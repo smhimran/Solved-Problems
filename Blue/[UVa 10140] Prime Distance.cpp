@@ -32,6 +32,7 @@ typedef map<int, VI> MIVI;
 
 // - - - - - - Pairs - - - - - - //
 typedef pair<int, int> PII;
+typedef pair<LL, LL> PLL;
 typedef pair<string, string> PSS;
 typedef pair<char, char> PCC;
 typedef pair<int, string> PIS;
@@ -60,7 +61,7 @@ typedef set<char> SC;
 #define BSRC                binary_search
 #define MAX                 10000007
 #define MIN                 -10000007
-#define inf                 int(1e6+9)
+#define inf                 int(1e9+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
 #define FastIO              ios_base::sync_with_stdio(false)
@@ -126,47 +127,88 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+#define LIMIT int(1e6+6)
+bool composite[LIMIT+1], mark[LIMIT+1];
+vector<LL> prime;
+PLL min_pair, max_pair;
+
+void sieve()
+{
+    LL i;
+    composite[0]=composite[1]=1;
+    for (i=4; i<=LIMIT; i+=2)
+        composite[i]=1;
+    prime.push_back(2);
+    for (i=3; i*i<=LIMIT; i+=2) {
+        if (!composite[i]) {
+            prime.push_back(i);
+            for (LL j=i*i; j<=LIMIT; j+=2*i)
+                composite[j]=1;
+        }
+    }
+    for (; i<=LIMIT; i++)
+        if (!composite[i])
+            prime.push_back(i);
+}
+
+void solve(LL low, LL high) 
+{ 
+    LL ret=0;
+    if (low==1)
+        low++;
+    memset(mark, 0, sizeof mark);
+    for (LL i=0; i<prime.size() and prime[i]<=high; i++) {
+        LL k=(low/prime[i])*prime[i];
+        if (k<low)
+            k+=prime[i];
+        if (k==prime[i])
+            k+=prime[i];
+        for (; k<=high; k+=prime[i]) {
+            if (k<low)
+                break;
+            mark[k-low]=1;
+        }
+    }
+    LL prev = -1;
+    LL mn = inf+1, mx = 0;
+    for (LL i=low; i<=high; i++) {
+        if (i<low)
+        	break;
+        if (!mark[i-low]) {
+        	if (prev != -1) {
+        		if (i - prev < mn) {
+        			mn = i - prev;
+        			min_pair = { prev, i };
+        		}
+        		if (i - prev > mx) {
+        			mx = i - prev;
+        			max_pair = { prev, i };
+        		}
+        	}
+        	prev = i;
+        }
+    }
+} 
 
 int main()
 {
-    FastIO;
+    // FastIO;
     #ifdef HOME
      clock_t Start=clock();
      freopen("in.txt", "r", stdin);
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		string s;
-  		cin>>s;
-  		int ans = 0, n = len(s);
-  		for (int i=0; i<n; i++) {
-  			int freq[30], odd = 0;
-  			bool is_odd[30];
-  			for (int j=0; j<30; j++) {
-  				freq[j] = 0;
-  				is_odd[j] = 0;
-  			}
-  			for (int j=i; j<n; j++) {
-  				freq[s[j]-'a']++;
-  				if (freq[s[j]-'a']&1) {
-  					odd++;
-  					is_odd[s[j]-'a'] = 1;
-  				}
-  				else {
-  					if (is_odd[s[j]-'a']) {
-  						odd--;
-  						is_odd[s[j]-'a'] = 0;
-  					}
-  				}
-  				if (odd <= 1)
-  					ans++;
-  			}
-  		}
-  		
-  		cout<<"Case "<<ca++<<": "<<ans<<endl;
+    sieve();
+  	int low, high;
+  	while (cin>>low>>high) {
+  		min_pair = {-1, -1};
+  		max_pair = {-1, -1};
+  		solve(low, high);
+  		if (min_pair.first != -1)
+	  		printf("%lld,%lld are closest, %lld,%lld are most distant.\n", min_pair.first, min_pair.second, max_pair.first, max_pair.second);
+  		else 
+  			puts("There are no adjacent primes.");
   	}
 
     END:

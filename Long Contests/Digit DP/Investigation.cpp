@@ -125,11 +125,28 @@ int LCM(int a, int b) { return a * (b/GCD(a, b)); }
 bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
+int n, k;
+std::vector<int> v;
+int dp[10][100][100][2];
 
+int solve(int pos, int sum, int mod, bool smaller) {
+	if (pos == n) {
+		return (sum%k == 0 and mod%k == 0);
+	}
+	int &ret = dp[pos][sum][mod][smaller];
+	if (ret != -1)
+		return ret;
+	int finish = smaller? 9: v[pos];
+	ret = 0;
+	for (int i=0; i<=finish; i++) {
+		ret += solve(pos+1, sum+i, (mod*10 + i)%k, smaller or i < v[pos]);
+	}
+	return ret;
+}
 
 int main()
 {
-    FastIO;
+    // FastIO;
     #ifdef HOME
      clock_t Start=clock();
      freopen("in.txt", "r", stdin);
@@ -139,34 +156,35 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		string s;
-  		cin>>s;
-  		int ans = 0, n = len(s);
-  		for (int i=0; i<n; i++) {
-  			int freq[30], odd = 0;
-  			bool is_odd[30];
-  			for (int j=0; j<30; j++) {
-  				freq[j] = 0;
-  				is_odd[j] = 0;
-  			}
-  			for (int j=i; j<n; j++) {
-  				freq[s[j]-'a']++;
-  				if (freq[s[j]-'a']&1) {
-  					odd++;
-  					is_odd[s[j]-'a'] = 1;
-  				}
-  				else {
-  					if (is_odd[s[j]-'a']) {
-  						odd--;
-  						is_odd[s[j]-'a'] = 0;
-  					}
-  				}
-  				if (odd <= 1)
-  					ans++;
-  			}
+  		int a, b;
+  		cin>>a>>b>>k;
+  		if (k>90) {
+  			cout<<"Case "<<ca++<<": ";
+  			cout<<0<<endl;
+  			continue;
   		}
+  		a--;
+  		v.clear();
+  		while (a) {
+  			v.push_back(a%10);
+  			a/=10;
+  		}
+  		reverse(v.begin(), v.end());
+  		n = v.size();
+  		memset(dp, -1, sizeof dp);
+  		int low = solve(0, 0, 0, 0);
+  		v.clear();
+  		while (b) {
+  			v.push_back(b%10);
+  			b/=10;
+  		}
+  		reverse(v.begin(), v.end());
+  		n = v.size();
+  		memset(dp, -1, sizeof dp);
+  		int high = solve(0, 0, 0, 0); 		
+  		// cout<<low<<" "<<high<<endl;
   		
-  		cout<<"Case "<<ca++<<": "<<ans<<endl;
+  		cout<<"Case "<<ca++<<": "<<(high - low)<<endl;
   	}
 
     END:

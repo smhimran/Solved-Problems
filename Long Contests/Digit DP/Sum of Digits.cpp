@@ -126,47 +126,58 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+vector<int> v;
+int n;
+LL dp[10][2][100];
+
+LL solve(int pos, bool small, int sum) {
+	if (pos == n)
+		return sum;
+	LL &ret = dp[pos][small][sum];
+	if (ret != -1)
+		return ret;
+	ret = 0;
+	int finish = small? 9: v[pos];
+	for (int i=0; i<=finish; i++) {
+		ret += solve(pos+1, small or i<v[pos], sum+i);
+	}
+	return ret;
+}
 
 int main()
 {
-    FastIO;
+    // FastIO;
     #ifdef HOME
      clock_t Start=clock();
      freopen("in.txt", "r", stdin);
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		string s;
-  		cin>>s;
-  		int ans = 0, n = len(s);
-  		for (int i=0; i<n; i++) {
-  			int freq[30], odd = 0;
-  			bool is_odd[30];
-  			for (int j=0; j<30; j++) {
-  				freq[j] = 0;
-  				is_odd[j] = 0;
-  			}
-  			for (int j=i; j<n; j++) {
-  				freq[s[j]-'a']++;
-  				if (freq[s[j]-'a']&1) {
-  					odd++;
-  					is_odd[s[j]-'a'] = 1;
-  				}
-  				else {
-  					if (is_odd[s[j]-'a']) {
-  						odd--;
-  						is_odd[s[j]-'a'] = 0;
-  					}
-  				}
-  				if (odd <= 1)
-  					ans++;
-  			}
+    int a, b;
+  	while (cin>>a>>b) {
+  		if (a==-1 and b==-1)
+  			break;
+  		v.clear();
+  		while (b) {
+  			v.push_back(b%10);
+  			b/=10;
   		}
-  		
-  		cout<<"Case "<<ca++<<": "<<ans<<endl;
+  		reverse(v.begin(), v.end());
+  		n = v.size();
+  		memset(dp, -1, sizeof dp);
+  		LL high = solve(0, 0, 0);
+  		a--;
+  		v.clear();
+  		while (a) {
+  			v.push_back(a%10);
+  			a/=10;
+  		}
+  		reverse(v.begin(), v.end());
+  		n = v.size();
+  		memset(dp, -1, sizeof dp);
+  		LL low = solve(0, 0, 0);
+  		// debug(high, low);
+  		cout<<(high - low)<<endl;
   	}
 
     END:

@@ -126,10 +126,34 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int dp[10][10][10][2][2], n;
+std::vector<int> a, b;
+
+LL ans;
+
+int solve(int pos, int latest, int lids, bool smaller, bool greater, bool started) {
+	if (pos == n) 
+		return (lids==ans);
+	int &ret = dp[pos][latest+1][lids][smaller][greater];
+	if (ret != -1)
+		return ret;
+	int temp = 0;
+	for (int i=0; i<=9; i++) {
+		if (!smaller and i>b[pos])
+			continue;
+		if (!greater and i<a[pos])
+			continue;
+		if (latest < i and (started or i)) 
+			temp += solve(pos+1, i, lids+1, smaller or i<b[pos], greater or i>a[pos], started or i);
+		temp += solve(pos+1, latest, lids, smaller or i<b[pos], greater or i>a[pos], started or i);
+		ret = temp;
+	}
+	return ret;
+}
 
 int main()
 {
-    FastIO;
+    // FastIO;
     #ifdef HOME
      clock_t Start=clock();
      freopen("in.txt", "r", stdin);
@@ -139,34 +163,36 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		string s;
-  		cin>>s;
-  		int ans = 0, n = len(s);
-  		for (int i=0; i<n; i++) {
-  			int freq[30], odd = 0;
-  			bool is_odd[30];
-  			for (int j=0; j<30; j++) {
-  				freq[j] = 0;
-  				is_odd[j] = 0;
-  			}
-  			for (int j=i; j<n; j++) {
-  				freq[s[j]-'a']++;
-  				if (freq[s[j]-'a']&1) {
-  					odd++;
-  					is_odd[s[j]-'a'] = 1;
-  				}
-  				else {
-  					if (is_odd[s[j]-'a']) {
-  						odd--;
-  						is_odd[s[j]-'a'] = 0;
-  					}
-  				}
-  				if (odd <= 1)
-  					ans++;
-  			}
+  		int x, y;
+  		scanf("%d %d", &x, &y);
+  		a.clear();
+  		b.clear();
+  		while (x) {
+  			a.push_back(x%10);
+  			x/=10;
   		}
   		
-  		cout<<"Case "<<ca++<<": "<<ans<<endl;
+  		while (y) {
+  			b.push_back(y%10);
+  			y/=10;
+  		}
+  		while (a.size() < b.size())
+  			a.push_back(0);
+
+  		reverse(a.begin(), a.end());
+  		reverse(b.begin(), b.end());
+  		n = a.size();
+  		ans = 9;
+  		while (ans) {
+  			memset(dp, -1, sizeof dp);
+  			LL cnt = solve(0, -1, 0, 0, 0, 0);
+  			if (cnt) {
+  				printf("Case %d: %lld %lld\n", ca++, ans, cnt);
+  				break;
+  			}
+  			ans--;
+  		}
+  		
   	}
 
     END:

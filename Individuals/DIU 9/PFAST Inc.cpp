@@ -68,7 +68,7 @@ typedef set<char> SC;
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
 #define rsort(a)            sort(a.rbegin(), a.rend())
-#define pvec(v)             for(auto x: v) cout<<x<<" "
+#define pvec(v)             for(auto x: v) cout<<x<<endl
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 /*----------------------Graph Moves----------------*/
@@ -126,48 +126,67 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+map<string, vector<string> > anties;
+
+vector<string> temp, ans, v;
+
+int n, m, mx = 0;
+
+void solve(int i) {
+	if (i==n) {
+		if (temp.size() > mx) {
+			mx = temp.size();
+			ans = temp;
+			// cout<<temp.size()<<endl;
+		}
+		return;
+	}
+	bool clash = 0;
+	for (auto j: temp) {
+		for (auto k: anties[v[i]]) {
+			if (k == j) {
+				clash = 1;
+				break;
+			}
+		}
+	}
+	if (!clash) {
+		// cout<<v[i]<<endl;
+		temp.push_back(v[i]);
+		solve(i+1);
+		temp.pop_back();
+	}
+	solve(i+1);
+}
 
 int main()
 {
-    FastIO;
+    // FastIO;
     #ifdef HOME
      clock_t Start=clock();
      freopen("in.txt", "r", stdin);
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
+  	
+  	cin>>n>>m;
+  	
+  	for (int i=0; i<n; i++) {
   		string s;
   		cin>>s;
-  		int ans = 0, n = len(s);
-  		for (int i=0; i<n; i++) {
-  			int freq[30], odd = 0;
-  			bool is_odd[30];
-  			for (int j=0; j<30; j++) {
-  				freq[j] = 0;
-  				is_odd[j] = 0;
-  			}
-  			for (int j=i; j<n; j++) {
-  				freq[s[j]-'a']++;
-  				if (freq[s[j]-'a']&1) {
-  					odd++;
-  					is_odd[s[j]-'a'] = 1;
-  				}
-  				else {
-  					if (is_odd[s[j]-'a']) {
-  						odd--;
-  						is_odd[s[j]-'a'] = 0;
-  					}
-  				}
-  				if (odd <= 1)
-  					ans++;
-  			}
-  		}
-  		
-  		cout<<"Case "<<ca++<<": "<<ans<<endl;
+  		anties[s] = std::vector<string> ();
+  		v.push_back(s);
   	}
+  	for (int i=0; i<m; i++) {
+  		string s, t;
+  		cin>>s>>t;
+  		anties[s].push_back(t);
+  		anties[t].push_back(s);
+  	}
+  	solve(0);
+  	sort(ans.begin(), ans.end());
+  	cout<<ans.size()<<endl;
+  	pvec(ans);
 
     END:
     #ifdef HOME

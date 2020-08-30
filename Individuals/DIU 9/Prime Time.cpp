@@ -126,47 +126,65 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+#define LIMIT int(1e5+6)
+bool composite[LIMIT+1];
+vector<int> prime;
+map<int, int> fact;
+
+void sieve()
+{
+    int i;
+    composite[0]=composite[1]=1;
+    for (i=4; i<=LIMIT; i+=2)
+        composite[i]=1;
+    prime.push_back(2);
+    for (i=3; i*i<=LIMIT; i+=2) {
+        if (!composite[i]) {
+            prime.push_back(i);
+            for (int j=i*i; j<=LIMIT; j+=2*i)
+                composite[j]=1;
+        }
+    }
+    for (; i<=LIMIT; i++)
+        if (!composite[i])
+            prime.push_back(i);
+}
+
+void factorization(int n) {
+	for (auto i: prime) {
+		if (i * i > n)
+			break;
+		if (n % i == 0) {
+			while (n% i == 0) {
+				fact[i]++;
+				n /= i;
+			}
+		}
+	}
+	if (n > 1)
+		fact[n]++;
+}
 
 int main()
 {
-    FastIO;
+    // FastIO;
     #ifdef HOME
      clock_t Start=clock();
      freopen("in.txt", "r", stdin);
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		string s;
-  		cin>>s;
-  		int ans = 0, n = len(s);
-  		for (int i=0; i<n; i++) {
-  			int freq[30], odd = 0;
-  			bool is_odd[30];
-  			for (int j=0; j<30; j++) {
-  				freq[j] = 0;
-  				is_odd[j] = 0;
-  			}
-  			for (int j=i; j<n; j++) {
-  				freq[s[j]-'a']++;
-  				if (freq[s[j]-'a']&1) {
-  					odd++;
-  					is_odd[s[j]-'a'] = 1;
-  				}
-  				else {
-  					if (is_odd[s[j]-'a']) {
-  						odd--;
-  						is_odd[s[j]-'a'] = 0;
-  					}
-  				}
-  				if (odd <= 1)
-  					ans++;
-  			}
-  		}
-  		
-  		cout<<"Case "<<ca++<<": "<<ans<<endl;
+    sieve();
+  	int n;
+  	cin>>n;
+  	for (int i=2; i<=n; i++) 
+  		factorization(i);
+  	bool st = 0;
+  	for (auto i: fact) {
+  		if (st)
+  			cout<<" * ";
+  		cout<<i.first<<"^"<<i.second;
+  		st = 1;
   	}
 
     END:

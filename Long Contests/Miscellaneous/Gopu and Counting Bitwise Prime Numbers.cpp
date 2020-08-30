@@ -8,7 +8,7 @@ using namespace std;
 // - - - - - - Data Types - - - - - - //
 
 typedef long int LI;
-typedef long long LL;
+typedef unsigned long long LL;
 
 // - - - - - - Vectors - - - - - - //
 typedef vector<int> VI;
@@ -126,10 +126,60 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int primes[] = {2, 3, 5, 7, 11, 13, 17, 19};
+std::vector<int> s;
+LL lim, dp[12][10][10][100];
+
+string dec_to_bin(LL n) {
+    string ret = "";
+    for (LL i = 63; i >= 0; i--) {
+        LL k = 1 << i;
+        ret += (n&k)? '1':'0';
+    }
+    return ret;
+}
+
+LL solve(LL pos, LL small, LL start, LL val) {
+    if (pos==lim) {
+        for (int i=0; i<8; i++) {
+        	if (val == primes[i])
+        		return 1;
+        }
+        return 0;
+    }
+    LL &ret = dp[pos][small][start][val];
+    if (ret != -1)
+        return ret;
+    LL finish = small? 1: s[pos];
+    ret = 0;
+    if (!start) {
+        for (int i=0; i<=finish; i++)
+            ret += solve(pos+1, small | i<s[pos], 0, (i==1) + val);
+    }
+    else {
+        for (int i=1; i<=finish; i++)
+            ret += solve(pos+1, small | i<s[pos], 0, (i==1) + val);
+        ret += solve(pos+1, 1, 1, 0);
+    }
+    // cout<<pos<<" "<<small<<" "<<finish<<" "<<ret<<endl;
+    return ret;
+}
+
+LL numbers(LL x) {
+    string z = dec_to_bin(x);
+    cout<<z<<endl;
+    s.clear();
+    for (int i=0; i<len(z); i++)
+    	s.push_back(z[i]-'0');
+    reverse(s.begin(),s.end()); 
+    lim = s.size();
+    memset(dp, -1, sizeof dp);
+    return solve(0, 0, 1, 0) + 1;
+}
 
 int main()
 {
-    FastIO;
+    // FastIO;
     #ifdef HOME
      clock_t Start=clock();
      freopen("in.txt", "r", stdin);
@@ -139,34 +189,9 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		string s;
-  		cin>>s;
-  		int ans = 0, n = len(s);
-  		for (int i=0; i<n; i++) {
-  			int freq[30], odd = 0;
-  			bool is_odd[30];
-  			for (int j=0; j<30; j++) {
-  				freq[j] = 0;
-  				is_odd[j] = 0;
-  			}
-  			for (int j=i; j<n; j++) {
-  				freq[s[j]-'a']++;
-  				if (freq[s[j]-'a']&1) {
-  					odd++;
-  					is_odd[s[j]-'a'] = 1;
-  				}
-  				else {
-  					if (is_odd[s[j]-'a']) {
-  						odd--;
-  						is_odd[s[j]-'a'] = 0;
-  					}
-  				}
-  				if (odd <= 1)
-  					ans++;
-  			}
-  		}
-  		
-  		cout<<"Case "<<ca++<<": "<<ans<<endl;
+  		LL a, b;
+  		cin>>a>>b;
+  		cout<<numbers(b) - numbers(a-1)<<endl;
   	}
 
     END:

@@ -60,7 +60,7 @@ typedef set<char> SC;
 #define BSRC                binary_search
 #define MAX                 10000007
 #define MIN                 -10000007
-#define inf                 int(1e6+9)
+// #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
 #define FastIO              ios_base::sync_with_stdio(false)
@@ -126,47 +126,57 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+const LL inf = 1000000000000000000;
 
 int main()
 {
-    FastIO;
+    // FastIO;
     #ifdef HOME
      clock_t Start=clock();
      freopen("in.txt", "r", stdin);
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		string s;
-  		cin>>s;
-  		int ans = 0, n = len(s);
-  		for (int i=0; i<n; i++) {
-  			int freq[30], odd = 0;
-  			bool is_odd[30];
-  			for (int j=0; j<30; j++) {
-  				freq[j] = 0;
-  				is_odd[j] = 0;
+  	int a[9];
+  	while (cin>>a[0]) {
+  		for (int i=1; i<9; i++)
+  			cin>>a[i];
+  		LL mn = inf;
+  		string ans, comb = "BCG";
+  		sort(comb.begin(), comb.end());
+  		do {
+  			string now = comb;
+  			int moves = 0;
+  			if (now[0] == 'B')
+  				moves += a[3] + a[6];
+  			else if (now[0] == 'C')
+  				moves += a[5] + a[8];
+  			else if (now[0] == 'G')
+  				moves += a[4] + a[7];
+
+  			if (now[1] == 'B')
+  				moves += a[0] + a[6];
+  			else if (now[1] == 'G')
+  				moves += a[1] + a[7];
+  			else if (now[1] == 'C')
+  				moves += a[2] + a[8];
+
+  			if (now[2] == 'B')
+  				moves += a[3] + a[0];
+ 			  else if (now[2] == 'G')
+  				moves += a[4] + a[1];
+  			else if (now[2]  == 'C')
+  				moves += a[5] + a[2];
+
+
+  			if (moves < mn) {
+  				mn = moves;
+  				ans = now;
+
   			}
-  			for (int j=i; j<n; j++) {
-  				freq[s[j]-'a']++;
-  				if (freq[s[j]-'a']&1) {
-  					odd++;
-  					is_odd[s[j]-'a'] = 1;
-  				}
-  				else {
-  					if (is_odd[s[j]-'a']) {
-  						odd--;
-  						is_odd[s[j]-'a'] = 0;
-  					}
-  				}
-  				if (odd <= 1)
-  					ans++;
-  			}
-  		}
   		
-  		cout<<"Case "<<ca++<<": "<<ans<<endl;
+  		} while (next_permutation(comb.begin(), comb.end()));
+  		cout<<ans<<" "<<mn<<endl;
   	}
 
     END:

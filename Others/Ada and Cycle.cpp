@@ -125,48 +125,56 @@ int LCM(int a, int b) { return a * (b/GCD(a, b)); }
 bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
+vector<int> v[2002];
 
+bool visited[2002];
+int dis[2002];
 
 int main()
 {
-    FastIO;
+    // FastIO;
     #ifdef HOME
      clock_t Start=clock();
      freopen("in.txt", "r", stdin);
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		string s;
-  		cin>>s;
-  		int ans = 0, n = len(s);
-  		for (int i=0; i<n; i++) {
-  			int freq[30], odd = 0;
-  			bool is_odd[30];
-  			for (int j=0; j<30; j++) {
-  				freq[j] = 0;
-  				is_odd[j] = 0;
-  			}
-  			for (int j=i; j<n; j++) {
-  				freq[s[j]-'a']++;
-  				if (freq[s[j]-'a']&1) {
-  					odd++;
-  					is_odd[s[j]-'a'] = 1;
-  				}
-  				else {
-  					if (is_odd[s[j]-'a']) {
-  						odd--;
-  						is_odd[s[j]-'a'] = 0;
-  					}
-  				}
-  				if (odd <= 1)
-  					ans++;
-  			}
+  	int n, x;
+  	cin>>n;
+  	for (int i=1; i<=n; i++) {
+  		for (int j=1; j<=n; j++) {
+  			cin>>x;
+  			if (x) 
+  				v[i].push_back(j);
   		}
-  		
-  		cout<<"Case "<<ca++<<": "<<ans<<endl;
+  	}
+  	for (int i=1; i<=n; i++) {
+  		memset(visited, 0, sizeof visited);
+  		memset(dis, 0, sizeof dis);
+  		queue<int> q;
+  		q.push(i);
+  		int ans = -1;
+  		while (!q.empty()) {
+  			int now = q.front();
+  			q.pop();
+  			for (auto x: v[now]) {
+  				if (!visited[x]) {
+  					visited[x] = 1;
+  					dis[x] = dis[now] + 1;
+  					q.push(x);
+  				}
+  				if (x == i) {
+  					ans = dis[x];
+  					break;
+  				}
+  			}
+  			if (ans != -1) 
+  				break;
+  		}
+  		if (ans == -1) 
+  			cout<<"NO WAY"<<endl;
+  		else
+  			cout<<ans<<endl;
   	}
 
     END:

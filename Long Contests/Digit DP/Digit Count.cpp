@@ -125,11 +125,27 @@ int LCM(int a, int b) { return a * (b/GCD(a, b)); }
 bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
+int digit[10], m, n;
+LL dp[10][10];
 
+LL solve(int pos, int last) {
+	if (pos == n) 
+		return 1;
+	LL &ret = dp[pos][last];
+	if (ret != -1)
+		return ret;
+	ret = 0;
+	for (int i=0; i<m; i++) {
+		if (!last or abs(digit[i] - last) <= 2) {
+			ret += solve(pos+1, digit[i]);
+		}
+	}
+	return ret;
+}
 
 int main()
 {
-    FastIO;
+    // FastIO;
     #ifdef HOME
      clock_t Start=clock();
      freopen("in.txt", "r", stdin);
@@ -139,34 +155,11 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		string s;
-  		cin>>s;
-  		int ans = 0, n = len(s);
-  		for (int i=0; i<n; i++) {
-  			int freq[30], odd = 0;
-  			bool is_odd[30];
-  			for (int j=0; j<30; j++) {
-  				freq[j] = 0;
-  				is_odd[j] = 0;
-  			}
-  			for (int j=i; j<n; j++) {
-  				freq[s[j]-'a']++;
-  				if (freq[s[j]-'a']&1) {
-  					odd++;
-  					is_odd[s[j]-'a'] = 1;
-  				}
-  				else {
-  					if (is_odd[s[j]-'a']) {
-  						odd--;
-  						is_odd[s[j]-'a'] = 0;
-  					}
-  				}
-  				if (odd <= 1)
-  					ans++;
-  			}
-  		}
-  		
-  		cout<<"Case "<<ca++<<": "<<ans<<endl;
+  		cin>>m>>n;
+  		for (int i=0; i<m; i++)
+  			cin>>digit[i];
+  		memset(dp, -1, sizeof dp);
+  		cout<<"Case "<<ca++<<": "<<solve(0, 0)<<endl;;
   	}
 
     END:
