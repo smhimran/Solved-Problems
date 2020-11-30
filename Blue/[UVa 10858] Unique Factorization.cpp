@@ -126,6 +126,34 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+vector<int> divs, ans[10000], temp;
+int cnt;
+
+void solve(int i, int n) {
+	if (n == 1) {
+		for (int j=0; j<temp.size(); j++) {
+			ans[cnt].push_back(temp[j]);
+		}
+		cnt++;
+		return;
+	}
+
+	for (; i<divs.size(); i++) {
+		if ((n/divs[i] >= divs[i] or n == divs[i]) and n % divs[i] == 0) {
+			temp.push_back(divs[i]);
+			solve(i, n/divs[i]);
+			temp.pop_back();
+		}
+	}
+}
+
+void clear() {
+	cnt = 0;
+	divs.clear();
+	temp.clear();
+	for (int i=0; i<10000; i++)
+		ans[i].clear();
+}
 
 int main()
 {
@@ -136,15 +164,35 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	LL n, ca=1;
-    while (cin>>n and n) {
-      LL ans = 0;
-      for (LL i=2; i*i<=n; i++) {
-        ans += (((n/i) - i + 1)*i) + (((n/i)*((n/i)+1)/2) - (i*(i+1)/2));
-      }
+  	int n;
+  	while (cin>>n and n) {
+  		clear();
+  		for (int i=2; i*i <= n; i++) {
+  			if (n % i == 0) {
+  				divs.push_back(i);
+  				if (i * i != n) 
+  					divs.push_back(n/i);
+  			}
+  		}
 
-      cout<<"Case "<<ca++<<": "<<ans<<endl;
-    }
+  		if (divs.empty()) {
+  			cout<<0<<endl;
+  			continue;
+  		}
+
+  		sort(divs.begin(), divs.end());
+
+  		solve(0, n);
+
+  		cout<<cnt<<endl;
+
+  		for (int i=0; i<cnt; i++) {
+  			cout<<ans[i][0];
+  			for (int j=1; j<ans[i].size(); j++)
+  				cout<<" "<<ans[i][j];
+  			cout<<endl;
+  		}
+  	}
 
     END:
     #ifdef HOME

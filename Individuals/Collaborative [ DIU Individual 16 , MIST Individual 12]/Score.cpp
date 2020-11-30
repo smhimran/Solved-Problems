@@ -136,15 +136,23 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	LL n, ca=1;
-    while (cin>>n and n) {
-      LL ans = 0;
-      for (LL i=2; i*i<=n; i++) {
-        ans += (((n/i) - i + 1)*i) + (((n/i)*((n/i)+1)/2) - (i*(i+1)/2));
-      }
+  	int t, ca=1;
+  	cin>>t;
+  	while (t--) {
+  		string s;
+  		cin>>s;
+  		int ans = 0, cons = 0;
+  		for (int i=0; i<len(s); i++) {
+  			if (s[i] == 'O') {
+  				ans += 1 + cons;
+  				cons++;
+  			}
+  			else 
+  				cons = 0;
+  		}
 
-      cout<<"Case "<<ca++<<": "<<ans<<endl;
-    }
+  		cout<<ans<<endl;
+  	}
 
     END:
     #ifdef HOME

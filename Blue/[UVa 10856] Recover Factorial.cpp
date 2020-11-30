@@ -60,7 +60,7 @@ typedef set<char> SC;
 #define BSRC                binary_search
 #define MAX                 10000007
 #define MIN                 -10000007
-#define inf                 int(1e6+9)
+#define inf                 int(1e7+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
 #define FastIO              ios_base::sync_with_stdio(false)
@@ -126,6 +126,44 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+#define MAXN int(1e7+9)
+
+LL dp[MAXN];
+
+int spf[MAXN]; 
+
+void sieve() { 
+    spf[1] = 1; 
+    for (int i=2; i<MAXN; i++) 
+        spf[i] = i; 
+    for (int i=4; i<MAXN; i+=2) 
+        spf[i] = 2; 
+  
+    for (int i=3; i*i<MAXN; i++) {         
+    	if (spf[i] == i) { 
+            for (int j=i*i; j<MAXN; j+=i) 
+                if (spf[j]==j) 
+                    spf[j] = i; 
+        } 
+    } 
+} 
+  
+LL getFactorization(int x) { 
+    LL ret = 0; 
+    while (x != 1) { 
+        ret++; 
+        x = x / spf[x]; 
+    } 
+    return ret; 
+} 
+
+void precal() {
+	sieve();
+	dp[0] = dp[1] = 0;
+	for (int i=2; i<MAXN; i++) {
+		dp[i] = dp[i-1] + getFactorization(i);
+	}
+}
 
 int main()
 {
@@ -136,15 +174,16 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	LL n, ca=1;
-    while (cin>>n and n) {
-      LL ans = 0;
-      for (LL i=2; i*i<=n; i++) {
-        ans += (((n/i) - i + 1)*i) + (((n/i)*((n/i)+1)/2) - (i*(i+1)/2));
-      }
-
-      cout<<"Case "<<ca++<<": "<<ans<<endl;
-    }
+    precal();
+  	int n, ca=1;
+  	while (cin>>n and n>=0) {
+  		int ans = lower_bound(dp, dp+MAXN, n) - dp;
+  		cout<<"Case "<<ca++<<": ";
+  		if (dp[ans] != n)
+  			cout<<"Not possible."<<endl;
+  		else 
+  			cout<<ans<<"!"<<endl;
+  	}
 
     END:
     #ifdef HOME

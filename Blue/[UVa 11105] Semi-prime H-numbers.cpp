@@ -125,7 +125,36 @@ int LCM(int a, int b) { return a * (b/GCD(a, b)); }
 bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
+int ans[1000005];
 
+bool HPrime[1000004];
+vector<int> v;
+
+void precal() {
+	for (int i=0; (4*i + 1)<=1000001; i++) {
+		HPrime[(4*i) +1] = 1;
+		v.push_back((4*i + 1));
+	}
+
+	for (int i=1; i<=1000001; i++) {
+		ans[i] = ans[i-1];
+		if (HPrime[i]) {
+			int x = 0, n = i;
+			for (int j=1; j<v.size() and v[j] * v[j] <= i; j++) {
+				while (n % v[j] == 0) {
+					x++;
+					n /= v[j];
+				}
+			}
+
+			if (n>1 and HPrime[n])
+				x++;
+
+			if (x == 2)
+				ans[i]++;
+		}
+	}
+}
 
 int main()
 {
@@ -136,15 +165,11 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	LL n, ca=1;
-    while (cin>>n and n) {
-      LL ans = 0;
-      for (LL i=2; i*i<=n; i++) {
-        ans += (((n/i) - i + 1)*i) + (((n/i)*((n/i)+1)/2) - (i*(i+1)/2));
-      }
-
-      cout<<"Case "<<ca++<<": "<<ans<<endl;
-    }
+    precal();
+  	int n;
+  	while (cin>>n and n) {
+  		cout<<n<<" "<<ans[n]<<endl;
+  	}
 
     END:
     #ifdef HOME

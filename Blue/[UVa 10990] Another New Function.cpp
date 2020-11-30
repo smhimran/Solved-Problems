@@ -126,6 +126,33 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+#define LIMIT int(2e6+7)
+int phi[LIMIT+1];
+LL depth[LIMIT+1], sumOfDepth[LIMIT+1];
+
+void phi_1_to_n() {
+    phi[0] = 0;
+    phi[1] = 1;
+    for (int i = 2; i <= LIMIT; i++)
+        phi[i] = i;
+
+    for (int i = 2; i <= LIMIT; i++) {
+        if (phi[i] == i) {
+            for (int j = i; j <= LIMIT; j += i)
+                phi[j] -= phi[j] / i;
+        }
+    }
+}
+
+void precal() {
+	phi_1_to_n();
+
+	depth[1] = 0;
+	for (int i=2; i<=LIMIT; i++) {
+		depth[i] = depth[phi[i]] + 1;
+		sumOfDepth[i] = sumOfDepth[i-1] + depth[i];
+	}
+}
 
 int main()
 {
@@ -136,15 +163,14 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	LL n, ca=1;
-    while (cin>>n and n) {
-      LL ans = 0;
-      for (LL i=2; i*i<=n; i++) {
-        ans += (((n/i) - i + 1)*i) + (((n/i)*((n/i)+1)/2) - (i*(i+1)/2));
-      }
-
-      cout<<"Case "<<ca++<<": "<<ans<<endl;
-    }
+    precal();
+  	int t, ca=1;
+  	cin>>t;
+  	while (t--) {
+  		int n, m;
+  		cin>>n>>m;
+  		cout<<(sumOfDepth[m] - sumOfDepth[n-1])<<endl;
+  	}
 
     END:
     #ifdef HOME

@@ -60,7 +60,7 @@ typedef set<char> SC;
 #define BSRC                binary_search
 #define MAX                 10000007
 #define MIN                 -10000007
-#define inf                 int(1e6+9)
+#define inf                 (1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
 #define FastIO              ios_base::sync_with_stdio(false)
@@ -136,15 +136,24 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	LL n, ca=1;
-    while (cin>>n and n) {
-      LL ans = 0;
-      for (LL i=2; i*i<=n; i++) {
-        ans += (((n/i) - i + 1)*i) + (((n/i)*((n/i)+1)/2) - (i*(i+1)/2));
-      }
+  	int n, m, ca=1;
+  	while (scanf("%d", &n)) {
+  		if (n == -1)
+  			break;
 
-      cout<<"Case "<<ca++<<": "<<ans<<endl;
-    }
+  		scanf("%d", &m);
+
+  		double dp[n+1][m+1];
+
+  		memset(dp, 0, sizeof dp);
+  		dp[1][1] = 1;
+
+  		for (int i=2; i<=n; i++) 
+  			for (int j=1; j<=m; j++)
+  				dp[i][j] = dp[i-1][j] * j / m + dp[i-1][j-1] * (m-j+1) / m;
+
+  		printf("Case %d: %.7lf\n", ca++, 1 - dp[n][m]);
+  	}
 
     END:
     #ifdef HOME

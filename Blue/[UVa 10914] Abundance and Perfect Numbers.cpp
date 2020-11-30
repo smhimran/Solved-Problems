@@ -126,6 +126,29 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+#define LIMIT int(1e7+7)
+
+LL divSum[LIMIT+1], oddDiv[LIMIT+1], ans[LIMIT+1];
+
+void precal() {
+	for (int i=1; i<=LIMIT; i++) {
+		for (int j=i; j<=LIMIT; j+=i) {
+			divSum[j] += i;
+			if (i&1) {
+				oddDiv[j]++;
+			}
+		}
+	}
+
+	for (int i=1; i<=LIMIT; i++) {
+		ans[i] = ans[i-1];
+		if (i%2==0 and oddDiv[i] == 2) {
+			LL sum = divSum[i] - 2*i;
+			ans[i] += sum;
+		}
+	}
+}
+
 
 int main()
 {
@@ -136,15 +159,12 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	LL n, ca=1;
-    while (cin>>n and n) {
-      LL ans = 0;
-      for (LL i=2; i*i<=n; i++) {
-        ans += (((n/i) - i + 1)*i) + (((n/i)*((n/i)+1)/2) - (i*(i+1)/2));
-      }
-
-      cout<<"Case "<<ca++<<": "<<ans<<endl;
-    }
+    precal();
+    // cout<<oddPrimes.size()<<endl;
+  	int n;
+  	while (scanf("%d", &n)!=EOF and n) {
+  		printf("%d %lld\n", n, ans[n]);
+  	}
 
     END:
     #ifdef HOME

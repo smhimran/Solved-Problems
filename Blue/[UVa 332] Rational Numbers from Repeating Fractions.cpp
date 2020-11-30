@@ -61,6 +61,7 @@ typedef set<char> SC;
 #define MAX                 10000007
 #define MIN                 -10000007
 #define inf                 int(1e6+9)
+#define eps					1e-10
 #define PI                  acos(-1)
 #define BR                  PF("\n")
 #define FastIO              ios_base::sync_with_stdio(false)
@@ -136,15 +137,39 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	LL n, ca=1;
-    while (cin>>n and n) {
-      LL ans = 0;
-      for (LL i=2; i*i<=n; i++) {
-        ans += (((n/i) - i + 1)*i) + (((n/i)*((n/i)+1)/2) - (i*(i+1)/2));
-      }
+  	LL j, ca=1;
+  	while (cin>>j) {
+  		if (j==-1)
+  			break;
 
-      cout<<"Case "<<ca++<<": "<<ans<<endl;
-    }
+  		string s;
+  		cin>>s;
+  		double x = stod(s);
+  		int k = len(s) - 2 - j;
+
+  		x += eps;
+
+  		int num, denom, temp1 = 0, temp2 = 0;
+
+  		temp1 = pow(10, k+j) * x;
+  		if (j) 
+  			temp2 = pow(10, k) * x;
+
+
+  		num = temp1 - temp2;
+  		denom = pow(10, k+j);
+  		if (j)
+	  		denom -= pow(10, k);
+
+  		int gcd = GCD(num, denom);
+
+  		// debug(x, num, denom, gcd);
+
+  		num /= gcd;
+  		denom /= gcd;
+
+  		cout<<"Case "<<ca++<<": "<<num<<"/"<<denom<<endl;
+  	}
 
     END:
     #ifdef HOME

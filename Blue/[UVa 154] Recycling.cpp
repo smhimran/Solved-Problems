@@ -60,7 +60,7 @@ typedef set<char> SC;
 #define BSRC                binary_search
 #define MAX                 10000007
 #define MIN                 -10000007
-#define inf                 int(1e6+9)
+#define inf                 int(1e9+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
 #define FastIO              ios_base::sync_with_stdio(false)
@@ -136,15 +136,56 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	LL n, ca=1;
-    while (cin>>n and n) {
-      LL ans = 0;
-      for (LL i=2; i*i<=n; i++) {
-        ans += (((n/i) - i + 1)*i) + (((n/i)*((n/i)+1)/2) - (i*(i+1)/2));
-      }
+  	string s;
+  	vector<map<char, char> > v;
+  	while (cin>>s) {
+  		if (s == "#")
+  			break;
+  		
+  		map<char, char> m;
+  		m[s[0]] = s[2];
+  		m[s[4]] = s[6];
+  		m[s[8]] = s[10];
+  		m[s[12]] = s[14];
+  		m[s[16]] = s[18];
+  		v.push_back(m);
+  		while (cin>>s) {
+  			if (s[0] == 'e') {
+  				int mn = inf, ans = 0;
+  				for (int i=0; i<v.size(); i++) {
+  					int cost = 0;
+  					for (int j=0; j<v.size(); j++) {
+  						if (v[j]['r'] != v[i]['r'])
+  							cost++;
+  						if (v[j]['o'] != v[i]['o'])
+  							cost++;
+  						if (v[j]['y'] != v[i]['y'])
+  							cost++;
+  						if (v[j]['g'] != v[i]['g'])
+  							cost++;
+  						if (v[j]['b'] != v[i]['b'])
+  							cost++;
+  					}
+  					if (cost < mn) {
+  						mn = cost;
+  						ans = i+1;
+  					}
+  				}
 
-      cout<<"Case "<<ca++<<": "<<ans<<endl;
-    }
+  				cout<<ans<<endl;
+  				v.clear();
+  				break;
+  			}
+  			else {
+  				m[s[0]] = s[2];
+  				m[s[4]] = s[6];
+  				m[s[8]] = s[10];
+  				m[s[12]] = s[14];
+  				m[s[16]] = s[18];
+  				v.push_back(m);
+  			}
+  		}
+  	}
 
     END:
     #ifdef HOME

@@ -126,6 +126,33 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+vector<LL> primes;
+map<LL, LL> times;
+
+void factorization(long long n) {
+	if (n % 2 == 0) {
+		primes.push_back(2);
+	    while (n % 2 == 0) {
+	        times[2]++;
+	        n /= 2;
+	    }
+	}
+    for (long long d = 3; d * d <= n; d += 2) { 
+    	if (n % d == 0) {
+    		primes.push_back(d);
+	        while (n % d == 0) {
+	            times[d]++;
+	            n /= d;
+	        }
+	    }
+    }
+    if (n > 1) {
+    	if (!times[n])
+	        primes.push_back(n);
+	    times[n]++;
+    }
+}
+
 
 int main()
 {
@@ -136,19 +163,36 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	LL n, ca=1;
-    while (cin>>n and n) {
-      LL ans = 0;
-      for (LL i=2; i*i<=n; i++) {
-        ans += (((n/i) - i + 1)*i) + (((n/i)*((n/i)+1)/2) - (i*(i+1)/2));
-      }
+  	string s;
+  	while (getline(cin, s)) {
+  		if (s == "0")
+  			break;
+  		stringstream ss(s);
+  		int p, e, number = 1;
+  		while (ss>>p) {
+  			ss>>e;
+  			while (e--)
+  				number *= p;
+  		}
 
-      cout<<"Case "<<ca++<<": "<<ans<<endl;
-    }
+  		number -= 1;
+
+  		primes.clear();
+  		times.clear();
+
+  		factorization(number);
+
+  		rsort(primes);
+
+  		cout<<primes[0]<<" "<<times[primes[0]];
+  		for (int i=1; i<primes.size(); i++)
+  			cout<<" "<<primes[i]<<" "<<times[primes[i]];
+  		cout<<endl;
+  	}
 
     END:
     #ifdef HOME
      fprintf(stderr, "\n>>Runtime: %.10fs\n", (double) (clock() - Start) / CLOCKS_PER_SEC);
     #endif
     return 0;
-}
+} 

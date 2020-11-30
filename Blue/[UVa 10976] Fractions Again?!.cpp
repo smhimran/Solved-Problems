@@ -136,15 +136,18 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	LL n, ca=1;
-    while (cin>>n and n) {
-      LL ans = 0;
-      for (LL i=2; i*i<=n; i++) {
-        ans += (((n/i) - i + 1)*i) + (((n/i)*((n/i)+1)/2) - (i*(i+1)/2));
-      }
-
-      cout<<"Case "<<ca++<<": "<<ans<<endl;
-    }
+  	int n;
+  	while (cin>>n) {
+  		vector<PII> v;
+  		 for (int i=n+1; i<=2*n; i++) {
+  		 	if ((i*n) % (i-n) == 0) {
+  		 		v.push_back({(i*n)/(i-n), i});
+  		 	}
+  		 }
+  		 cout<<v.size()<<endl;
+  		 for (auto i: v)
+	  		 printf("1/%d = 1/%d + 1/%d\n", n, i.first, i.second);
+  	}
 
     END:
     #ifdef HOME

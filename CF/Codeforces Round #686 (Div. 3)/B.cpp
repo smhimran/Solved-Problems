@@ -60,7 +60,7 @@ typedef set<char> SC;
 #define BSRC                binary_search
 #define MAX                 10000007
 #define MIN                 -10000007
-#define inf                 int(1e6+9)
+#define inf                 int(1e9+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
 #define FastIO              ios_base::sync_with_stdio(false)
@@ -136,15 +136,29 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	LL n, ca=1;
-    while (cin>>n and n) {
-      LL ans = 0;
-      for (LL i=2; i*i<=n; i++) {
-        ans += (((n/i) - i + 1)*i) + (((n/i)*((n/i)+1)/2) - (i*(i+1)/2));
-      }
+  	int t, ca=1;
+  	cin>>t;
+  	while (t--) {
+  		int n;
+  		cin>>n;
+  		int a[n+1];
+  		map<int, int> freq, index;
+  		for (int i=1; i<=n; i++) {
+  			cin>>a[i];
+  			freq[a[i]]++;
+  			index[a[i]] = i;
+  		}
 
-      cout<<"Case "<<ca++<<": "<<ans<<endl;
-    }
+  		int mn = inf;
+  		for (int i=1; i<=n; i++) 
+  			if (freq[a[i]] == 1)
+  				mn = min(mn, a[i]);
+
+  		if (mn == inf)
+  			cout<<-1<<endl;
+  		else
+  			cout<<index[mn]<<endl;
+  	}
 
     END:
     #ifdef HOME

@@ -60,7 +60,7 @@ typedef set<char> SC;
 #define BSRC                binary_search
 #define MAX                 10000007
 #define MIN                 -10000007
-#define inf                 int(1e6+9)
+#define inf                 int(1e9+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
 #define FastIO              ios_base::sync_with_stdio(false)
@@ -126,6 +126,30 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int times[60][60], toll[60][60], n, t;
+
+bool visited[60];
+int min_toll, min_time;
+
+void solve(int i, int tollSoFar, int timeSoFar) {
+	if (i == n) {
+		if (tollSoFar < min_toll) {
+			min_toll = tollSoFar;
+			min_time = timeSoFar;
+		}
+		return;
+	}
+
+	for (int j=1; j<=n; j++) {
+		if (j==i)
+			continue;
+		else if (!visited[j] and tollSoFar + toll[i][j] <= min_toll and timeSoFar + times[i][j] <= t) {
+			visited[j] = 1;
+			solve(j, tollSoFar + toll[i][j], timeSoFar + times[i][j]);
+			visited[j] = 0;
+		}
+	}
+}
 
 int main()
 {
@@ -136,15 +160,26 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	LL n, ca=1;
-    while (cin>>n and n) {
-      LL ans = 0;
-      for (LL i=2; i*i<=n; i++) {
-        ans += (((n/i) - i + 1)*i) + (((n/i)*((n/i)+1)/2) - (i*(i+1)/2));
-      }
+  	while (cin>>n>>t) {
+  		if (n==0 and t==0)
+  			break;
 
-      cout<<"Case "<<ca++<<": "<<ans<<endl;
-    }
+  		for (int i=1; i<=n; i++)
+  			for (int j=1; j<=n; j++)
+  				cin>>times[i][j];
+
+  		for (int i=1; i<=n; i++)
+  			for (int j=1; j<=n; j++)
+  				cin>>toll[i][j];
+  		
+  		min_toll = min_time = inf;
+
+  		memset(visited, 0, sizeof visited);
+
+  		solve(1, 0, 0);
+
+  		cout<<min_toll<<" "<<min_time<<endl;
+  	}
 
     END:
     #ifdef HOME

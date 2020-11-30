@@ -136,15 +136,35 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	LL n, ca=1;
-    while (cin>>n and n) {
-      LL ans = 0;
-      for (LL i=2; i*i<=n; i++) {
-        ans += (((n/i) - i + 1)*i) + (((n/i)*((n/i)+1)/2) - (i*(i+1)/2));
-      }
+  	int t, ca=1;
+  	scanf("%d", &t);
+  	while (t--) {
+  		int n;
+  		scanf("%d", &n);
+  		int start[n+1], end[n+1];
 
-      cout<<"Case "<<ca++<<": "<<ans<<endl;
-    }
+  		for (int i=0; i<n; i++) 
+  			scanf("%d %d", &start[i], &end[i]);
+
+		sort(start, start+n);
+		sort(end, end+n);  		
+  		int wrapper = 0, ans = 0, i = 0, j = 0;
+
+  		while (i<n and j<n) {
+  			if (start[i] <= end[j]) {
+  				wrapper++;
+  				i++;
+  			}
+  			else {
+  				wrapper--;
+  				j++;
+  			}
+
+  			ans = max(ans, wrapper);
+  		}
+
+  		printf("Case %d: %d\n", ca++, ans);
+  	}
 
     END:
     #ifdef HOME

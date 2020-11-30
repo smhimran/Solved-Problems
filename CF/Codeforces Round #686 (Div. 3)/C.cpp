@@ -136,15 +136,37 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	LL n, ca=1;
-    while (cin>>n and n) {
-      LL ans = 0;
-      for (LL i=2; i*i<=n; i++) {
-        ans += (((n/i) - i + 1)*i) + (((n/i)*((n/i)+1)/2) - (i*(i+1)/2));
-      }
+  	int t, ca=1;
+  	cin>>t;
+  	while (t--) {
+  		int n;
+  		cin>>n;
+  		int a[n+1];
+  		map<int, int> freq, left, right;
+  		for (int i=1; i<=n; i++) {
+  			cin>>a[i];
+  			if (i==1)
+  				freq[a[i]]++;
+  			else if (a[i-1] != a[i])
+	  			freq[a[i]]++;
+  			if (i==1)
+  				left[a[i]] = 1;
+  			if (i==n)
+  				right[a[i]] = 1;
+  		}
 
-      cout<<"Case "<<ca++<<": "<<ans<<endl;
-    }
+  		int mn = inf, ans = -1;
+  		for (int i=1; i<=n; i++) {
+  			int moves = freq[a[i]] + 1;
+  			if (left[a[i]])
+  				moves--;
+  			if (right[a[i]])
+  				moves--;
+  			mn = min(mn, moves);
+  		}
+
+  		cout<<mn<<endl;
+  	}
 
     END:
     #ifdef HOME

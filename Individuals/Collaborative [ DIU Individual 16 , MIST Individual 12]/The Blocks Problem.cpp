@@ -136,15 +136,102 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	LL n, ca=1;
-    while (cin>>n and n) {
-      LL ans = 0;
-      for (LL i=2; i*i<=n; i++) {
-        ans += (((n/i) - i + 1)*i) + (((n/i)*((n/i)+1)/2) - (i*(i+1)/2));
-      }
+  	int n;
+  	cin>>n;
+  	string command, type;
+  	int a, b, current[n+1];
+  	stack<int> st[n+1];
 
-      cout<<"Case "<<ca++<<": "<<ans<<endl;
-    }
+  	for (int i=0; i<n; i++) {
+  		current[i] = i;
+  		st[i].push(i);
+  	}
+
+  	while (cin>>command) {
+  		if (command == "quit")
+  			break;
+
+  		cin>>a>>type>>b;
+
+  		if (a==b)
+  			continue;
+
+  		if (current[a] == current[b])
+  			continue;
+
+  		if (command == "move") {
+  			int pos = current[a];
+  			while (st[pos].top() != a) {
+  				int x = st[pos].top();
+  				st[pos].pop();
+  				st[x].push(x);
+  				current[x] = x;
+  			}
+
+  			int pos2 = current[b];
+  			if (type == "onto") {
+  				while (st[pos2].top() != b) {
+	  				int x = st[pos2].top();
+	  				st[pos2].pop();
+	  				st[x].push(x);
+	  				current[x] = x;
+	  			}
+  			}
+
+  			st[pos].pop();
+  			st[pos2].push(a);
+  			current[a] = pos2;
+  		}
+
+  		else {
+  			int pos = current[a];
+  			stack<int> temp;
+
+  			while (st[pos].top() != a) {
+  				int x = st[pos].top();
+  				st[pos].pop();
+  				temp.push(x);
+  			}
+
+  			temp.push(a);
+  			st[pos].pop();
+
+  			int pos2 = current[b];
+  			if (type == "onto") {
+  				while (st[pos2].top() != b) {
+	  				int x = st[pos2].top();
+	  				st[pos2].pop();
+	  				st[x].push(x);
+	  				current[x] = x;
+	  			}
+  			}
+
+  			while (!temp.empty()) {
+  				int x = temp.top();
+  				temp.pop();
+  				current[x] = pos2;
+  				st[pos2].push(x);
+  			}
+  		}
+  	}
+
+  	for (int i=0; i<n; i++) {
+  		cout<<i<<":";
+  		if (!st[i].empty()) {
+  			stack<int> temp;
+  			while (!st[i].empty()) {
+  				int x = st[i].top();
+  				st[i].pop();
+  				temp.push(x);
+  			}
+  			while (!temp.empty()) {
+  				int x = temp.top();
+  				cout<<" "<<x;
+  				temp.pop();
+  			}
+  		}
+  		cout<<endl;
+  	}
 
     END:
     #ifdef HOME

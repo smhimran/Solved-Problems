@@ -126,6 +126,9 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+bool isSame(string a, string b) {
+	return ((a[0] == b[0]) or (a[1] == b[1]));
+}
 
 int main()
 {
@@ -136,15 +139,62 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	LL n, ca=1;
-    while (cin>>n and n) {
-      LL ans = 0;
-      for (LL i=2; i*i<=n; i++) {
-        ans += (((n/i) - i + 1)*i) + (((n/i)*((n/i)+1)/2) - (i*(i+1)/2));
-      }
+  	string s;
+  	while (cin>>s) {
+  		if (s == "#")
+  			break;
 
-      cout<<"Case "<<ca++<<": "<<ans<<endl;
-    }
+  		vector<vector<string> > st;
+
+  		st.push_back(std::vector<string> (1, s));
+
+  		int n = 0;
+
+  		for (int j=2; j<=52; j++) {
+  			cin>>s;
+  			st.push_back(std::vector<string> (1, s));
+  			n++;
+
+  			bool op;
+	  		do {
+	  			op = 0;
+	  			for (int i=0; i<=n; i++) {
+	  				if (i>=3 and isSame(st[i].back(), st[i-3].back())) {
+						string x = st[i].back();
+						st[i].pop_back();
+						st[i-3].push_back(x);
+						op = 1;
+					}
+
+	  				else if (i>=1 and isSame(st[i].back(), st[i-1].back())) {
+	  					string x = st[i].back();
+	  					st[i].pop_back();
+	  					st[i-1].push_back(x);
+	  					op = 1;
+	  				}
+	  				else 
+	  					continue;
+
+					if (st[i].empty()) {
+						st.erase(st.begin() + i);
+						n--;
+					}
+
+					break;
+	  			}
+	  		} while (op);
+  		}
+
+
+  		cout<<n+1<<" pile";
+  		if (n>0)
+  			cout<<"s";
+  		cout<<" remaining: ";
+  		cout<<st[0].size();
+  		for (int i=1; i<=n; i++)
+  			cout<<" "<<st[i].size();
+  		cout<<endl;
+  	}
 
     END:
     #ifdef HOME

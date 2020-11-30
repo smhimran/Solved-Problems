@@ -60,7 +60,7 @@ typedef set<char> SC;
 #define BSRC                binary_search
 #define MAX                 10000007
 #define MIN                 -10000007
-#define inf                 int(1e6+9)
+#define inf                 LL(1e18)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
 #define FastIO              ios_base::sync_with_stdio(false)
@@ -126,6 +126,58 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+#define LIMIT int(1e3+6)
+bool composite[LIMIT+1];
+vector<int> prime;
+
+void sieve()
+{
+    int i;
+    composite[0]=composite[1]=1;
+    for (i=4; i<=LIMIT; i+=2)
+        composite[i]=1;
+    prime.push_back(2);
+    for (i=3; i*i<=LIMIT; i+=2) {
+        if (!composite[i]) {
+            prime.push_back(i);
+            for (int j=i*i; j<=LIMIT; j+=2*i)
+                composite[j]=1;
+        }
+    }
+    for (; i<=LIMIT; i++)
+        if (!composite[i])
+            prime.push_back(i);
+}
+
+vector<LL> primes;
+map<LL, LL> times;
+
+void factorization(long long n) {
+	if (n % 2 == 0) {
+		if (!times[2])
+			primes.push_back(2);
+	    while (n % 2 == 0) {
+	        times[2]++;
+	        n /= 2;
+	    }
+	}
+    for (long long d = 3; d * d <= n; d += 2) { 
+    	if (n % d == 0) {
+    		if (!times[d])
+	    		primes.push_back(d);
+	        while (n % d == 0) {
+	            times[d]++;
+	            n /= d;
+	        }
+	    }
+    }
+    if (n > 1) {
+    	if (!times[n])
+	        primes.push_back(n);
+	    times[n]++;
+    }
+}
+
 
 int main()
 {
@@ -136,15 +188,36 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	LL n, ca=1;
-    while (cin>>n and n) {
-      LL ans = 0;
-      for (LL i=2; i*i<=n; i++) {
-        ans += (((n/i) - i + 1)*i) + (((n/i)*((n/i)+1)/2) - (i*(i+1)/2));
-      }
+  	int t, ca=1;
+  	cin>>t;
+  	while (t--) {
+  		LL n;
+  		string s;
+  		cin>>n>>s;
+  		int f = len(s);
 
-      cout<<"Case "<<ca++<<": "<<ans<<endl;
-    }
+  		bool infinity = 0;
+  		LL ans = 1;
+
+  		primes.clear();
+  		times.clear();
+
+  		for (int i=n; i>1; i-=f) 
+  			factorization(i);
+
+  		for (auto i: primes) {
+  			ans *= (times[i] + 1);
+
+  			if (ans > inf)
+  				infinity = 1;
+  		}
+
+  		cout<<"Case "<<ca++<<": ";
+  		if (infinity)
+  			cout<<"Infinity"<<endl;
+  		else
+  			cout<<ans<<endl;
+  	}
 
     END:
     #ifdef HOME
