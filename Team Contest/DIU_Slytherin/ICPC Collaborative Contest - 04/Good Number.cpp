@@ -126,6 +126,7 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+inline LL  exp(LL a, LL b)          {  LL res = 1; while (b > 0) { if(b & 1) { res = res * a; } a = a * a ; b >>= 1; } return res; }
 
 int main()
 {
@@ -137,18 +138,52 @@ int main()
     #endif
     
   	int t, ca=1;
-  	cin>>t;
+  	scanf("%d", &t);
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	
+  		LL n, k;
+  		scanf("%lld %lld", &n, &k);
+  		
+  		printf("Case #%d: ", ca++);
+  		
+  		if (k == 1 or k>=32) {
+  			printf("%lld\n", n);
+  			continue;
+  		}
+  		
+  		
+  		vector<LL> pow;
+  		
+  		for (LL i=2; ; i++) {
+  			LL now = exp(i, k);
+  			
+  			if (now > n)
+  				break;
+  			
+  			pow.push_back(now);
+  		}
+  		
+  		LL ans = 0, prev = 1, i, j;
+  		
+  		for (i=2, j = 0; j < pow.size(); i++, j++) {
+  			LL now = pow[j];
+  			
+  			LL cnt = (now - 1) / (i-1);
+  			cnt -= ((prev - 1) / (i-1));
+  			
+  			ans += cnt;
+  			
+  			prev = now;
+  		}
+  		
+  		LL now = min(n, exp(i, k));
+  		
+  		LL cnt = now / (i-1);
+		cnt -= ((prev - 1) / (i-1));
+		
+		ans += cnt;
+  		
+  		printf("%lld\n", ans);
   	}
 
     END:

@@ -126,6 +126,85 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int n, K;
+int grid[80][80], dp[80][80][10], path[80][80];
+bool visited[80][80][10];
+
+int solve(int i, int j, int k) {
+	if (i==n-1 and j==n-1)
+		return grid[i][j];
+
+	if (i>=n or j>=n)
+		return 0;
+
+	if (i<0 or j<0)
+		return 0;
+
+	if (k >= K)
+		return -inf;
+
+	int &ret = dp[i][j][k];
+
+	if (visited[i][j][k])
+		return ret;
+
+	visited[i][j][k] = 1;
+
+	ret = -inf;
+
+	// debug(i, j, k);
+
+	// ret = max(ret, grid[i][j] + solve(i+1, j, k + (grid[i][j] < 0)));
+	// ret = max(ret, grid[i][j] + solve(i, j + 1, k + (grid[i][j] < 0)));
+	// ret = max(ret, grid[i][j] + solve(i, j - 1, k + (grid[i][j] < 0)));
+
+	int temp = grid[i][j] + solve(i+1, j, k+(grid[i][j] < 0));
+
+	if (temp > ret) {
+		ret = temp;
+		path[i][j] = 1;
+	}
+
+	temp = grid[i][j] + solve(i, j + 1, k+(grid[i][j] < 0));
+
+	if (temp > ret) {
+		ret = temp;
+		path[i][j] = 2;
+	}
+
+	temp = grid[i][j] + solve(i, j - 1, k+(grid[i][j] < 0));
+
+	if (temp > ret) {
+		ret = temp;
+		path[i][j] = 3;
+	}
+
+	return ret;
+}
+
+void print(int i, int j) {
+	if (i>=n-1 or j>=n-1)
+		return;
+	
+	
+	if (path[i][j] == 0)
+		return;
+
+	if (path[i][j] == 1) {
+		cout<<"D";
+		print(i+1, j);
+	}
+
+	if (path[i][j] == 2) {
+		cout<<"R";
+		print(i, j+1);
+	}
+
+	if (path[i][j] == 3) {
+		cout<<"L";
+		print(i, j-1);
+	}
+}
 
 int main()
 {
@@ -136,19 +215,28 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	while (cin>>n>>K) {
+		if (n==0 and K==0)
+			break;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+		for (int i=0; i<n; i++)
+			for (int j=0; j<n; j++)
+				cin>>grid[i][j];
 
-  		ans += k;
+		memset(visited, 0, sizeof visited);
 
-  		cout<<ans<<endl;
+		// for (int i=0; i<n; i++)
+		// 	for (int j=0; j<n; j++)
+		// 		for (int k=0; k<n; k++)
+		// 			dp[i][j][k] = -inf;
+
+		int ans = solve(0, 0, 0);
+
+		cout<<ans<<endl;
+
+		if (ans > 0) {
+			print(0, 0);
+		}
   	}
 
     END:

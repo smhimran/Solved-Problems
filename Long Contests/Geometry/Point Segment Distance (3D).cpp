@@ -52,6 +52,7 @@ typedef set<char> SC;
 #define PP                  prev_permutation
 #define NP                  next_permutation
 #define MP                  make_pair
+#define sqr(x)				((x) * (x))
 #define CLRN(a, b)          memset(a, b, sizeof(a))
 #define CLR(a)              memset(a, 0, sizeof(a))
 #define ALL(a)              a.begin(), a.end()
@@ -126,6 +127,10 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+double distance(double x, double y, double z) {
+	return sqrt(sqr(x) + sqr(y) + sqr(z));
+}
+
 
 int main()
 {
@@ -137,18 +142,45 @@ int main()
     #endif
     
   	int t, ca=1;
-  	cin>>t;
+  	scanf("%d", &t);
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  		double x1, y1, z1, x2, y2, z2, x, y, z;
+  		
+  		scanf("%lf %lf %lf %lf %lf %lf %lf %lf %lf", &x1, &y1, &z1, &x2, &y2, &z2, &x, &y, &z);
+  		
+  		double low = 0, high = 1, mid, mid2, ans = 1e9;
+  		
+  		int iterations = 128;
+  		
+  		while (iterations--) {
+  			double length = high - low;
+  			
+  			mid = low + length /3.0;
+  			
+  			mid2 = low + (2*length) /3.0;
+  			
+  			double a = x1 + (x2 - x1) * mid;
+  			double b = y1 + (y2 - y1) * mid;
+  			double c = z1 + (z2 - z1) * mid;
+  			
+  			double dis1 = distance(x - a, y - b, z - c);
+  			
+  			a = x1 + (x2 - x1) * mid2;
+  			b = y1 + (y2 - y1) * mid2;
+  			c = z1 + (z2 - z1) * mid2;
+  			
+  			double dis2 = distance(x - a, y - b, z - c);
+  			
+  			if (dis1 > dis2)
+  				low = mid;
+  			
+  			else 
+  				high = mid2;
+  			
+  			ans = min({ans, dis1, dis2});
+  		} 
+  		
+  		printf("Case %d: %.10lf\n", ca++, ans);
   	}
 
     END:

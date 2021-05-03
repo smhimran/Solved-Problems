@@ -126,6 +126,61 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+#define LIMIT 10000100
+
+vector<int> primePosition[LIMIT + 1];
+
+int spf[10000101];
+
+
+void smallest_prime_fector() {// good range 1e6
+    int lim=sqrt(LIMIT)+2;
+    for(int i=1;i<=LIMIT;i++)spf[i]=i;
+    for(int i=4;i<=LIMIT;i+=2)spf[i]=2;
+    for(int i=3;i<=LIMIT;i+=2){
+        if(spf[i]==i && i<=lim){
+            for(int j=i*i;j<=LIMIT;j+=i){
+                if(spf[j]==j)spf[j]=i;
+            }
+        }
+    }
+}
+
+vector<int> logn_prime_factor(int n, int pos) {
+	vector<int> ret;
+    while(n!=1){
+        primePosition[spf[n]].push_back(pos);
+        
+        ret.push_back(spf[n]);
+        n/=spf[n];
+    }
+    
+    return ret;
+}
+
+int parent[LIMIT];
+
+void init() {
+	for (int i=0; i<LIMIT; i++)
+		parent[i] = i;
+}
+
+int find(int n) {
+	if (parent[n] == n)
+		return n;
+	
+	return find(parent[n]);
+}
+
+void uni(int a, int b) {
+	parent[find(b)] =  find(a);
+}
+
+void clear() {
+	init();
+	for (int i=0; i<LIMIT; i++)
+		primePosition[i].clear();
+}
 
 int main()
 {
@@ -136,19 +191,42 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
+    smallest_prime_fector();
+    
   	int t, ca=1;
-  	cin>>t;
+  	scanf("%d", &t);
+  	
+  	init();
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	
+  		int n;
+  		scanf("%d", &n);
+  		
+  		int a[n+1];
+  		vector<int> factors[n+1];
+  		
+  		for (int i=1; i<=n; i++) {
+  			cin>>a[i];
+  			
+  			factors[i] = logn_prime_factor(a[i], i);
+  		}
+  		
+  		for (int i=1; i<=n; i++) {
+  			for (auto j: factors[i]) {
+  				for (auto k: primePosition[j]) {
+  					uni(i, k);
+  				}
+  			}
+  		}
+  		
+  		int ans = 0;
+  		
+  		for (int i=1; i<=n; i++) {
+  			if (find(i) == i)
+  				ans++;
+  		}
+  		
+  		printf("Case %d: %d\n", ca++, ans);
   	}
 
     END:

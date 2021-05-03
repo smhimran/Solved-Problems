@@ -136,21 +136,49 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
-  	}
-
+    string s, word = "";
+    
+    map<int, int> times;
+    
+    while (getline(cin, s)) {
+    	
+    	if (s == "#") {
+    		for (auto i: times) {
+    			cout<<i.first<<" "<<i.second<<endl;
+    		}
+    		
+    		cout<<endl;
+    		
+    		times.clear();
+    	}
+    	
+    	for (int i=0; i<len(s); i++) {
+    		if (s[i] == '-' or s[i] == 39) 
+    			continue;
+    		
+    		else if (isalpha(s[i])) 
+    			word += s[i];
+    		
+    		else {    			
+    			int l = len(word);
+    			
+    			if (l)
+	    			times[l]++;
+    			
+    			word = "";
+    		}
+    	}
+    	
+    	if (s.back() != '-' and s.back() != 39) {
+    		int l = len(word);
+    			
+			if (l)
+    			times[l]++;
+			
+			word = "";
+    	}
+    }
+  	
     END:
     #ifdef HOME
      fprintf(stderr, "\n>>Runtime: %.10fs\n", (double) (clock() - Start) / CLOCKS_PER_SEC);

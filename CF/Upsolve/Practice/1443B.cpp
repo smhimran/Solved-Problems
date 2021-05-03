@@ -139,15 +139,43 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	
+  		int a, b;
+  		cin>>a>>b;
+  		
+  		string s;
+  		cin>>s;
+  		
+  		if (s == "1") {
+  			cout<<a<<endl;
+  			continue;
+  		}
+  		
+  		if (s == "0") {
+  			cout<<0<<endl;
+  			continue;
+  		}
+  		
+  		std::vector<int> v;
+  		
+  		for (int i=0; i<len(s); i++) 
+  			if (s[i] == '1')
+  				v.push_back(i); 
+  				
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
+  		int n = v.size();
+  		
+  		if (n == 0) {
+  			cout<<0<<endl;
+  			continue;
+  		}
+  		
+  		int ans = a;
+  		
+  		for (int i=1; i<n; i++) 
+  			if (v[i] - v[i-1] != 1) 
+  				ans += min(a, b * (v[i] - v[i-1] - 1));
+  		
   		cout<<ans<<endl;
   	}
 

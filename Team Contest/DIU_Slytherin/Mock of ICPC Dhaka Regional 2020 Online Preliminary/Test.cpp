@@ -60,7 +60,7 @@ typedef set<char> SC;
 #define BSRC                binary_search
 #define MAX                 10000007
 #define MIN                 -10000007
-#define inf                 int(1e6+9)
+#define inf                 LL(1e18+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
 #define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
@@ -136,20 +136,25 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
-  	}
+  	LL x = 0, n = LL(1e5+9);
+  	
+  	bool ok = 0;
+  	
+  	int a[n+5];
+  	
+  	for (int i=0; i<n; i++) {
+  		a[i] = n - i;
+  	}	
+  	
+  	sort(a, a+n);
+  	
+  	cout<<a[5]<<endl;
+  	
+  	if (!ok)
+	  	cout<<"Welcome to ICPC Dhaka Regional Online Preliminary Contest, 2019"<<endl;
+	else
+		cout<<"Not even"<<endl;
+	 
 
     END:
     #ifdef HOME

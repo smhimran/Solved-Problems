@@ -60,7 +60,7 @@ typedef set<char> SC;
 #define BSRC                binary_search
 #define MAX                 10000007
 #define MIN                 -10000007
-#define inf                 int(1e6+9)
+#define inf                 int(1e9+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
 #define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
@@ -137,18 +137,95 @@ int main()
     #endif
     
   	int t, ca=1;
-  	cin>>t;
+  	scanf("%d", &t);
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	
+  		int n, m;
+  		scanf("%d %d", &n, &m);
+  		
+  		int a[n+1][m+1], ans[n+1][m+1];
+  		
+  		bool taken[n+1][m+1];
+  		
+  		memset(taken, 0, sizeof taken);
+  		memset(ans, 0, sizeof ans);
+  		
+  		vector<PII> mins;
+  		
+  		for (int i=1; i<=n; i++) {
+  			int mn = inf, pos = 0;
+  			
+  			for (int j=1; j<=m; j++) {
+  				scanf("%d", &a[i][j]);
+  				
+  				if (mn > a[i][j]) {
+  					mn = a[i][j];
+  					pos = j;
+  				}
+  			}
+  			
+  			taken[i][pos] = 1;
+  			mins.push_back({mn, i});
+  		}
+  		
+  		int z = 1;
+  		
+  		for (auto i: mins) {
+  			ans[i.second][z] = i.first;
+  			z++;
+  			
+  			if (z > m)
+  				z = 1;
+  		}
+  		
+  		for (int i=1; i<=n; i++) {
+  			for (int j=1; j<=m; j++) {
+  				printf("%d ", ans[i][j]);
+  			}
+  			printf("\n");
+  		}
+  		
+  		
+  		int p = 1, q = 1;
+  		
+  		if (ans[p][q]) {
+			q++;
+		}
+		
+		if (q > m) {
+			q = 1;
+			p++;
+		}
+  		
+  		for (int i=1; i<=n; i++) {
+  			for (int j=1; j<=m; j++) {
+  				if (!taken[i][j]) {
+  					ans[p][q] = a[i][j];
+  					q++;
+  				}
+				
+				if (q > m) {
+					q = 1;
+					p++;
+				}
+				
+				if (ans[p][q]) {
+					q++;
+				}
+				
+				if (q > m) {
+					q = 1;
+					p++;
+				}
+  			}
+  		}
+  		
+  		for (int i=1; i<=n; i++) {
+  			for (int j=1; j<=m; j++) {
+  				printf("%d ", ans[i][j]);
+  			}
+  			printf("\n");
+  		}
   	}
 
     END:

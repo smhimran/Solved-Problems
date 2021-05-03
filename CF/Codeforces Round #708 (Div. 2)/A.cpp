@@ -139,16 +139,33 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  		int n;
+  		cin>>n;
+  		
+		int freq[105];
+		memset(freq, 0, sizeof freq);
+		
+		for (int i=0; i<n; i++) {
+			int x;
+			cin>>x;
+			freq[x]++;
+		}  
+		
+		std::vector<int> v;
+		
+		for (int i=100; i>=1; i--) {
+			for (int j=100; j>=0; j--) {
+				if (freq[j] == i) {
+					v.push_back(j);
+					freq[j]--;
+				}
+			}
+		}
+		
+		reverse(v.begin(), v.end());
+		
+		pvec(v);
+		cout<<endl;
   	}
 
     END:

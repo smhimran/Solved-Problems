@@ -139,16 +139,57 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		LL a, b;
+  		cin>>a>>b;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		if (a == b) 
+  			cout<<0<<endl;
+  		else if (a < b) {
+  			LL steps = 0;
 
-  		ans += k;
+  			while (a * 8 <= b) {
+  				a *= 8;
+  				steps++;
+  			}
 
-  		cout<<ans<<endl;
+			while (a * 4 <= b) {
+  				a *= 4;
+  				steps++;
+  			}
+
+  			while (a * 2 <= b) {
+  				a *= 2;
+  				steps++;
+  			} 
+
+  			if (a == b)
+  				cout<<steps<<endl;
+  			else
+  				cout<<-1<<endl; 			
+  		}
+  		else {
+  			LL steps = 0;
+
+  			while (a % 8 == 0 and a / 8 >= b) {
+  				a /= 8;
+  				steps++;
+  			}
+
+			while (a % 4 == 0 and a / 4 >= b) {
+  				a /= 4;
+  				steps++;
+  			}
+
+  			while (a % 2 == 0 and a / 2 >= b) {
+  				a /= 2;
+  				steps++;
+  			} 
+
+  			if (a == b)
+  				cout<<steps<<endl;
+  			else
+  				cout<<-1<<endl; 	
+  		}
   	}
 
     END:

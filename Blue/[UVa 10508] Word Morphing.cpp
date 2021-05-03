@@ -126,6 +126,16 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int diff(string a, string b) {
+	int ret = 0;
+	
+	for (int i=0; i<len(a); i++) {
+		if (a[i] != b[i])
+			ret++;
+	}
+	
+	return ret;
+}
 
 int main()
 {
@@ -136,19 +146,42 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	int n, m;
+  	while (cin>>n>>m) {
+  		bool taken[n+1];
+  		
+  		string s, words[n+1];
+  		
+  		for (int i=0; i<n; i++) {
+  			cin>>s;
+  			
+  			words[i] = s;
+  			taken[i] = 0;
+  		}
+  		
+  		cout<<words[0]<<'\n';
+  		
+  		string prev = words[0];
+  		
+  		int rem = n;
+  		
+  		while (rem--) {
+  			
+  			for (int i=1; i<n; i++) {
+  				if (taken[i])
+  					continue;
+  				
+  				if (diff(prev, words[i]) == 1) {
+  					cout<<words[i]<<'\n';
+  					
+  					prev = words[i];
+  					
+  					taken[i] = 1;
+  					
+  					break;
+  				}
+  			}
+  		}
   	}
 
     END:

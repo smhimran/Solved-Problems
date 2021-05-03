@@ -125,7 +125,28 @@ int LCM(int a, int b) { return a * (b/GCD(a, b)); }
 bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
+int n, q, m, a[205], d;
+int dp[205][205][50];
 
+int solve(int i, int taken, int sum) {
+	if (taken == m) 
+		return sum == 0;
+
+	if (i == n)
+		return 0;
+
+	int &ret = dp[i][taken][sum];
+
+	if (ret != -1)
+		return ret;
+
+	ret = 0;
+
+	ret += solve(i+1, taken+1, (sum + a[i])% d);
+	ret += solve(i+1, taken, sum % d);
+
+	return ret;
+}
 
 int main()
 {
@@ -136,19 +157,25 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+    int ca = 1;
+  	while (cin>>n>>q) {
+  		if (n==0 and q==0)
+  			break;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		for (int i=0; i<n; i++)
+  			cin>>a[i];
 
-  		ans += k;
+  		cout<<"SET "<<ca++<<":"<<endl;
 
-  		cout<<ans<<endl;
+  		int query = 1;
+
+  		while (q--) {
+  			cin>>d>>m;
+
+  			memset(dp, -1, sizeof dp);
+
+  			cout<<"QUERY "<<query++<<": "<<solve(0, 0, 0)<<endl;
+  		}
   	}
 
     END:

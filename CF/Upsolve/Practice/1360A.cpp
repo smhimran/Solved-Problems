@@ -126,6 +126,9 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int sqr(int x) {
+	return ((x) * (x));
+}
 
 int main()
 {
@@ -139,16 +142,15 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int a, b;
+  		cin>>a>>b;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		int x = min(a, b), y= max(a, b);
 
-  		ans += k;
-
-  		cout<<ans<<endl;
+  		if (2*x >= y)
+  			cout<<sqr(2 * x)<<endl;
+  		else
+  			cout<<sqr(y)<<endl;
   	}
 
     END:

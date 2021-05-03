@@ -139,16 +139,30 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	
+  		string a, b, c;
+  		cin>>a>>b>>c;
+  		
+  		int n = len(a), m = len(b), o = len(c);
+  		
+  		int dp[n+1][m+1][o+1];
+  		
+  		for (int i=0; i<=n; i++) {
+  			for (int j=0; j<=m; j++) {
+  				for (int k=0; k<=o; k++) {
+  					if (i==0 or j==0 or k==0)
+  						dp[i][j][k] = 0;
+  					
+  					else if (a[i-1] == b[j-1] and a[i-1] == c[k-1])
+  						dp[i][j][k] = 1 + dp[i-1][j-1][k-1];
+  					
+  					else 
+  						dp[i][j][k] = max({dp[i-1][j][k], dp[i][j-1][k], dp[i][j][k-1]});
+  				}
+  			}
+  		}
+  		
+  		cout<<"Case "<<ca++<<": "<<dp[n][m][o]<<endl;
   	}
 
     END:

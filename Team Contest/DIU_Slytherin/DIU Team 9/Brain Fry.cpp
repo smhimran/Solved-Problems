@@ -126,6 +126,164 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int n, m, t;
+int dist[500][500], cost[500][500], dis[500];
+vector<int> v[500];
+bool visited[500], vis[500][120], vis2[500][120];
+
+double probability[500];
+
+double dp[500][120], dp2[500][120];
+
+class node 
+{
+public:
+    int x, d;
+
+    node(int x, int d) {
+        this->x=x;
+        this->d=d;
+    }
+
+    bool operator<(const node &a) const{
+        return d > a.d;
+    }
+};
+
+void dijkstra(int source) {
+    for (int i=0; i<=n; i++)
+        dis[i]=inf;
+    priority_queue<node> pq;
+    pq.push(node(source, 0));
+    dis[source]=0;
+    while (!pq.empty()) {
+        node now = pq.top();
+        int u=now.x, d=now.d;
+        pq.pop();
+        if (visited[u])
+            continue;
+        visited[u]=1;
+        for (auto i: v[u]) {
+            if (dis[u]+cost[u][i] < dis[i]) {
+                dis[i] = dis[u]+cost[u][i];
+                pq.push(node(i, dis[i]));
+            }
+        }
+    }
+    for (int i=1; i<=n; i++) 
+    	dist[source][i] = dis[i];
+}
+
+double dfs(int u, int currentTime) {
+	double & ret = dp[u][currentTime];
+	
+	if (vis[u][currentTime])
+		return ret;
+	
+	vis[u][currentTime] = 1;
+	ret = probability[u];
+	
+	if (currentTime >= t) 
+		return ret;
+	
+	double no = 1.0 - probability[u];
+	
+	int canVisit = 0;
+	
+	for (auto i: v[u]) {
+		if (i != 0)
+			canVisit++;
+	}
+	
+	
+	if (canVisit == 0) {
+		if (u == 0)
+			return 0.0;
+		
+		ret += (1.0 - probability[u]) * dfs(0, currentTime + dis[u]);
+		
+		return ret;
+	}
+	
+	else {
+		double chooseOne = 1.0 / double(canVisit);
+		
+		for (auto i: v[u]) {
+			
+			if (i == 0)
+				continue;
+
+			ret += (1.0 - probability[u]) * chooseOne * dfs(i, currentTime + cost[u][i]);
+		}
+		
+	}
+	
+	return ret;
+}
+
+double dfs2(int u, int currentTime) {
+	double & ret = dp2[u][currentTime];
+	
+	if (vis2[u][currentTime])
+		return ret;
+	
+	vis2[u][currentTime] = 1;
+	ret = probability[u] * dis[u];
+	double no = 1.0 - probability[u];
+	
+	if (currentTime >= t) {
+		ret += (no * dis[u]);
+		return ret;
+	}
+	
+	
+	int canVisit = 0;
+	
+	for (auto i: v[u]) {
+		if (i != 0)
+			canVisit++;
+	}
+	
+	
+	if (canVisit == 0) {
+		if (u == 0)
+			return 0.0;
+		
+		ret += (1.0 - probability[u]) * (dis[u] + dfs2(0, currentTime + dis[u]));
+		
+		return ret;
+	}
+	
+	else {
+		double chooseOne = 1.0 / double(canVisit);
+		
+		for (auto i: v[u]) {
+			
+			if (i == 0)
+				continue;
+
+			ret += (1.0 - probability[u]) * chooseOne * (cost[u][i] + dfs2(i, currentTime + cost[u][i]));
+		}
+		
+	}
+	
+	return ret;
+}
+
+void clear() {
+	for (int i=0; i<500; i++) {
+		v[i].clear();
+		visited[i] = 0;
+		probability[i] = 0.0;
+		dis[i] = 0;
+	}
+	
+	memset(dist, 0, sizeof dist);
+	memset(cost, 0, sizeof cost);
+	memset(vis, 0, sizeof vis);
+	memset(vis2, 0, sizeof vis2);
+}
+
 
 int main()
 {
@@ -136,19 +294,41 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	int T, ca=1;
+  	scanf("%d", &T);
+  	while (T--) {
+  	
+  		// int n, m, t;
+  		clear();
+  		scanf("%d %d %d", &n, &m, &t);
+  		
+  		for (int i=1; i<=n; i++) 
+  			scanf("%lf", probability+i);
+  		
+  		for (int i=0; i<m; i++) {
+  			int x, y, w;
+  			scanf("%d %d %d", &x, &y, &w);
+  			
+  			v[x].push_back(y);
+  			v[y].push_back(x);
+  			
+  			cost[x][y] = w;
+  			cost[y][x] = w;
+  		}
+  		
+  		dijkstra(0);
+  		
+  		printf("Case %d: ", ca++);
+  		
+  		// for (int i=0; i<=n; i++)
+  		// 	cout<<dis[i]<<" ";
+  		// // cout<<endl;
+  		
+  		// cout<<dfs2(0, 0)<<endl;
+  		
+  		printf("%.5lf %.5lf\n", dfs(0, 0), dfs2(0, 0));
+  		
+  		
   	}
 
     END:

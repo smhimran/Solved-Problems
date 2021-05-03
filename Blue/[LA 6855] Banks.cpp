@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -132,21 +132,53 @@ int main()
     // FastIO;
     #ifdef HOME
      clock_t Start=clock();
-     freopen("in.txt", "r", stdin);
+     
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+     freopen("a.in", "r", stdin);
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  	int n;
+  	while (cin>>n) {
+  		int a[n+1];
+  		set<PII> s;
 
-  		ans += k;
+  		for (int i=0; i<n; i++) {
+  			cin>>a[i];
+  			if (a[i] < 0) 
+  				s.insert({a[i], i});
+  		}
+
+  		int ans = 0;
+
+  		while (!s.empty()) {
+  			auto z = s.begin();
+  			s.erase(z);
+
+  			PII x = *z;
+  			int val = x.first, ind = x.second;
+
+  			int left = (ind - 1 + n)%n, right = (ind + 1)%n;
+
+  			if (a[left] < 0) 
+  				s.erase({a[left], left});
+
+			if (a[right] < 0) 
+				s.erase({a[right], right});
+
+			a[ind] *= -1;
+
+			a[left] -= a[ind];
+			a[right] -= a[ind];
+
+			if (a[left] < 0) 
+  				s.insert({a[left], left});
+
+			if (a[right] < 0) 
+				s.insert({a[right], right});
+
+			ans++;
+  		}
 
   		cout<<ans<<endl;
   	}

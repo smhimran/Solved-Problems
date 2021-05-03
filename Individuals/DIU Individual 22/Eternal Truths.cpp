@@ -139,14 +139,27 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int r, c, x, y, ans = 0;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		char grid[r+5][c+5];
+  		bool visited[5][r+5][c+5];
+  		
+  		cin>>r>>c;
 
-  		ans += k;
+  		for (int i=1; i<=r; i++) {
+  			for (int j=1; j<=c; j++) {
+  				cin>>grid[i][j];
+
+  				if (grid[i][j] == 'S')
+  					x = i, y = j;
+  			}
+  		}
+
+  		ans = -1;
+
+  		memset(visited, 0, sizeof visited);
+
+  		
 
   		cout<<ans<<endl;
   	}

@@ -136,19 +136,29 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	int n;
+  	
+  	while (cin>>n and n) {
+  		priority_queue<int, vector<int>, greater<int> > q;
+  		int x, y, cost = 0;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		for (int i=0; i<n; i++) {
+  			cin>>x;
+  			q.push(x);
+  		}
 
-  		ans += k;
+  		while (q.size() > 1) {
+  			x = q.top();
+  			q.pop();
 
-  		cout<<ans<<endl;
+  			y = q.top();
+  			q.pop();
+
+  			q.push(x + y);
+  			cost += (x + y);
+  		}
+
+  		cout<<cost<<endl;
   	}
 
     END:

@@ -60,7 +60,7 @@ typedef set<char> SC;
 #define BSRC                binary_search
 #define MAX                 10000007
 #define MIN                 -10000007
-#define inf                 int(1e6+9)
+#define inf                 LL(1e9+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
 #define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
@@ -126,6 +126,7 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+LL a[505][505];
 
 int main()
 {
@@ -136,19 +137,56 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	LL n, m;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  	while (cin>>n>>m) {
+  		if (n==0 and m==0)
+  			break;
 
-  		ans += k;
+  		for (int i=0; i<=n; i++)
+  			for (int j=0; j<=n; j++)
+  				a[i][j] = 0;
 
-  		cout<<ans<<endl;
+  		for (LL i=1; i<=n; i++) {
+  			for (LL j=1; j<=m; j++) {
+  				LL x;
+  				cin>>x;
+  				a[i][j] = (x? MIN: 1);
+  			}
+  		}
+
+  		for (LL i=1; i<=n; i++) 
+			for (LL j=1; j<=m; j++)
+				a[i][j] += a[i-1][j];
+
+
+		LL ans = -inf;
+
+		for (LL i=1; i<=n; i++) {
+			for (LL j=i; j<=n; j++) {
+				LL sum[m + 2];
+
+				for (LL k = 1; k <=m; k++)
+					sum[k] = a[j][k] - a[i - 1][k];
+
+				LL mx = -inf, now = 0;
+
+				for (LL k=1; k<=m; k++) {
+					now = max(now + sum[k], sum[k]);
+
+					mx = max(mx, now);
+
+					// if (sum[k] < 0)
+					// 	now = 0;
+				}
+
+				ans = max(ans, mx);
+			}
+		}
+
+		ans = max(0LL, ans);
+
+		cout<<ans<<endl;
   	}
 
     END:

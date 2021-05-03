@@ -136,20 +136,26 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	LL n;
+  	cin>>n;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  	map<LL, LL> freq;
+  	LL x, mx = 0;
 
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	while (n--) {
+  		cin>>x;
+  		freq[x]++;
+  		mx = max(mx, x);
   	}
+
+  	bool ok = 0;
+
+  	for (auto i: freq) {
+  		if (i.second & 1)
+  			ok = 1;
+  	}
+
+  	cout<<(ok? "Conan": "Agasa")<<endl;
 
     END:
     #ifdef HOME

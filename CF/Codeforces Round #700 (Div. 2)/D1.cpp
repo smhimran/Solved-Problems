@@ -136,20 +136,29 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	int n;
+  	cin>>n;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  	vector<int> a, b;
 
-  		ans += k;
+  	while (n--) {
+  		int x;
+  		cin>>x;
 
-  		cout<<ans<<endl;
+  		if (a.empty())
+  			a.push_back(x);
+  		else if (b.empty())
+  			b.push_back(x);
+
+  		else {
+  			if (x != a.back())
+  				a.push_back(x);
+  			else if (x != b.back())
+  				b.push_back(x);
+  		}
   	}
+
+  	cout<<(int(a.size()) + int(b.size()))<<endl;
 
     END:
     #ifdef HOME

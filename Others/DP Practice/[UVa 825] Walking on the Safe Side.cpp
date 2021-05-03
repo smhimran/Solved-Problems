@@ -125,7 +125,34 @@ int LCM(int a, int b) { return a * (b/GCD(a, b)); }
 bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
+int n, m;
+int grid[1000][1000], dp[1000][1000];
 
+int solve(int i, int j) {
+	if (i == n and j == m)
+		return 1;
+
+	if (i>n)
+		return 0;
+
+	if (j>m)
+		return 0;
+
+	if (grid[i][j] == -1)
+		return 0;
+
+	int &ret = dp[i][j];
+
+	if (ret != -1)
+		return ret;
+
+	ret = 0;
+
+	ret += solve(i+1, j);
+	ret += solve(i, j+1);
+
+	return ret;
+}
 
 int main()
 {
@@ -139,16 +166,33 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		cin>>n>>m;
+  		int x;
+  		memset(grid, 0, sizeof grid);
+  		getchar();
+  		for (int i=0; i<n; i++) {
+  			string s;
+  			getline(cin, s);
+  			stringstream ss(s);
+  			ss>>x;
+  			int z;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  			while (ss>>z) {
+  				grid[x][z] = -1;
+  			}
+  		}
 
-  		ans += k;
+  		// for (int i=1; i<=n; i++) {
+  		// 	for (int j=1; j<=m; j++) {
+  		// 		printf("%2d ", grid[i][j]);
+  		// 	}
+  		// 	cout<<endl;
+  		// }
 
-  		cout<<ans<<endl;
+  		memset(dp, -1, sizeof dp);
+  		cout<<solve(1, 1)<<endl;
+  		if (t)
+  			cout<<endl;
   	}
 
     END:

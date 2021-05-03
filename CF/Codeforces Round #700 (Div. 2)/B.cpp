@@ -139,16 +139,37 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		LL attack, health, n;
+  		cin>>attack>>health>>n;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		PII monster[n+1];
 
-  		ans += k;
+  		for (int i=0; i<n; i++)
+  			cin>>monster[i].first;
+  		
+  		for (int i=0; i<n; i++)
+  			cin>>monster[i].second;
 
-  		cout<<ans<<endl;
+  		bool win = 1;
+
+  		sort(monster, monster+n);
+
+  		for (int i=0; i<n; i++) {
+  			LL need = (monster[i].second + attack - 1) / attack;
+
+  			LL enemy_need = (health + monster[i].first - 1) / monster[i].first;
+
+  			// debug(need, enemy_need);
+
+  			if (need > enemy_need) {
+  				win = 0;
+  				break;
+  			}
+
+  			health -= (monster[i].first * need);
+  		}
+
+  		cout<<(win? "YES":"NO")<<endl;
   	}
 
     END:

@@ -126,6 +126,16 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+LL sumOfDigits(LL n) {
+	LL ret = 0;
+	
+	while (n) {
+		ret += n%10;
+		n /= 10;
+	}
+	
+	return ret;
+} 
 
 int main()
 {
@@ -139,16 +149,16 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	
+  		LL n;
+  		cin>>n;
+  		
+  		for (LL i=n; ; i++) {
+  			if (GCD(i, sumOfDigits(i)) > 1) {
+  				cout<<i<<endl;
+  				break;
+  			}
+  		}
   	}
 
     END:

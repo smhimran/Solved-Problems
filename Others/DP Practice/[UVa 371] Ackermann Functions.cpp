@@ -126,6 +126,7 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+LL length[MAX];
 
 int main()
 {
@@ -136,20 +137,43 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	memset(length, -1, sizeof length);
+  	length[1] = 3;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  	int n, m;
+  	while (cin>>n>>m) {
+  		if (n==0 and m==0)
+  			break;
+  		LL mx = 0, ans = 0;
 
-  		ans += k;
+  		if (n > m)
+  			swap(n, m);
 
-  		cout<<ans<<endl;
+  		for (int i=n; i<=m; i++) {
+  			LL now = i;
+
+  			if (length[i] == -1) {
+  				LL steps = 0;
+  				while (now > 1) {
+  					if (now & 1)
+  						now = now * 3 + 1;
+  					else
+  						now /= 2;
+  					steps++;
+  				}
+
+  				length[i] = steps;
+  			}
+
+  			if (length[i] > mx) {
+  				mx = length[i];
+  				ans = i;
+  			}
+  		}
+
+  		cout<<"Between "<<n<<" and "<<m<<", "<<ans<<" generates the longest sequence of "<<mx<<" values."<<endl;
   	}
+
 
     END:
     #ifdef HOME

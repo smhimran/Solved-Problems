@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -126,6 +126,49 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+#define LIMIT int(1e5+6)
+bool composite[LIMIT+1];
+vector<int> prime;
+
+void sieve()
+{
+    int i;
+    composite[0]=composite[1]=1;
+    for (i=4; i<=LIMIT; i+=2)
+        composite[i]=1;
+    prime.push_back(2);
+    for (i=3; i*i<=LIMIT; i+=2) {
+        if (!composite[i]) {
+            prime.push_back(i);
+            for (int j=i*i; j<=LIMIT; j+=2*i)
+                composite[j]=1;
+        }
+    }
+    for (; i<=LIMIT; i++)
+        if (!composite[i])
+            prime.push_back(i);
+}
+
+LL mod (LL b, LL p, LL m)
+{
+    if (p==0) return 1;
+    if (p%2==0) {
+        LL x=mod(b, p/2, m);
+        return (x*x)%m;
+    }
+    else return (b%m * mod(b, p-1, m))%m;
+}
+
+LL times(LL n, LL primeNumber) {
+	LL k = primeNumber;
+	LL ret = 0;
+	while (k<=n) {
+		ret += n / k;
+		k *= primeNumber;
+	}
+
+	return ret;
+}
 
 int main()
 {
@@ -136,19 +179,25 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+    sieve();
+  	int T, ca=1;
+  	cin>>T;
+  	while (T--) {
+  		LL n, t;
+  		cin>>n>>t;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		LL ans = 1;
+  		for (auto i: prime) {
+  			if (i > n)
+  				break;
 
-  		ans += k;
+  			LL freq = times(n, i);
 
-  		cout<<ans<<endl;
+  			if (freq >= t) 
+  				ans = (ans%10000019 * mod(i, freq/t, 10000019)) % 10000019;
+  		}
+
+  		cout<<"Case "<<ca++<<": "<<(ans == 1? -1: ans)<<endl;
   	}
 
     END:

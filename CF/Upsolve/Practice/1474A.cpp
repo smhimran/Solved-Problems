@@ -139,15 +139,26 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int n;
+  		string s;
+  		cin>>n>>s;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		string ans = "1";
 
-  		ans += k;
+  		int prev = 1 + (s[0] - '0');
 
+  		for (int i=1; i<n; i++) {
+  			int now = 1 + (s[i] - '0');
+
+  			if (now == prev) {
+  				ans += '0';
+  				prev = (s[i] - '0');
+  				continue;
+  			}
+
+  			ans += '1';
+  			prev = now;
+  		}
   		cout<<ans<<endl;
   	}
 

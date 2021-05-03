@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -126,10 +126,46 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+#define mx int(2e5+5)
+LL a[mx], val[mx], tree[mx*4], n, siz;
+
+LL build(int node, int s, int e) 
+{
+    if (s==e) {
+        return tree[node]=a[s];
+    }
+    int left=node*2, right=left +1;
+    int mid=(s+e)/2;
+    return tree[node]=build(left, s, mid)+build(right, mid+1, e);
+}
+
+LL query(int node, int i, int j, int s=1, int e=2*siz)
+{
+    if (e<i or s>j)
+        return 0;
+    if (s>=i and e<=j)
+        return tree[node];
+    int left=node*2, right=left+1;
+    int mid=(s+e)/2;
+    return query(left, i, j, s, mid)+query(right, i, j, mid+1, e);
+}
+
+LL update(int node, int i, int val, int s=1, int e=2*siz)
+{
+    if (e<i or s>i)
+        return tree[node];
+    if (s==e) {
+        return tree[node]=val;
+    }
+    int left=node*2, right=left+1;
+    int mid=(s+e)/2;
+    return tree[node]=update(left, i, val, s, mid)+update(right, i, val, mid+1, e);
+}
+
 
 int main()
 {
-    // FastIO;
+    FastIO;
     #ifdef HOME
      clock_t Start=clock();
      freopen("in.txt", "r", stdin);
@@ -139,16 +175,56 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		memset(a, 0, sizeof a);
+  		memset(val, 0, sizeof val);
+  		int q;
+  		cin>>n>>q;
+  		siz = n;
+  		for (int i=1; i<=n; i++) {
+  			cin>>val[i];
+  			a[i] = 1;
+  		}
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		build(1, 1, 2*n);
 
-  		ans += k;
+  		cout<<"Case "<<ca++<<":"<<endl;
+  		// cout<<query(1, 1, 2)<<endl;
 
-  		cout<<ans<<endl;
+  		while (q--) {
+  			char c;
+  			int x;
+  			cin>>c>>x;
+
+  			if (c == 'a') {
+  				val[++n] = x;
+  				update(1, n, 1);
+  			}
+
+  			else {
+  				int low = 1, high = n, mid, ans = 0;
+  				for (int z=0; z<20; z++) {
+  					mid = (low+high)>>1;
+
+  					int sum = query(1, 1, mid);
+  					// debug(sum, high, low, mid, n);
+
+  					if (sum >= x) {
+  						high = mid - 1;
+  						ans = mid;
+  					}
+  					else {
+  						low = mid + 1;
+  					}
+  				}
+
+  				if (ans) {
+  					cout<<val[ans]<<endl;
+  					update(1, ans, 0);
+  				}
+  				else 
+  					cout<<"none"<<endl;
+  			}
+  		}
   	}
 
     END:

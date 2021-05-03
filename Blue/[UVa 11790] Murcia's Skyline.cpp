@@ -137,18 +137,47 @@ int main()
     #endif
     
   	int t, ca=1;
-  	cin>>t;
+  	scanf("%d", &t);
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	
+  		int n;
+  		scanf("%d", &n);
+  		
+  		int height[n+1], width[n+1];
+  		
+  		for (int i=0; i<n; i++) 
+  			scanf("%d", height+i);
+  		
+  		for (int i=0; i<n; i++) 
+  			scanf("%d", width+i);
+  		
+  		int lis[n+1], lds[n+1], increasing = 0, decreasing = 0;
+  		
+  		for (int i=0; i<n; i++) {
+  			lis[i] = lds[i] = width[i];
+  			
+  			for (int j=0; j<i; j++) {
+  				if (height[j] < height[i] and lis[i] < lis[j] + width[i])
+  					lis[i] = lis[j] + width[i];
+  				
+  				if (height[j] > height[i] and lds[i] < lds[j] + width[i])
+  					lds[i] = lds[j] + width[i];
+  			}
+  			
+  			if (lis[i] > increasing)
+  				increasing = lis[i];
+  			
+  			if (lds[i] > decreasing)
+  				decreasing = lds[i];
+  		}  		
+  		
+  		printf("Case %d. ", ca++);
+  		
+  		if (increasing >= decreasing)
+  			printf("Increasing (%d). Decreasing (%d).\n", increasing, decreasing);
+  		
+  		else 
+  			printf("Decreasing (%d). Increasing (%d).\n", decreasing, increasing);
   	}
 
     END:

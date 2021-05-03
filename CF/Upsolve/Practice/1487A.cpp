@@ -139,16 +139,20 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int n;
+  		cin>>n;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		int a[n+1], mn = inf;
+  		map<int, int> freq;
 
-  		ans += k;
+  		for (int i=0; i<n; i++) {
+  			cin>>a[i];
+  			freq[a[i]]++;
 
-  		cout<<ans<<endl;
+  			mn = min(mn, a[i]);
+  		}
+
+  		cout<<(n - freq[mn])<<endl;
   	}
 
     END:

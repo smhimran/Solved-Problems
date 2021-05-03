@@ -126,6 +126,16 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+std::vector<LL> v;
+
+void precal() {
+	LL n = 2050;
+	
+	while (n <= 1e18) {
+		v.push_back(n);
+		n *= 10;
+	}
+}
 
 int main()
 {
@@ -136,19 +146,32 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
+    precal();
   	int t, ca=1;
-  	cin>>t;
+  	scanf("%d", &t);
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	
+  		LL n;
+  		scanf("%lld", &n);
+  		
+  		LL ans = 0;
+  		
+  		while (n >= 2050) {
+  			LL x = *(upper_bound(v.begin(), v.end(), n) - 1);
+  			
+  			
+  			LL times = n / x;
+  			
+  			ans += times;
+  			
+  			n -= (x * times);
+  		}
+  		
+  		if (n) 
+  			printf("-1\n");
+  		
+  		else 
+	  		printf("%lld\n", ans);
   	}
 
     END:

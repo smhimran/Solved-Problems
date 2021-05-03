@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -125,7 +125,9 @@ int LCM(int a, int b) { return a * (b/GCD(a, b)); }
 bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
+string note[] = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
 
+bool major[12] = {1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1};
 
 int main()
 {
@@ -136,19 +138,45 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  	string line;
 
-  		ans += k;
+  	while (getline(cin, line) and line != "END") {
+  		stringstream ss(line); 
+  		string s;
+  		vector<string> baal;
+  		map<string, bool> present;
+  		while (ss >> s) {
+  			baal.push_back(s);
+  			present[s] = 1;
+  		}
 
-  		cout<<ans<<endl;
+  		bool paisi = 0;
+
+  		for (int i=0; i<12; i++) {
+
+  			bool hoga = 0;
+
+  			for (int j=0; j<12; j++) {
+  				if (present[note[(i+j) % 12]]) {
+  					if (major[j])
+  						hoga = 1;
+  					else {
+  						hoga = 0;
+  						break;
+  					}
+  				}
+  			}
+
+  			if (hoga) {
+  				if (paisi)
+  					cout<<" ";
+  				cout<<note[i];
+  				paisi = 1;
+  			}
+  		}
+
+  		cout<<endl;
   	}
 
     END:

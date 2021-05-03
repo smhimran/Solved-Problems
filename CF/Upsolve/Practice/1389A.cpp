@@ -139,16 +139,13 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		LL a, b;
+  		cin>>a>>b;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  		if (b < 2LL * a)
+  			cout<<"-1 -1"<<endl;
+  		else
+  			cout<<a<<" "<<2*a<<endl;
   	}
 
     END:

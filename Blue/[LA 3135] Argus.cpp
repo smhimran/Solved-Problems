@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -126,6 +126,23 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+class Query
+{
+public:
+	int value, time, period;
+
+	Query(int value, int time, int period) {
+		this->value = value;
+		this->time = time;
+		this->period = period;
+	}
+	
+	bool operator<(const Query &a) const{
+		if (time == a.time)
+			return value > a.value;
+		return time > a.time;
+	}
+};
 
 int main()
 {
@@ -136,20 +153,28 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	string s;
+  	priority_queue<Query> queries;
+  	while (cin>>s) {
+  		if (s=="#")
+  			break;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  		int val, per;
+  		cin>>val>>per;
+  		queries.push(Query(val, per, per));
   	}
+
+  	int q;
+  	cin>>q;
+  	while (q--) {
+  		Query out = queries.top();
+  		queries.pop();
+
+  		cout<<out.value<<endl;
+
+  		queries.push(Query(out.value, out.time+out.period, out.period));
+  	}
+
 
     END:
     #ifdef HOME

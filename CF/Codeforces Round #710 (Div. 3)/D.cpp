@@ -137,18 +137,53 @@ int main()
     #endif
     
   	int t, ca=1;
-  	cin>>t;
+  	scanf("%d", &t);
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  		int n, z;
+  		scanf("%d", &n);
+  		
+  		z = n;
+  		
+  		vector<int> v;
+  		
+  		map<int, int> freq;
+  		map<int, bool> taken;
+  		
+  		while (n--) {
+  			int x;
+  			scanf("%d", &x);
+  			
+  			freq[x]++;
+  			
+  			if (!taken[x])
+  				v.push_back(x);	
+  			
+  			taken[x] = 1;
+  		}
+  		
+  		int sum = 0;
+  		
+  		for (int i=0; i<v.size(); i++) 
+  			sum += freq[v[i]];
+  		
+  		int ans = inf;
+  		
+  		for (int i=0; i<v.size(); i++) {
+  			int now = freq[v[i]];
+  			
+  			int left = sum - now;
+  			
+  			int diff = now - left;
+  			
+  			if (diff >= 0)
+	  			ans = min(ans, diff);
+  			
+  		}
+  		
+  		if (ans > z)
+  			ans = 0;
+  		
+  		printf("%d\n", ans);
   	}
 
     END:

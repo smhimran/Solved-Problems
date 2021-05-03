@@ -139,16 +139,57 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	
+  		int n, m, q;
+  		cin>>n>>m>>q;
+  		
+  		char grid[n+1][m+1];
+  		
+  		for (int i=0; i<n; i++) {
+  			for (int j=0; j<m; j++)
+  				cin>>grid[i][j];
+  		}
+  		
+  		
+  		cout<<n<<" "<<m<<" "<<q<<endl;
+  		
+  		while (q--) {
+  			int r, c;
+  			cin>>r>>c;
+  			
+			int maxRow = min(r, n - r - 1);
+			int maxColumn = min(c, m - c - 1);
+			
+			int maxHeight = min(maxRow, maxColumn);
+			
+			int height = 0;
+			
+			bool isSquare;
+			
+			for (int k=1; k<=maxHeight; k++) {
+				isSquare = 1;
+				
+				for (int i=r-k; i<=r+k; i++) {
+					for (int j=c-k; j<=c+k; j++) {
+						if (grid[i][j] != grid[r][c]) {
+							isSquare = 0;
+							break;
+						}
+					}
+					
+					if (!isSquare)
+						break;
+				}
+				
+				if (isSquare)
+					height++;
+				
+				else
+					break;
+			}
+			
+			cout<<(height * 2) + 1<<endl;
+  		}
   	}
 
     END:

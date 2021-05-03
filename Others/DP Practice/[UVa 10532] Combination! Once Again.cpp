@@ -126,6 +126,30 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+LL dp[105][105];
+int freq[105];
+
+LL solve(int n, int k) {
+	if (k == 0)
+		return 1;
+
+	if (n == 0)
+		return 0;
+	
+	LL &ret = dp[n][k];
+
+	if (ret != -1)
+		return ret;
+
+	ret = 0;
+
+  for (int i=1; i<=freq[n] and i<=k; i++) 
+    ret += solve(n - 1, k - i);
+  
+  ret += solve(n-1, k);
+
+	return ret;
+}	
 
 int main()
 {
@@ -136,19 +160,28 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	int n, q, ca=1;
+  	while (cin>>n>>q) {
+  		if (n==0 and q==0)
+  			break;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		int a[n+1];
+  		memset(freq, 0, sizeof freq);
+      memset(dp, -1, sizeof dp);
 
-  		ans += k;
+  		for (int i=0; i<n; i++) {
+  			cin>>a[i];
+  			freq[a[i]]++;
+  		}
 
-  		cout<<ans<<endl;
+  		cout<<"Case "<<ca++<<":"<<endl;
+
+  		while (q--) {
+        int k;
+  			cin>>k;
+        
+  			cout<<solve(n, k)<<endl;
+  		}
   	}
 
     END:

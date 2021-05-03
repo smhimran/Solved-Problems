@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -126,6 +126,28 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int n, a[100], total;
+int dp[105][400];
+
+bool solve(int i, int sum) {
+
+	if (i == n) {
+		int rem = total - sum;
+		return (sum == rem);
+	}
+
+	int &ret = dp[i][sum];
+
+	if (ret != -1)
+		return ret;
+
+	ret = 0;
+
+	ret |= solve(i+1, sum+a[i]);
+	ret |= solve(i+1, sum);
+
+	return ret;
+}
 
 int main()
 {
@@ -139,16 +161,15 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		cin>>n;
+  		total = 0;
+  		for (int i=0; i<n; i++) {
+  			cin>>a[i];
+  			total += a[i];
+  		}
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  		memset(dp, -1, sizeof dp);
+  		cout<<(solve(0, 0)? "YES":"NO")<<endl;
   	}
 
     END:

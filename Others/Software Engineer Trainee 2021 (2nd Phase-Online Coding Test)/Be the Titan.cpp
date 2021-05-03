@@ -136,20 +136,44 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	int n;
+  	cin>>n;
+  	
+  	vector<PII> v;
+  	priority_queue<PII> q;
+  	
+  	for (int i=1; i<=n; i++) {
+  		int x;
+  		cin>>x;
+  		
+  		v.push_back({x, i});
   	}
+  	
+  	string s;
+  	cin>>s;
+  	
+  	rsort(v);
+  	
+  	for (int i=0; i<len(s); i++) {
+  		if (s[i] == '0') {
+  			PII now = v.back();
+  			v.pop_back();
+  			
+  			cout<<now.second<<" ";
+  			
+  			q.push(now);
+  		}
+  		
+  		else {
+  			PII now = q.top();
+  			
+  			q.pop();
+  			
+  			cout<<now.second<<" ";
+  		}
+  	}
+  	
+  	cout<<endl;
 
     END:
     #ifdef HOME

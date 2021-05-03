@@ -126,6 +126,81 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int gcdE(int a, int b, int &x, int &y)
+{
+    if (a==0) {
+        x=0;
+        y=1;
+        return b;
+    }
+    int x1, y1;
+    int gcd=gcdE(b%a, a, x1, y1);
+    x=y1-(b/a)*x1;
+    y=x1;
+    return gcd;
+}
+
+bool find_any_solution(int a, int b, int c, int &x0, int &y0, int &g) {
+    g = gcdE(abs(a), abs(b), x0, y0);
+    if (c % g) {
+        return false;
+    }
+
+    x0 *= c / g;
+    y0 *= c / g;
+    if (a < 0) x0 = -x0;
+    if (b < 0) y0 = -y0;
+    return true;
+}
+
+void shift_solution(int & x, int & y, int a, int b, int cnt) {
+    x += cnt * b;
+    y -= cnt * a;
+}
+
+int find_min_sum(int a, int b, int c)  
+{  
+    int x, y, g;  
+  
+    if (!find_any_solution(a, b, c,  
+                        x, y, g))  
+        return -1;  
+  
+    a /= g;  
+    b /= g;  
+
+    int sign_a = a > 0 ? +1 : -1;  
+    int sign_b = b > 0 ? +1 : -1;  
+  
+    shift_solution(x, y, a, b, -x / b);  
+  
+    if (x < 0)  
+        shift_solution(x, y, a, b, sign_b);  
+  
+    int minx1 = x;  
+  
+    shift_solution(x, y, a, b, y / a);  
+
+    if (y < 0)  
+        shift_solution(x, y, a, b, -sign_a);  
+  
+    int minx2 = x;  
+  
+    if (minx2 > x)  
+        swap(minx2, x); 
+
+    int minx = max(minx1, minx2);  
+  
+
+    if (minx > x)  
+        return -1;  
+  
+    int miny = (c - a * x) / b;  
+
+    debug(minx, miny);
+  
+    return (miny + minx);  
+}  
 
 int main()
 {
@@ -139,16 +214,15 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int n, l, r, t;
+  		cin>>n>>l>>r>>t;
+  		t--;
+  		int ans = find_min_sum(l, r, t);
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  		if (ans == -1)
+  			cout<<"uh-oh!"<<endl;
+  		else 
+  			cout<<ans<<endl;
   	}
 
     END:

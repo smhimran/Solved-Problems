@@ -126,6 +126,7 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int dp[50][50];
 
 int main()
 {
@@ -136,19 +137,44 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	int r, ca = 0;
+  	while (cin>>r) {
+  		memset(dp, 0, sizeof dp);
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		int n = 0;
 
-  		ans += k;
+  		for (int i=1; i<=r; i++) {
+  			int x, y;
+  			cin>>x>>y;
+  			dp[x][y]++;
+  			n = max({n, x, y});
+  		}
 
-  		cout<<ans<<endl;
+  		for (int k=0; k<=n; k++) 
+  			for (int i=0; i<=n; i++)
+  				for (int j=0; j<=n; j++)
+  					if (dp[i][k] and dp[k][j])
+	  					dp[i][j] += dp[i][k] * dp[k][j];
+
+
+  		for (int k=0; k<=n; k++) 
+  			if (dp[k][k])
+	  			for (int i=0; i<=n; i++)
+	  				for (int j=0; j<=n; j++)
+	  					if (dp[i][k] and dp[k][j])
+		  					dp[i][j] = -1;
+
+
+		cout<<"matrix for city "<<ca++<<endl;
+
+		for (int i=0; i<=n; i++) {
+			for (int j=0; j<=n; j++) {
+				if (j > 0)
+					cout<<" ";
+				cout<<dp[i][j];
+			}
+			cout<<endl;
+		}
   	}
 
     END:

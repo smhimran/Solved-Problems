@@ -139,16 +139,53 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  		int n;
+  		cin>>n;
+  		
+  		int a[n+1];
+  		
+  		cin>>a[0];
+  		
+  		set<int> diffs;
+  		
+  		int diff;
+  		
+  		bool eq = 1;
+  		
+  		for (int i=1; i<n; i++) {
+  			cin>>a[i];
+  			
+  			if (a[i] != a[i-1])
+  				eq = 0;
+  			
+  			if (a[i] > a[i-1]) {
+  				diff = a[i] - a[i -1];
+  				
+  				diffs.insert(diff);
+  			}
+  		}
+  		
+  		if (diffs.size() > 1) {
+  			cout<<-1<<endl;
+  			continue;
+  		}
+  		
+  		if (eq) {
+  			cout<<0<<endl;
+  			continue;
+  		}
+  		
+  		int ans = 0;
+  		
+  		for (int i=1; i<n; i++) {
+  			if (a[i] < a[i-1]) 
+  				ans = (a[i-1] + diff) - a[i];
+  		}
+  		
+  		// if (ans >= diff)
+  		// 	cout<<-1<<endl;
+  		// else
+	  		cout<<ans<<" "<<diff<<endl;
   	}
 
     END:

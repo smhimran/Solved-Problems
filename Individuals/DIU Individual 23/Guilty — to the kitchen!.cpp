@@ -136,20 +136,28 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	int n;
+  	double volume;
+  	cin>>n>>volume;
+  	double a[n+1], b[n+1];
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  	for (int i=0; i<n; i++) 
+  		cin>>a[i];
 
-  		ans += k;
+  	for (int i=0; i<n; i++)
+  		cin>>b[i];
 
-  		cout<<ans<<endl;
-  	}
+  	double ans = 0, unit = 100;
+
+  	for (int i=0; i<n; i++) 
+  		unit = min(unit, b[i]/a[i]);
+
+  	for (int i=0; i<n; i++)
+  		ans += a[i] * unit;
+
+  	ans = min(ans, volume);
+
+  	printf("%.5lf\n", ans + 1e-8);
 
     END:
     #ifdef HOME

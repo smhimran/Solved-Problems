@@ -139,16 +139,31 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int n;
+  		cin>>n;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		int a[n+1];
+  		set<int> st;
 
-  		ans += k;
+  		for (int i=0; i<n; i++) {
+  			cin>>a[i];
+  			st.insert(a[i]);
+  		}
 
-  		cout<<ans<<endl;
+  		reverse(a, a+n);
+
+  		if (st.size() < n)
+  			cout<<"YES"<<endl;
+  		else {
+  			bool ok = 1;
+  			for (int i=1; i<n; i++) 
+  				if (a[i] <= a[i-1])
+  					ok = 0;
+  			if (ok)
+  				cout<<"NO"<<endl;
+  			else
+  				cout<<"YES"<<endl;
+  		}
   	}
 
     END:

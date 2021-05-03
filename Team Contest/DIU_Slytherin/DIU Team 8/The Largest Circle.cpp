@@ -62,6 +62,7 @@ typedef set<char> SC;
 #define MIN                 -10000007
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
+#define sqr(x) 				((x) * (x))
 #define BR                  PF("\n")
 #define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
 #define READ()              freopen("input.txt", "r", stdin)
@@ -126,6 +127,30 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+LL shoeLace(vector < pair <LL, LL> > v) {
+	
+   LL n = v.size();
+   
+   LL sum1 = 0, sum2 = 0;
+   
+   for(LL i=0; i<n-1; i++){
+      sum1 += v[i].first * v[i+1].second * 1;
+      sum2 += v[i].second * v[i+1].first * 1;
+   }
+
+   sum1 += v[n-1].first * v[0].second;
+   sum2 += v[0].first * v[n-1].second;
+
+   LL area = abs(sum1-sum2);
+   
+   return area;
+}
+
+LL distance(PII a, PII b) {
+	LL ret = sqr(a.first - b.first) + sqr(a.second - b.second);
+	
+	return ret;
+}
 
 int main()
 {
@@ -136,19 +161,39 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+    LL x1, y1, x2, y2, x3, y3, x4, y4;
+    
+  	while (~scanf("%lld %lld %lld %lld %lld %lld %lld %lld", &x1, &y1, &x2, &y2, &x3, &y3, &x4, &y4)) {
+  		if (x1==0 and y1==0 and x2==0 and y2==0 and x3==0 and y3==0 and x4==0 and y4==0)
+  			break;
+  		
+  		
+	    vector< pair<LL, LL> > v;
+	    v.push_back(MP(x1, y1));
+	    v.push_back(MP(x2, y2));
+	    v.push_back(MP(x3, y3));
+	    v.push_back(MP(x4, y4));
+	    
+	    LL area = shoeLace(v);
+	    
+	    area = sqr(area);
+	    
+	    LL a = distance(v[0], v[1]), b = distance(v[1], v[2]);
+	    
+	    LL x = max(a, b);
+	    
+	    x *= 16;
+	    LL g = GCD(area, x);
+	    
+	    area /= g;
+	    x /= g;
+	    
+	    // area = sqr(area);
+	    
+	    // x = sqr(x);
+	    
+	    
+	    printf("(%lld/%lld)*pi\n", area, x);
   	}
 
     END:

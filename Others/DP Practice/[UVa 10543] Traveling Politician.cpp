@@ -60,7 +60,7 @@ typedef set<char> SC;
 #define BSRC                binary_search
 #define MAX                 10000007
 #define MIN                 -10000007
-#define inf                 int(1e6+9)
+#define inf                 int(1e7+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
 #define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
@@ -126,6 +126,39 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int n, m, k;
+
+vector<int> v[66];
+
+int dp[66][66];
+
+int solve(int city, int speeches) {
+	if ((city == n-1) and ((speeches + 1)>=k and (speeches + 1)<=20)) 
+		return 1;
+	
+	if (speeches > 20)
+		return 100;
+	
+	int &ret = dp[city][speeches];
+	
+	if (ret != - 1)
+		return ret;
+	
+	ret = 100;
+	
+	for (auto i: v[city]) {
+		if (i != city) 
+			ret = min(ret, 1 + solve(i, speeches + 1));
+	}
+	
+	return ret;
+}
+
+void clear() {
+	for (int i=0; i<=60; i++) {
+		v[i].clear();
+	}
+}
 
 int main()
 {
@@ -136,19 +169,30 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	while (cin>>n>>m>>k) {
+  		if (n==0 and m==0 and k==0)
+  			break;
+  		
+  		
+  		while (m--) {
+  			int x, y;
+  			cin>>x>>y;
+  			
+  			v[x].push_back(y);
+  			// v[y].push_back(x);
+  		}
+  		
+  		memset(dp, -1, sizeof dp);
+  		
+  		int ans = solve(0, 0);
+  		
+  		if (ans > 20 or ans < k)
+  			cout<<"LOSER"<<endl;
+  		
+  		else 
+  			cout<<ans<<endl;
+  		
+  		clear();
   	}
 
     END:

@@ -137,18 +137,36 @@ int main()
     #endif
     
   	int t, ca=1;
-  	cin>>t;
+  	scanf("%d", &t);
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	
+  		LL n;
+  		scanf("%lld", &n);
+  		
+  		LL a[n+1];
+  		
+  		for (int i=0; i<n; i++) {
+  			scanf("%lld", a+i);
+  		}
+  		
+  		LL total = 0, deduct = 0;
+  		
+  		for (int i=0; i<n; i++)
+  		    total += (a[i] * (i+1) * (n-i));
+  		
+  		for (int i=0; i<n; i++) {
+  			LL left = i-1, right = i + 1;
+  			while (left>=0 and a[left]>=a[i])
+  				left--;
+  			while (right<n and a[right]>a[i])
+  				right++;
+  			
+  			deduct += ((i-left) * (right-i) * (right - left) / 2) * a[i];
+  		}  
+  		
+  		total -= deduct;
+  		
+  		printf("Case %d: %lld\n", ca++, total);
   	}
 
     END:

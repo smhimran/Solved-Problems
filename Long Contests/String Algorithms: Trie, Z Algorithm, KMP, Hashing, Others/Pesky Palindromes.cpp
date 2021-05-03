@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -126,6 +126,53 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+/*By Arg_007*/
+struct FindHash{
+    int b1 = 129, b2 = 371 ;
+    vector <int> bp1 , bp2 ;
+    vector <int> h1 , h2 ;
+    string s ;
+    int sz ;
+ 
+    LL mod1 = 998244353LL , mod2 = 1000000009LL ;
+ 
+    void init( string _s)
+    {
+        bp1.clear() ;
+        bp2.clear() ;
+        h1.clear() ; h2.clear() ;
+ 
+        s = _s ;
+        sz = s.size() ;
+ 
+        bp1.PB(1) ; bp2.PB(1) ;
+ 
+        for(int i=1 ; i < sz+2 ; i++)
+        {
+            bp1.PB( (1LL*bp1.back()*b1)%mod1 ) ;
+            bp2.PB( (1LL*bp2.back()*b2)%mod2 ) ;
+        }
+ 
+        h1.PB(s[0]-'a' + 1) ; h2.PB(s[0]-'a' + 1) ;
+ 
+        for(int i=1 ; i<sz ; i++)
+        {
+            h1.PB( (1LL*h1.back()*b1 + s[i]-'a' + 1) % mod1 ) ;
+            h2.PB( (1LL*h2.back()*b2 + s[i]-'a' + 1) % mod2 ) ;
+        }
+    }
+ 
+    pair<int,int> Get(int i, int j)
+    {
+        pair<int,int> res = MP( h1[j],h2[j] ) ;
+        if(i>0) res=MP((res.first-1LL*h1[i-1]*bp1[j-i+1])%mod1,(res.second-1LL*h2[i-1]*bp2[j-i+1])%mod2);
+        res = MP((res.first%mod1+mod1)%mod1,(res.second%mod2+mod2)%mod2);
+        return res ;
+    }
+ 
+}f1, f2;
+ 
+inline bool isPal(int l,int r,int n) {return f1.Get(l, r)==f2.Get(n-r-1, n-l-1);}
 
 int main()
 {
@@ -136,20 +183,27 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	 string s, r;
+  	 while (cin>>s) {
+  	 	r = s;
+  	 	f1.init(s);
+  	 	reverse(r.begin(), r.end());
+  	 	f2.init(r);
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  	 	int n = len(s), ans = 0;
+  	 	map<int, bool> visited;
 
-  		ans += k;
+  	 	for (int i=0; i<n; i++) {
+  	 		for (int j=i; j<n; j++) {
+  	 			if (!visited[f1.Get(i, j).first] and isPal(i, j, n)) {
+  	 				ans++;
+  	 				visited[f1.Get(i, j).first] = 1;
+  	 			}
+  	 		}
+  	 	}
 
-  		cout<<ans<<endl;
-  	}
+  	 	cout<<"The string '"<<s<<"' contains "<<ans<<" palindromes."<<endl;
+  	 }
 
     END:
     #ifdef HOME

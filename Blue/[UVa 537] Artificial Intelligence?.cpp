@@ -126,6 +126,77 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+double I, U, P;
+
+bool has_I, has_U, has_P;
+
+bool doesItMatter(string s) {
+	return (s[0] == 'I' or s[0] == 'U' or s[0] == 'P') and s[1] == '=';
+}
+
+void process(string s) {
+	double ret = 0.0, prefix = 0;
+	
+	bool mulPrefix = 0, divPrefix = 0;
+	
+	if (s.back() == ',' or s.back() == '?' or s.back() == '.')
+		s.pop_back();
+	
+		// debug(s);
+	char c = s[0];
+	
+	if (!isdigit(s.back())) {
+		s.pop_back();
+		
+	}
+	
+	if (s.back() == 'k') {
+		mulPrefix = 1;
+		prefix = 1000.00;
+		s.pop_back();
+	}
+	
+	else if (s.back() == 'M') {
+		mulPrefix = 1;
+		prefix = 1000000.00;	
+		s.pop_back();
+	}
+	
+	else if (s.back() == 'm') {
+		divPrefix = 1;
+		prefix = 1000.00;
+		s.pop_back();
+	}
+	
+	s.erase(s.begin());
+	s.erase(s.begin());
+	
+	
+	ret = stod(s);
+	// debug(ret, mulPrefix, divPrefix);
+	
+	if (mulPrefix) {
+		ret *= prefix;
+	}
+	
+	else if (divPrefix)
+		ret /= prefix;
+	
+	if (c == 'I') {
+		I = ret;
+		has_I = 1;
+	}
+	
+	else if (c == 'U') {
+		U = ret;
+		has_U = 1;
+	}
+	
+	else if (c == 'P') {
+		P = ret;
+		has_P = 1;
+	}
+}
 
 int main()
 {
@@ -138,17 +209,45 @@ int main()
     
   	int t, ca=1;
   	cin>>t;
+  	getchar();
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  		
+  		has_I = has_P = has_U = 0;
+  		
+  		I = 0, P = 0, U = 0;
+  	
+  		string s, word;
+  		getline(cin, s);
+  		
+  		stringstream ss(s);
+  		
+  		while (ss>>word) {
+  			if (doesItMatter(word)) {
+  				// debug(word);
+  				process(word);
+  			}
+  		}
+  		
+  		// debug(I, P, U);
+  		
+  		cout<<"Problem #"<<ca++<<endl;
+  		
+  		if (has_I and has_U) {
+  			P = U * I;
+  			cout<<fixed<<setprecision(2)<<"P="<<P<<"W"<<endl;
+  		}
+  		
+  		else if (has_I and has_P) {
+  			U = P / I;
+  			cout<<fixed<<setprecision(2)<<"U="<<U<<"V"<<endl;
+  		}
+  		
+  		else if (has_P and has_U) {
+  			I = P / U;
+  			cout<<fixed<<setprecision(2)<<"I="<<I<<"A"<<endl;
+  		}
+  		
+  		cout<<endl;
   	}
 
     END:

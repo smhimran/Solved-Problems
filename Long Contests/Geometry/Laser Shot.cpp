@@ -120,7 +120,7 @@ void fastscan(int &number)
         number *= -1; 
 } 
 
-LL GCD(LL a, LL b) { return b == 0 ? a : GCD(b , a % b); }
+int GCD(int a, int b) { return b == 0 ? a : GCD(b , a % b); }
 int LCM(int a, int b) { return a * (b/GCD(a, b)); }
 bool CMP(int a, int b) { return a>b; }
 
@@ -137,18 +137,56 @@ int main()
     #endif
     
   	int t, ca=1;
-  	cin>>t;
+  	scanf("%d", &t);
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	
+  		int n;
+  		scanf("%d", &n);
+  		
+  		PII points[n+1];
+  		
+  		map<PII, int> slope;
+  		
+  		int overlaps = 0, ans = 0;
+  		
+  		for (int i=0; i<n; i++) 
+  			scanf("%d %d", &points[i].first, &points[i].second);
+  		
+  		for (int i=0; i<n; i++) {
+	        int curr = 0, vertical = 0;
+        	
+        	overlaps = 0;
+  
+	        for (int j=i+1; j<n; j++) {
+	            if (points[i] == points[j])
+	                overlaps++;
+	  
+	            else if (points[i].first == points[j].first)
+	                vertical++;
+	  
+	            else
+	            {
+	                int y = points[j].second - points[i].second;
+	                int x = points[j].first - points[i].first;
+	                
+	                int g = GCD(x, y);
+	                
+	                y /= g;
+	                x /= g;
+	  
+	                slope[{y, x}]++;
+	                curr = max(curr, slope[{y, x}]);
+	            }
+	  
+	            curr = max(curr, vertical);
+	        }
+	        ans = max(ans, curr + overlaps + 1);
+	        
+	        slope.clear();
+	    }
+  		
+  		
+  		printf("Case %d: %d\n", ca++, ans);
   	}
 
     END:

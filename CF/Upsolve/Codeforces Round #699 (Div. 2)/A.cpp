@@ -139,17 +139,65 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int px, py;
+  		string s;
+  		cin>>px>>py>>s;
+  		int x = 0, y = 0, l = 0, r = 0, u = 0, d = 0;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		for (int i=0; i<len(s); i++) {
+  			if (s[i] == 'L') {
+  				x--;
+  				l++;
+  			}
+  			else if (s[i] == 'R') {
+  				x++;
+  				r++;
+  			}
+  			else if (s[i] == 'U') {
+  				y++;
+  				u++;
+  			}
+  			else {
+  				y--;
+  				d++;
+  			}
+  		}
 
-  		ans += k;
+  		int need_x = px - x, need_y = py - y;
 
-  		cout<<ans<<endl;
-  	}
+  		// debug(need_x, need_y);
+
+  		bool okx = 0, oky = 0;
+  		if (need_x == 0 and need_y == 0) {
+  			cout<<"Yes"<<endl;
+  		}
+  		else { 
+  			if (need_x) {
+  				if (need_x > 0) {
+  					if (l >= need_x)
+  						okx = 1;
+  				}
+  				else if (need_x < 0) 
+  					if (r >= abs(need_x))
+  						okx = 1;
+			}
+			else 
+				okx = 1;
+			if (need_y) {
+				if (need_y > 0) {
+					if (d >= need_y)
+						oky = 1;
+				}
+				else if (need_y < 0)
+					if (u >= abs(need_y))
+						oky = 1;
+			}
+			else 
+				oky = 1;
+			cout<<(okx and oky? "Yes":"No")<<endl;
+	  	}
+	  	
+  	} 
 
     END:
     #ifdef HOME

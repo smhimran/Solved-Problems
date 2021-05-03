@@ -137,18 +137,20 @@ int main()
     #endif
     
   	int t, ca=1;
-  	cin>>t;
+  	scanf("%d", &t);
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	
+  		int n, m;
+  		scanf("%d %d", &n, &m);
+  		
+  		for (int i=0; i<m; i++) {
+  			int x, y;
+  			scanf("%d %d", &x, &y);
+  		}
+  		
+  		int ans = max(0, (m - n));
+  		
+  		printf("Case #%d: %d\n", ca++, ans);
   	}
 
     END:

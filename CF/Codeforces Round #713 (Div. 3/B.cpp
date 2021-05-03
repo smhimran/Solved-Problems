@@ -139,16 +139,74 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	
+  		int n;
+  		cin>>n;
+  		
+  		char grid[n+1][n+1];
+  		
+  		int x1 = 0, x2 = 0, y1 = 0, y2 = 0;
+  		
+  		bool is_x_border = 0, is_y_border = 0;
+  		
+  		for (int i=1; i<=n; i++) {
+  			for (int j=1; j<=n; j++) {
+  				cin>>grid[i][j];
+  				
+  				if (grid[i][j] == '*') {
+  					if (!x1) {
+  						x1 = i;
+  						y1 = j;
+  					}
+  					else {
+  						x2 = i;
+  						y2 = j;
+  					}
+  					
+  					if (i == n)
+  						is_x_border = 1;
+  					
+  					if (j == n)
+  						is_y_border = 1;
+  				}
+  			}
+  		}
+  		
+  		// debug(x1, x2, y1, y2, is_x_border, is_y_border);
+  		
+  		if (x1 == x2) {
+  			if (is_x_border) {
+  				grid[1][y1] = '*';
+  				grid[1][y2] = '*';
+  			}
+  			else {
+  				grid[n][y1] = '*';
+  				grid[n][y2] = '*';
+  			}
+  		}
+  		
+  		else if (y1 == y2) {
+  			if (is_y_border) {
+  				grid[x1][1] = '*';
+  				grid[x2][1] = '*';
+  			}
+  			else {
+  				grid[x1][n] = '*';
+  				grid[x2][n] = '*';
+  			}
+  		}
+  		
+  		else {
+  			grid[x1][y2] = '*';
+  			grid[x2][y1] = '*';
+  		}
+  		
+  		for (int i=1; i<=n; i++) {
+  			for (int j=1; j<=n; j++) {
+  				cout<<grid[i][j];
+  			}
+  			cout<<endl;
+  		}
   	}
 
     END:

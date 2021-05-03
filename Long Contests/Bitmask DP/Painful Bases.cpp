@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -125,7 +125,36 @@ int LCM(int a, int b) { return a * (b/GCD(a, b)); }
 bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
+int base, K, n;
+string s;
 
+int Set(int N, int i) {return N=(N|(1<<i));}
+int reset(int N,int pos){return N= N & ~(1<<pos);}
+bool check(int N,int pos){return (bool)(N & (1<<pos));}
+
+LL dp[(1<<16)+5][20];
+
+LL solve(LL mask, LL mod) {
+	if (mask == (1<<n) - 1)
+		return mod == 0;
+
+	LL &ret = dp[mask][mod];
+	if (ret != -1)
+		return ret;
+	ret = 0;
+	for (int i=0; i<n; i++) {
+		if (!check(mask, i)) {
+			int val = 0;
+			if (s[i]>='0' and s[i]<='9')
+				val = s[i] - '0';
+			else 
+				val = s[i] - 'A' + 10;
+
+			ret += solve(Set(mask, i), (mod*base + val)%K);
+		}
+	}
+	return ret;
+}
 
 int main()
 {
@@ -139,16 +168,10 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  		cin>>base>>K>>s;
+  		n = len(s);
+  		memset(dp, -1, sizeof dp);
+  		cout<<"Case "<<ca++<<": "<<solve(0, 0)<<endl;
   	}
 
     END:

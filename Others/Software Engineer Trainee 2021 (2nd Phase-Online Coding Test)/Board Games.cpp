@@ -135,22 +135,42 @@ int main()
      freopen("in.txt", "r", stdin);
      freopen("out.txt", "w", stdout);
     #endif
-    
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	
+  	int n, x, fives = 0, zeros = 0;
+  	
+  	scanf("%d", &n);
+  	
+  	for (int i=0; i<n; i++) {
+  		scanf("%d", &x);
+  		
+  		if (x == 5)
+  			fives++;
+  		
+  		else
+  			zeros++;
   	}
-
+  	
+  	int p = fives / 9;
+  	
+  	p *= 9;
+  	
+  	string ans = "";
+  	
+  	for (int i=0; i<p; i++)
+  		ans += '5';
+  	
+  	for (int i=0; i<zeros; i++)
+  		ans += '0';
+  	
+  	if (p == 0)
+  		ans = "0";
+  	
+  	if (zeros == 0)
+  		ans = "-1";
+  	
+  	cout<<ans<<endl;
+  	
+  	
     END:
     #ifdef HOME
      fprintf(stderr, "\n>>Runtime: %.10fs\n", (double) (clock() - Start) / CLOCKS_PER_SEC);

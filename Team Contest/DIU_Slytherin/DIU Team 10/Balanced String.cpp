@@ -126,6 +126,7 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int freq[100005];
 
 int main()
 {
@@ -137,18 +138,25 @@ int main()
     #endif
     
   	int t, ca=1;
-  	cin>>t;
+  	scanf("%d", &t);
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	
+  		memset(freq, 0, sizeof freq);
+  		
+  		int n, mx = 0, x;
+  		scanf("%d", &n);
+  		
+  		for (int i=0; i<n; i++) {
+  			scanf("%d", &x);
+  			
+  			freq[x]++;
+  			
+  			mx = max(mx, x);
+  		}
+  		
+  		
+  		
+  		printf("Case %d: ", ca++);
   	}
 
     END:

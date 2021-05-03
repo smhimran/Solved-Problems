@@ -126,6 +126,53 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+map<char, char> reverseChar;
+
+bool isPalindrome, isMirrored;
+
+void precal() {
+	reverseChar['A'] = 'A';
+	reverseChar['E'] = '3';
+	reverseChar['H'] = 'H';
+	reverseChar['I'] = 'I';
+	reverseChar['J'] = 'L';
+	reverseChar['L'] = 'J';
+	reverseChar['M'] = 'M';
+	reverseChar['O'] = 'O';
+	reverseChar['S'] = '2';
+	reverseChar['T'] = 'T';
+	reverseChar['U'] = 'U';
+	reverseChar['V'] = 'V';
+	reverseChar['W'] = 'W';
+	reverseChar['X'] = 'X';
+	reverseChar['Y'] = 'Y';
+	reverseChar['Z'] = '5';
+	reverseChar['1'] = '1';
+	reverseChar['2'] = 'S';
+	reverseChar['3'] = 'E';
+	reverseChar['5'] = 'Z';
+	reverseChar['8'] = '8';
+}
+
+void check(string s) {
+	isMirrored = isPalindrome = 1;
+	
+	int l = 0, r = len(s) - 1;
+	
+	while (l < r) {
+		if (s[l] != s[r])
+			isPalindrome = 0;
+		
+		if (s[l] != reverseChar[s[r]])
+			isMirrored = 0;
+		
+		l++;
+		r--;
+	}
+	
+	if (l==r and isMirrored) 
+		isMirrored = (s[l] == reverseChar[s[l]]);
+}
 
 int main()
 {
@@ -135,20 +182,27 @@ int main()
      freopen("in.txt", "r", stdin);
      freopen("out.txt", "w", stdout);
     #endif
-    
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+    precal();
+	    
+  	string s;
+  	
+  	while(cin>>s) {
+  		check(s);
+  		
+  		if (isMirrored and isPalindrome)
+  			cout<<s<<" -- is a mirrored palindrome."<<endl;
+  		
+  		else if (isMirrored and !isPalindrome)
+  			cout<<s<<" -- is a mirrored string."<<endl;
+  		
+  		else if (!isMirrored and isPalindrome)
+  			cout<<s<<" -- is a regular palindrome."<<endl;
+  		
+  		else 
+  			cout<<s<<" -- is not a palindrome."<<endl;
+  		
+  		cout<<endl;
   	}
 
     END:

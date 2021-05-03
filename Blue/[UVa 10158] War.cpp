@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -126,6 +126,24 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int parent[20015], maxPeople = 10007;
+
+
+int find(int n) {
+	if (parent[n] == n)
+		return n;
+	return find(parent[n]);
+}
+
+void uni(int a, int b) {
+	parent[find(b)] = find(a);
+}
+
+void init() {
+	for (int i=0; i<=2*maxPeople; i++)
+		parent[i] = i;
+}
+
 
 int main()
 {
@@ -136,20 +154,44 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	int n;
+  	cin>>n;
+  	init();
+  	int c, x, y;
+  	while (cin>>c>>x>>y) {
+  		if (c==0 and x==0 and y==0)
+  			break;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		// debug(c, x, y);
+  		// debug(find(x), find(y));
+  		int friendX = find(x), friendY = find(y);
+  		int enemyX = find(x+maxPeople), enemyY = find(y+maxPeople);
 
-  		ans += k;
+  		if (c==1) {
+  			if (friendX == enemyY)
+  				cout<<-1<<endl;
+  			else {
+  				uni(friendX, friendY);
+  				uni(enemyX, enemyY);
+  			}
+  		}
 
-  		cout<<ans<<endl;
+  		else if (c==2) {
+  			if (friendX == friendY)
+  				cout<<-1<<endl;
+  			else {
+  				uni(friendX, enemyY);
+  				uni(enemyX, friendY);
+  			}
+  		}
+
+  		else if (c==3) 
+  			cout<<(friendX == friendY)<<endl;
+
+  		else if (c==4) 
+  			cout<<(friendX == enemyY)<<endl;
   	}
+
 
     END:
     #ifdef HOME

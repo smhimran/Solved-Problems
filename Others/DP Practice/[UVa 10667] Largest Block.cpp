@@ -139,16 +139,61 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int n, q;
+  		cin>>n>>q;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		int a[n+3][n+3];
 
-  		ans += k;
+  		for (int i=0; i<=n; i++)
+  			for (int j=0; j<=n; j++)
+  				a[i][j] = 1;
 
-  		cout<<ans<<endl;
+  		while (q--) {
+  			int x, y, w, z;
+  			cin>>x>>y>>z>>w;
+  			for (int i=x; i<=z; i++) 
+  				for (int j=y; j<=w; j++)
+  					a[i][j] = -inf;
+  		}
+
+  		// for (int i=1; i<=n; i++) {
+  		// 	for (int j=1; j<=n; j++) 
+  		// 		printf("%8d ", a[i][j]);
+  		// 	cout<<endl;
+  		// }
+
+  		int ans = -inf;
+
+  		for (int i=1; i<=n; i++) 
+			for (int j=1; j<=n; j++)
+				a[i][j] += a[i-1][j];
+
+		for (int i=1; i<=n; i++) {
+			for (int j=i; j<=n; j++) {
+				int sum[n + 2];
+
+				for (int k = 1; k <=n; k++)
+					sum[k] = a[j][k] - a[i - 1][k];
+
+				int mx = -inf, now = 0;
+
+				for (int k=1; k<=n; k++) {
+					now = max(now + sum[k], sum[k]);
+
+					mx = max(mx, now);
+
+					// if (sum[k] < 0)
+					// 	now = 0;
+				}
+
+				ans = max(ans, mx);
+			}
+		}
+
+		if (ans < 0)
+			ans = 0;
+
+		cout<<ans<<endl;
   	}
 
     END:

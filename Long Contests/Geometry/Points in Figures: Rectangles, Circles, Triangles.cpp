@@ -58,6 +58,7 @@ typedef set<char> SC;
 #define ALLN(a, n)          (a, a+n)
 #define BSRCN(a, n, x)      binary_search(ALLN(a, n), x)
 #define BSRC                binary_search
+#define sqr(x)				((x) * (x))
 #define MAX                 10000007
 #define MIN                 -10000007
 #define inf                 int(1e6+9)
@@ -126,6 +127,39 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+double triangleArea(double x1, double y1, double x2, double y2, double x3, double y3) 
+{ 
+   return ((x1*(y2-y3) + x2*(y3-y1)+ x3*(y1-y2))/2.0); 
+} 
+  
+ 
+bool isInsideTriangle(double x1, double y1, double x2, double y2, double x3, double y3, long double x, long double y) 
+{    
+
+   double A = abs(triangleArea (x1, y1, x2, y2, x3, y3)); 
+     
+   double A1 = abs(triangleArea (x, y, x2, y2, x3, y3)); 
+
+   double A2 = abs(triangleArea (x1, y1, x, y, x3, y3)); 
+    
+   double A3 = abs(triangleArea (x1, y1, x2, y2, x, y)); 
+
+   return (fabs(A - (A1 + A2 + A3)) < 1e-5 and (A1 != 0 and A2 != 0 and A3 != 0)); 
+} 
+
+bool isInsideRectangle(double x1, double y1, double x2, double y2, double x, double y) {
+    double leftX = min(x1, x2), leftY = min(y1, y2);
+    double rightX = max(x1, x2), rightY = max(y1, y2);
+    
+    if (x > leftX and x < rightX and y > leftY and y < rightY) 
+        return true;
+ 
+    return false;
+}
+
+bool isInsideCircle(double x1, double y1, double r, double x, double y) {
+	return sqr(x - x1) + sqr(y - y1) < sqr(r);
+}
 
 int main()
 {
@@ -136,21 +170,74 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+    char type[15];
+    double values[15][10];
+    int index = 0; 
+    
+  	char c;
+  	while (cin>>c) {
+  		if (c == '*')
+  			break;
+  		
+  		type[index] = c;
+  		 
+  		if (c == 'r') {
+  			for (int i=0; i<4; i++)
+  				cin>>values[index][i];
+  		}
+  		
+  		else if (c == 'c') {
+  			for (int i=0; i<3; i++)
+  				cin>>values[index][i];
+  		}
+  		
+  		else {
+  			for (int i=0; i<6; i++)
+  				cin>>values[index][i];
+  		}
+  		
+  		index++;
   	}
-
+  	
+  	double x, y;
+  	int point = 0;
+  	
+  	while (cin>>x>>y) {
+  		if (x==9999.9 and y==9999.9)
+  			break;
+  		
+  		point++;
+  		
+  		bool inside = 0;
+  		
+  		for (int i=0; i<index; i++) {
+  			if (type[i] == 'r') {
+  				if (isInsideRectangle(values[i][0], values[i][1], values[i][2], values[i][3], x, y)) {
+  					cout<<"Point "<<point<<" is contained in figure "<<i + 1<<endl;
+  					inside = 1;
+  				}
+  			}
+  			
+  			else if (type[i] == 't') {
+  				if (isInsideTriangle(values[i][0], values[i][1], values[i][2], values[i][3], values[i][4], values[i][5], x, y)) {
+  					cout<<"Point "<<point<<" is contained in figure "<<i + 1<<endl;
+  					inside = 1;
+  				}
+  			}
+  			
+  			else if (type[i] == 'c') {
+  				if (isInsideCircle(values[i][0], values[i][1], values[i][2], x, y)) {
+  					cout<<"Point "<<point<<" is contained in figure "<<i + 1<<endl;
+  					inside = 1;
+  				}
+  			}
+  		}
+  		
+  		if (!inside)
+  			cout<<"Point "<<point<<" is not contained in any figure"<<endl;
+  	}
+  		
+  		
     END:
     #ifdef HOME
      fprintf(stderr, "\n>>Runtime: %.10fs\n", (double) (clock() - Start) / CLOCKS_PER_SEC);

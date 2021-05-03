@@ -127,6 +127,8 @@ bool CMP(int a, int b) { return a>b; }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 
+int sum[inf+1], R[inf+1], B[inf+1];
+
 int main()
 {
     // FastIO;
@@ -136,20 +138,64 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	string s;
+  	cin>>s;
+  	
+  	int n = len(s);
+  	
+  	int r = 0, b = 0, rc = 0, bc = 0, maxnow = 0, mx = 0, pos = 0;
+  	
+  	for (int i=0; i<n; i++) {
+  		if (s[i] == 'R') {
+  			rc++;
+  			r++;
+  			b--;
+  		}
+  		
+  		else {
+  			b++;
+  			bc++;
+  			r--;
+  		}
+  		
+  		R[i + 1] = rc;
+  		B[i + 1] = bc;
+  		
+  		r = max(r, 0);
+  		b = max(b, 0);
+  		
+  		int diff = abs(r - b);
+  		
+  		sum[i] = diff;
+  		
+  		if (diff > maxnow) {
+  			// debug(diff, i, r, b);
+  			maxnow = diff;
+  			pos = i;
+  		}
   	}
+  	
+  	// for (int i=1; i<=pos; i++)
+  	// 	cout<<B[i]<<' ';
+  	// cout<<endl;
+  	// for (int i=1; i<=pos; i++)
+  	// 	cout<<R[i]<<' ';
+  	// cout<<endl;
+  	
+  	for (int i=0; i<=pos; i++) {
+  		int x = i, y = pos + 1;
+  		// debug(x, R[y] - R[x]);
+  		// debug(i, B[y] - B[x]);
+  		int now = abs((R[y] - R[x]) - (B[y] - B[x]));
+  		// debug(now);
+  		if (now == maxnow) {
+  			cout<<i + 1<<" "<<pos + 1<<endl;
+  			break;
+  		}
+  	}
+  	
+  	
+  	// debug(maxnow, pos);
 
     END:
     #ifdef HOME

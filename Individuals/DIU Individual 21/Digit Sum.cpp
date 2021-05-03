@@ -126,6 +126,24 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+vector<LL> v;
+LL n;
+LL dp[20][2][400];
+
+LL solve(LL pos, bool small, LL sum) {
+	if (pos == n)
+		return sum;
+	LL &ret = dp[pos][small][sum];
+	if (ret != -1)
+		return ret;
+	ret = 0;
+	int finish = small? 9: v[pos];
+	for (int i=0; i<=finish; i++) {
+		ret += solve(pos+1, small or i<v[pos], sum+i);
+	}
+	return ret;
+}
+
 
 int main()
 {
@@ -139,16 +157,35 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		LL a, b;
+  		cin>>a>>b;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		v.clear();
+  		while (b) {
+  			v.push_back(b%10);
+  			b/=10;
+  		}
 
-  		ans += k;
+  		reverse(v.begin(), v.end());
+  		n = v.size();
 
-  		cout<<ans<<endl;
+  		memset(dp, -1, sizeof dp);
+  		LL high = solve(0, 0, 0);
+
+  		a--;
+  		v.clear();
+  		while (a) {
+  			v.push_back(a%10);
+  			a/=10;
+  		}
+
+  		reverse(v.begin(), v.end());
+  		n = v.size();
+
+  		memset(dp, -1, sizeof dp);
+  		LL low = solve(0, 0, 0);
+
+  		cout<<(high - low)<<endl;
   	}
 
     END:

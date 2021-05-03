@@ -126,6 +126,26 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int n, a[105], dp[105][50005], total;
+
+int solve(int i, int sum) {
+	if (i == n) {
+		int other = total - sum;
+		return abs(sum - other);
+	}
+
+	int &ret = dp[i][sum];
+
+	if (ret != -1)
+		return ret;
+
+	ret = inf;
+
+	ret = min(ret, solve(i+1, sum+a[i]));
+	ret = min(ret, solve(i+1, sum));
+
+	return ret;
+}
 
 int main()
 {
@@ -138,17 +158,28 @@ int main()
     
   	int t, ca=1;
   	cin>>t;
+    getchar();
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		total = 0;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+      string s;
+      getline(cin, s);
 
-  		ans += k;
+      stringstream ss(s);
 
-  		cout<<ans<<endl;
+      int x, i = 0;
+
+  		while (ss>>x) {
+  			a[i++] = x;
+  			total += x;
+  		}
+
+      n = i;
+
+  		memset(dp, -1, sizeof dp);
+
+  		int ret = solve(0, 0);
+      cout<<(ret == 0? "YES":"NO")<<endl;
   	}
 
     END:

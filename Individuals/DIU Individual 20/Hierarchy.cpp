@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -126,6 +126,11 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+vector<pair<PII, int> > v;
+
+bool cmp(pair<PII, int> a, pair<PII, int> b) {
+	return a.second < b.second;
+}
 
 int main()
 {
@@ -136,20 +141,56 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	int n, q, x, y, z;
+  	cin>>n;
+  	int a[n+1], supervisor[n+1], mx = -1;
+  	for (int i=1; i<=n; i++) {
+  		cin>>a[i];
+  		supervisor[i] = -1;
+  		mx = max(mx, a[i]);
   	}
+
+  	int max_times = 0, ans = 0;
+
+  	bool ok = 1;
+
+  	for (int i=1; i<=n; i++) {
+  		if (a[i] == mx)
+  			max_times++;
+  	}
+
+  	if (max_times > 1) {
+  		cout<<-1<<endl;
+  		goto END;
+  	}
+
+  	cin>>q;
+
+  	while (q--) {
+  		cin>>x>>y>>z;
+  		v.push_back({{x, y}, z});
+  	}
+
+  	sort(v.begin(), v.end(), cmp);
+
+  	for (auto i: v) {
+  		if (supervisor[i.first.second] == -1) {
+  			ans += i.second;
+  			supervisor[i.first.second] = i.first.first;
+  		}
+  	}
+
+  	for (int i=1; i<=n; i++) {
+  		if (a[i] == mx) {
+  			if (supervisor[i] != -1)
+	  			ok = 0;
+  		}
+  		else if (supervisor[i] == -1) {
+  			ok = 0; 
+  		}
+  	}
+
+  	cout<<(ok? ans: -1)<<endl;
 
     END:
     #ifdef HOME

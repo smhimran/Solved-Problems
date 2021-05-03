@@ -61,6 +61,7 @@ typedef set<char> SC;
 #define MAX                 10000007
 #define MIN                 -10000007
 #define inf                 int(1e6+9)
+#define eps					1e-18
 #define PI                  acos(-1)
 #define BR                  PF("\n")
 #define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
@@ -137,18 +138,45 @@ int main()
     #endif
     
   	int t, ca=1;
-  	cin>>t;
+  	scanf("%d", &t);
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int n;
+  		scanf("%d", &n);
+  		map<int, int> last;
+  		set<int> s, owner[10020];
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		double total = 0.0, person[n+1];
 
-  		ans += k;
+  		for (int i=1; i<=n; i++) {
+  			int k, x;
+  			person[i] = 0.0;
+  			scanf("%d", &k);
 
-  		cout<<ans<<endl;
+  			while (k--) {
+  				scanf("%d", &x);
+  				owner[x].insert(i);
+  				last[x] = i;
+
+  				s.insert(x);
+  			}
+  		}
+
+  		for (auto i: s) {
+  			if (owner[i].size() == 1) {
+  				total += 1.0;
+  				person[last[i]] += 1.0;
+  			}
+  		}
+
+  		printf("Case %d:", ca++);
+
+  		char per[] = "%";
+
+  		for (int i=1; i<=n; i++) {
+  			printf(" %lf%c", ((person[i] + eps) * 100.00 / total), per[0]);
+  		}
+
+  		printf("\n");
   	}
 
     END:

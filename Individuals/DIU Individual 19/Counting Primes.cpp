@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -126,29 +126,157 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+#define LIMIT int(1e6+6)
+bool composite[LIMIT+1];
+vector<int> prime;
+map<int, int> fact;
+
+void sieve()
+{
+    int i;
+    composite[0]=composite[1]=1;
+    for (i=4; i<=LIMIT; i+=2)
+        composite[i]=1;
+    prime.push_back(2);
+    for (i=3; i*i<=LIMIT; i+=2) {
+        if (!composite[i]) {
+            prime.push_back(i);
+            for (int j=i*i; j<=LIMIT; j+=2*i)
+                composite[j]=1;
+        }
+    }
+    for (; i<=LIMIT; i++)
+        if (!composite[i])
+            prime.push_back(i);
+}
+
+
+LL a[inf], segment[1000], lazy[1000], sum;
+int val, n, siz, t, ca=1, q, k, x, y, curr, seg, p;
+
+void build()
+{
+    curr=-1;
+    siz=sqrt(n);
+    for (int i=0; i<n; i++) {
+        if (i%siz==0)
+            curr++;
+        if (!composite[a[i]])
+	        segment[curr]++;
+        lazy[curr]=-1;
+    }
+}
+
+LL query(int i, int j)
+{
+    // cout<<i<<" "<<j<<endl;
+    sum = 0;
+    while (i<=j and i%siz!=0) {
+    	// debug(i, a[i]);
+        if (lazy[i/siz] != -1)
+    		sum += !composite[lazy[i/siz]];
+    	else
+        	sum += !composite[a[i]];
+        i++;
+    }
+
+    while (i+siz<=j) {
+        sum+=segment[i/siz];
+        // cout<<sum<<" <--"<<i<<endl;
+        i+=siz;
+    }
+
+    while (i<=j) {
+    	// debug(i, j, a[i]);
+    	if (lazy[i/siz] != -1)
+    		sum += !composite[lazy[i/siz]];
+    	else
+        	sum += !composite[a[i]];
+        i++;
+    }
+
+    return sum;
+}
+
+void update(int i, int val)
+{
+    seg=i/siz;
+    segment[seg]+=val;
+    // lazy[i/siz]=val;
+    a[i]+=val;
+}
+
+void range_update(int i, int j, int val)
+{
+    while (i<=j and i%siz!=0) {
+        segment[i/siz] -= !composite[a[i]];
+        segment[i/siz] += !composite[val];
+        lazy[i/siz] = -1;
+        a[i++] = val;
+        // i++;
+    }
+
+    while (i+siz<=j) {
+        segment[i/siz] = (!composite[val]) * siz;
+        lazy[i/siz] = val;
+        i+=siz;
+    }
+
+    while (i<=j) {
+        segment[i/siz] -= !composite[a[i]];
+        segment[i/siz] += !composite[val];
+        lazy[i/siz] = -1;
+        a[i++] = val;
+        // i++;
+    }
+}
+
+void clear()
+{
+    for (p=0; p<n; p++) {
+        lazy[p]=segment[p]=a[p]=0;
+    }
+}
+
+
 
 int main()
 {
-    // FastIO;
+    FastIO;
     #ifdef HOME
      clock_t Start=clock();
      freopen("in.txt", "r", stdin);
      freopen("out.txt", "w", stdout);
     #endif
     
+    sieve();
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		cin>>n>>q;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		for (int i=0; i<n; i++)
+  			cin>>a[i];
 
-  		ans += k;
+  		build();
+  		// debug(siz);
 
-  		cout<<ans<<endl;
+  		cout<<"Case "<<ca++<<":"<<endl;
+  		while (q--) {
+  			int z, x, y;
+  			cin>>z>>x>>y;
+  			x--; y--;
+  			// debug(z, y, x);
+  			if (z == 0) {
+  				int val;
+  				cin>>val;
+  				range_update(x, y, val);
+  			}
+  			else
+  				cout<<query(x, y)<<endl;
+  		}
+
+  		clear();
   	}
 
     END:

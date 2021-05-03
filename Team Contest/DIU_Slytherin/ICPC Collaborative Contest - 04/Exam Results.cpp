@@ -137,19 +137,35 @@ int main()
     #endif
     
   	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
-  	}
+    scanf("%d", &t);
+    while(t--){
+        int n, p;
+        
+        vector<int> v;
+        
+        scanf("%d %d", &n, &p);
+        
+        int a[n+1], b[n+1];
+        
+        for(int i=1; i<=n; i++){
+            scanf("%d %d", a+i, b+i);
+            v.push_back(a[i]);
+            // v.push_back(b[i]);
+        }
+        
+        sort(ALL(v));
+        
+        int ans = 0;
+        
+        for (int i=0; i<v.size(); i++){
+           	
+           	if () 
+            
+            ans = max(ans, cnt1);
+        }
+        
+        printf("Case #%d: %d\n", ca++, ans);
+    }
 
     END:
     #ifdef HOME

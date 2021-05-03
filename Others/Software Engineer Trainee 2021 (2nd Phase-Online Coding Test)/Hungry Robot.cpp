@@ -126,6 +126,43 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int days[] = {2, 1, 1, 2, 3, 1, 3};
+
+int a, b, c;
+
+bool possible(int n, int a, int b, int c) {
+	if (n==1)
+		return a;
+	
+	if (n == 2)
+		return b;
+	
+	if (n==3)
+		return c;
+}
+
+int getDays(int day, int a, int b, int c) {
+	int ans = 0;
+  		
+	while (possible(days[day], a, b, c)) {
+		ans++;
+		
+		int k = days[day];
+		
+		if (k == 1)
+			a--;
+		else if (k==2)
+			b--;
+		else if (k==3)
+			c--;
+		
+		day++;
+		
+		day %= 7;
+	}
+	
+	return ans;
+}
 
 int main()
 {
@@ -136,20 +173,18 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	int x, y, z;
+  	cin>>a>>b>>c;
+  	
+  	x = a, y = b, z = c;
+  	
+  	int day = 0, ans = 0;
+  	
+  	for (int i=0; i<7; i++) {
+  		ans = max(ans, getDays(i, x, y, z));
   	}
+  	
+  	cout<<ans<<endl;
 
     END:
     #ifdef HOME

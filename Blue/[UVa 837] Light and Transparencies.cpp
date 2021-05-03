@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -126,6 +126,23 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+class Point
+{
+public:
+	double position, value;
+	bool start;
+
+	Point(double position, double value, bool start) {
+		this->position = position;
+		this->value = value;
+		this->start = start;
+	}
+
+
+	bool operator<(const Point &a) {
+		return position < a.position;
+	}
+};
 
 int main()
 {
@@ -137,18 +154,59 @@ int main()
     #endif
     
   	int t, ca=1;
-  	cin>>t;
+  	scanf("%d", &t);
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int n;
+  		scanf("%d", &n);
+  		std::vector<Point> points;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		for (int i=0; i<n; i++) {
+  			double x1, y1, x2, y2, tran;
+  			scanf("%lf %lf %lf %lf %lf", &x1, &y1, &x2, &y2, &tran);
 
-  		ans += k;
+  			double x = min(x1, x2), y = max(x1, x2);
 
-  		cout<<ans<<endl;
+  			points.push_back(Point(x, tran, 1));
+  			points.push_back(Point(y, tran, 0));
+  		}
+
+  		sort(points.begin(), points.end());
+
+  		char s[300];
+
+  		vector<string> ans;
+
+  		sprintf(s, "-inf %.3lf 1.000", points[0].position);
+
+  		ans.push_back(s);
+
+  		double value = 1.000;
+
+  		for (int i=0; i<points.size() -1; i++) {
+  			Point p = points[i];
+
+  			// debug(p.position, p.start, p.value, value);
+
+  			if (p.start)
+  				value *= p.value;
+  			else 
+  				value /= p.value;
+
+  			sprintf(s, "%.3lf %.3lf %.3lf", p.position, points[i+1].position, value);
+  			ans.push_back(s);
+  		}
+
+  		sprintf(s, "%.3lf +inf 1.000", points.back().position);
+  		
+  		ans.push_back(s);
+
+  		cout<<ans.size()<<endl;
+
+  		for (auto i: ans)
+  			cout<<i<<endl;
+
+  		if (t)
+  			cout<<endl;
   	}
 
     END:

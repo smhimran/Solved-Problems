@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -139,16 +139,82 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int n, m;
+  		cin>>n>>m;
+  		deque<int> deq;
+  		stack<int> st;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		for (int i=1; i<=n+1; i++)
+  			deq.push_back(i);
 
-  		ans += k;
+  		bool visited[m+1][n+2];
+  		int prog[m+1];
 
-  		cout<<ans<<endl;
+  		memset(visited, 0, sizeof visited);
+  		memset(prog, 0, sizeof prog);
+
+  		int time = 0, curt = 0;
+  		while (true) {
+  			time += 5;
+  			curt++;
+
+  			if (curt > m)
+  				curt = 1;
+
+  			// debug(time, curt);
+
+  			int out = prog[curt];
+  			prog[curt] = 0;
+
+  			// debug(out);
+
+  			if (out != 0)
+  				deq.push_back(out);
+
+  			bool found = 0;
+  			while (!deq.empty()) {
+  				int k = deq.front();
+  				deq.pop_front();
+  				if (!visited[curt][k]) {
+  					visited[curt][k] = 1;
+  					prog[curt] = k;
+  					found = 1;
+  					while (!st.empty()) {
+  						int z = st.top();
+  						st.pop();
+  						deq.push_front(z);
+  					}
+  					break;
+  				}
+
+  				st.push(k);
+  			}
+
+  			while (!st.empty()) {
+  				int z = st.top();
+  				st.pop();
+  				deq.push_front(z);
+  			}
+
+  			if (!found) {
+  				bool done = 1;
+  				for (int i=1; i<=m; i++) {
+  					for (int j=1; j<=n+1; j++) {
+  						if (!visited[i][j]) {
+  							done = 0;
+  							break;
+  						}
+  					}
+  					if (!done)
+  						break;
+  				}
+
+  				if (done)
+  					break;
+  			}
+  		}
+
+  		cout<<"Case "<<ca++<<": "<<time<<endl;
   	}
 
     END:

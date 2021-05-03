@@ -32,6 +32,7 @@ typedef map<int, VI> MIVI;
 
 // - - - - - - Pairs - - - - - - //
 typedef pair<int, int> PII;
+typedef pair<LL, LL> PLL;
 typedef pair<string, string> PSS;
 typedef pair<char, char> PCC;
 typedef pair<int, string> PIS;
@@ -63,7 +64,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -139,16 +140,31 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		LL n, x, val, sum = 0;
+  		cin>>n>>x;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		queue<PLL> q;
 
-  		ans += k;
+  		for (int i=0; i<n; i++) {
+  			cin>>val;
+  			q.push({val, 1});
+  		}
 
-  		cout<<ans<<endl;
+  		bool stop = 0;
+  		while (!q.empty()) {
+  			PLL now = q.front();
+  			q.pop();
+  			sum += now.first * now.second;
+
+  			if (!stop) {
+  				if (now.first % x)
+  					stop = 1;
+  				else 
+  					q.push({now.first / x, now.second * x});
+  			}
+  		}
+
+  		cout<<sum<<endl;
   	}
 
     END:

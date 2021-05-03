@@ -126,10 +126,11 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int prince[62505], princess[62505];
 
 int main()
 {
-    // FastIO;
+    FastIO;
     #ifdef HOME
      clock_t Start=clock();
      freopen("in.txt", "r", stdin);
@@ -139,16 +140,53 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int n, p, q;
+  		cin>>n>>p>>q;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		p++; q++;
 
-  		ans += k;
+  		vector<int> seq[(n * n) + 5], a;
 
-  		cout<<ans<<endl;
+  		for (int i=1; i<=p; i++) {
+  			cin>>prince[i];
+  			seq[prince[i]].push_back(i);
+  		}
+
+  		for (int i=1; i<=q; i++)
+  			cin>>princess[i];
+
+  		for (int i=1; i<=q; i++) {
+  			if (!(seq[princess[i]].empty())) {
+  				// debug(princess[i]);
+  				for (int j=seq[princess[i]].size() -1; j>=0; j--) {
+  					a.push_back(seq[princess[i]][j]);
+  				}
+  			}
+  		}
+
+  		int sz = a.size();
+
+  		// for (int i=0; i<sz; i++)
+  		// 	cout<<a[i]<<' ';
+  		// cout<<endl;
+
+  		int lis[sz];
+  		vector<int> v;
+	    lis[0]=1;
+	    for (int i=0; i<sz; i++) {
+	        if (v.empty())
+	            v.PB(a[i]);
+	        else {
+	            auto it=lower_bound(v.begin(), v.end(), a[i]);
+	            lis[i]=(it-v.begin()) +1;
+	            if (it==v.end())
+	                v.push_back(a[i]);
+	            else 
+	                *it=a[i];
+	        }
+	    }
+
+  		cout<<"Case "<<ca++<<": "<<v.size()<<endl;
   	}
 
     END:

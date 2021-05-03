@@ -126,6 +126,27 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+LL multiples[10005], ans[10005];
+
+LL nC4(LL n) {
+	LL ret = n * (n - 1) * (n - 2) * (n - 3);
+	
+	ret /= 24;
+	
+	return ret;
+}
+
+void countMultiplesOf(LL n) {
+	for (LL i=1; i * i <= n; i++) {
+		if (n % i == 0) {
+			multiples[i]++;
+			
+			if (n/i != i) {
+				multiples[n/i]++;
+			}
+		}
+	}
+}
 
 int main()
 {
@@ -137,18 +158,29 @@ int main()
     #endif
     
   	int t, ca=1;
-  	cin>>t;
+  	scanf("%d", &t);
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	
+  		int n;
+  		scanf("%d", &n);
+  		memset(multiples, 0, sizeof multiples);
+  		
+  		while (n--) {
+  			LL x;
+  			scanf("%lld", &x);
+  			
+  			countMultiplesOf(x);
+  		}
+  		
+  		for (int i=10000; i>=1; i--) {
+  			ans[i] = nC4(multiples[i]);
+  			
+  			for (int j=2*i; j<=10000; j+=i) {
+  				ans[i] -= ans[j];
+  			}
+  		}
+  		
+  		printf("Case %d: %lld\n", ca++, ans[1]);
   	}
 
     END:

@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -126,6 +126,17 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+bool isSolved[105][10], submitted[105];
+int penalty[105], solved[105], penaltyForProblem[105][10];
+
+bool cmp(int a, int b) {
+	if (solved[a] == solved[b]) {
+		if (penalty[a] == penalty[b])
+			return a < b;
+		return penalty[a] < penalty[b];
+	}
+	return solved[a] > solved[b];
+}
 
 int main()
 {
@@ -138,17 +149,57 @@ int main()
     
   	int t, ca=1;
   	cin>>t;
+  	getchar();
+  	getchar();
+  	string s;
+
+  	bool started = 0;
+
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		memset(isSolved, 0, sizeof isSolved);
+  		memset(solved, 0, sizeof solved);
+  		memset(penalty, 0, sizeof penalty);
+  		memset(submitted, 0, sizeof submitted);
+  		memset(penaltyForProblem, 0, sizeof penaltyForProblem);
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		vector<int> contestants;
+  		while (1) {
+  			getline(cin, s);
+	  		if (s.empty())
+	  			break;
 
-  		ans += k;
+	  		stringstream ss(s);
+	  		int contestant, problem, time;
+	  		char verdict;
 
-  		cout<<ans<<endl;
+	  		ss>>contestant>>problem>>time>>verdict;
+
+	  		if (!submitted[contestant])
+	  			contestants.push_back(contestant);
+
+	  		submitted[contestant] = 1;
+
+	  		if (isSolved[contestant][problem])
+	  			continue;
+
+	  		if (verdict == 'I') 
+	  			penaltyForProblem[contestant][problem] += 20;
+	  		else if (verdict == 'C') {
+	  			penalty[contestant] += time + penaltyForProblem[contestant][problem];
+	  			isSolved[contestant][problem] = 1;
+	  			solved[contestant]++;
+	  		}
+  		}
+
+  		sort(contestants.begin(), contestants.end(), cmp);
+
+  		if (started)
+  			cout<<endl;
+
+  		for (auto i: contestants)
+  			cout<<i<<" "<<solved[i]<<" "<<penalty[i]<<endl;
+
+  		started = 1;
   	}
 
     END:

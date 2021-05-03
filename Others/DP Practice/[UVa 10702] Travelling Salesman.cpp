@@ -126,6 +126,30 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int c, s, e, t;
+
+int cost[105][105], dp[105][1005];
+
+map<int, bool> finish;
+
+int solve(int i, int left) {
+	if (left == 0)
+		return finish[i] ? 0: -inf;
+	
+	int &ret = dp[i][left];
+	
+	if (ret != -1)
+		return ret;
+	
+	ret = -inf;
+	
+	for (int k=1; k<=c; k++) {
+		if (k != i) 
+			ret = max(ret, cost[i][k] + solve(k, left - 1));
+	}
+
+	return ret;
+}
 
 int main()
 {
@@ -136,20 +160,29 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
-  	}
+	while (cin>>c>>s>>e>>t) {
+		if (c == 0 and s == 0 and e == 0 and t == 0)
+			break;
+		
+		for (int i=1; i<=c; i++) 
+			for (int j=1; j<=c; j++)
+				cin>>cost[i][j];
+			
+			
+		for (int i=0; i<e; i++) {
+			int x;
+			cin>>x;
+			finish[x] = 1;
+		}
+		
+		memset(dp, -1, sizeof dp);
+		
+		int ans = max(0, solve(s, t));
+		
+		cout<< ans <<endl;
+		
+		finish.clear();
+	} 	
 
     END:
     #ifdef HOME

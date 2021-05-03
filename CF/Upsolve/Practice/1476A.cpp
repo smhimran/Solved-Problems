@@ -139,14 +139,13 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		LL n, k;
+  		cin>>n>>k;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		LL sum = (n + k - 1) / k;
+  		sum *= k;
 
-  		ans += k;
+  		LL ans = (sum + n - 1) / n;
 
   		cout<<ans<<endl;
   	}

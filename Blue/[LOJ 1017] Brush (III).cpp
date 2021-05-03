@@ -137,18 +137,38 @@ int main()
     #endif
     
   	int t, ca=1;
-  	cin>>t;
+  	scanf("%d", &t);
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	
+  		int n, w, k;
+  		scanf("%d %d %d", &n, &w, &k);
+  		
+  		int point[n+1], removedFrom[n+1], x;
+  		
+  		memset(removedFrom, 0, sizeof removedFrom);
+  		
+  		for (int i=1; i<=n; i++)
+  			scanf("%d %d", &x, point+i);
+  		
+  		sort(point+1, point+n+1);
+  		
+  		for (int i=1; i<=n; i++) {
+  			for (int j=1; j<=i; j++) {
+  				if (point[i] - point[j] <= w)
+  					removedFrom[i]++;
+  			}
+  		}
+  		
+  		int dp[n+1][k+1];
+  		
+  		memset(dp, 0, sizeof dp);
+  		
+  		for (int i=1; i<=n; i++) 
+  			for (int j=1; j<=k; j++) 
+  				dp[i][j] = max(dp[i-1][j], dp[i-removedFrom[i]][j-1] + removedFrom[i]);
+  		
+  		
+  		printf("Case %d: %d\n", ca++, dp[n][k]);
   	}
 
     END:

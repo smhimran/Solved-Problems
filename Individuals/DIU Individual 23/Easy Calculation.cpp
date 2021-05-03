@@ -61,6 +61,7 @@ typedef set<char> SC;
 #define MAX                 10000007
 #define MIN                 -10000007
 #define inf                 int(1e6+9)
+#define eps 				1e-9
 #define PI                  acos(-1)
 #define BR                  PF("\n")
 #define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
@@ -126,6 +127,12 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+double eval(double a, double b, double c, double x) {
+	double out = b * sin(x);
+	out += a * x;
+
+	return out;
+}
 
 int main()
 {
@@ -137,18 +144,24 @@ int main()
     #endif
     
   	int t, ca=1;
-  	cin>>t;
+  	scanf("%d", &t);
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		double a, b, c;
+  		scanf("%lf %lf %lf", &a, &b, &c);
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		double low = 1, high = 1000000, mid;
 
-  		ans += k;
+  		int steps = 64;
 
-  		cout<<ans<<endl;
+  		while (steps--) {
+  			mid = (low + high) / 2;
+  			if (eval(a, b, c, mid) < c)
+  				low = mid;
+  			else
+  				high = mid;
+  		}
+
+  		printf("%.6lf\n", mid);
   	}
 
     END:

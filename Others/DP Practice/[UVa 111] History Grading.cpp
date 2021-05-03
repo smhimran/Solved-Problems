@@ -136,19 +136,58 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	int n, a[22];
+  	string s;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  	while (getline(cin, s)) {
+  		stringstream ss(s);
 
-  		ans += k;
+  		int cnt = 0, x, b[22];
 
-  		cout<<ans<<endl;
+  		while (ss>>x) {
+  			b[x] = ++cnt;
+  		}
+
+  		if (cnt == 1) {
+  			n = x;
+
+  			getline(cin, s);
+  			stringstream ss2(s);
+
+  			int pos = 0;
+
+  			while (ss2>>x) {
+  				a[x] = ++pos;
+  			}
+
+  			// cout<<n<<endl;
+  			// for (int i=1; i<=n; i++)
+  			// 	cout<<a[i]<<' ';
+  			// cout<<endl;
+
+  			continue;
+
+  			
+  		}
+
+  	// 	for (int i=1; i<=n; i++)
+			// cout<<b[i]<<' ';
+  	// 	cout<<endl;
+
+  		int dp[n+2][n+2];
+
+  		memset(dp, 0, sizeof dp);
+
+  		for (int i=1; i<=n; i++) {
+  			for (int j=1; j<=n; j++) {
+  				if (a[i] == b[j]) 
+  					dp[i][j] = max({dp[i-1][j-1], dp[i-1][j], dp[i][j-1]}) + 1;
+  				else
+  					dp[i][j] = max(dp[i-1][j], dp[i][j-1]);
+  			}
+  		}
+
+  		cout<<dp[n][n]<<endl;
   	}
 
     END:

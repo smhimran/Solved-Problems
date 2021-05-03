@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -126,6 +126,50 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+#define LIMIT int(1e7+6)
+bool composite[LIMIT+1];
+vector<int> prime;
+map<int, int> fact;
+
+void sieve()
+{
+    int i;
+    composite[0]=composite[1]=1;
+    for (i=4; i<=LIMIT; i+=2)
+        composite[i]=1;
+    prime.push_back(2);
+    for (i=3; i*i<=LIMIT; i+=2) {
+        if (!composite[i]) {
+            prime.push_back(i);
+            for (int j=i*i; j<=LIMIT; j+=2*i)
+                composite[j]=1;
+        }
+    }
+    for (; i<=LIMIT; i++)
+        if (!composite[i])
+            prime.push_back(i);
+}
+
+//Sieve required before this function
+
+LL div(LL n)
+{
+    if (n==1) 
+        return 1;
+    LL ret=1;
+    for (int i=0; i<prime.size() and prime[i]*prime[i]<=n; i++) {
+        LL cnt=1;
+        while (n%prime[i]==0) {
+            cnt++;
+            n/=prime[i];
+        }
+        ret*=cnt;
+    } 
+    if (n!=1)
+        ret*=2;
+
+    return ret;
+}
 
 int main()
 {
@@ -136,19 +180,16 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
+    sieve();
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		LL n;
+  		cin>>n;
+  		while (n % 2 == 0)
+  			n /= 2;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  		cout<<"Case "<<ca++<<": "<<div(n) - 1LL<<endl;
   	}
 
     END:

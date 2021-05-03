@@ -61,6 +61,7 @@ typedef set<char> SC;
 #define MAX                 10000007
 #define MIN                 -10000007
 #define inf                 int(1e6+9)
+#define eps 				1e-9
 #define PI                  acos(-1)
 #define BR                  PF("\n")
 #define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
@@ -137,18 +138,14 @@ int main()
     #endif
     
   	int t, ca=1;
-  	cin>>t;
+  	scanf("%d", &t);
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		double R, r;
+  		scanf("%lf %lf", &R, &r);
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		double f = PI * R * R, s = PI * r * r * 2.0;
 
-  		ans += k;
-
-  		cout<<ans<<endl;
+  		printf("%d\n", (f > s) ? 1: 2);
   	}
 
     END:

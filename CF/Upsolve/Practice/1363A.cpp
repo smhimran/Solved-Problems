@@ -139,16 +139,29 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int n, x;
+  		cin>>n>>x;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		int a[n+1], odd = 0, even = 0;
+  		for (int i=0; i<n; i++) {
+  			cin>>a[i];
+  			if (a[i] & 1)
+  				odd++;
+  			else 
+  				even++;
+  		}
 
-  		ans += k;
+  		bool ok = 0;
 
-  		cout<<ans<<endl;
+  		for (int i=1; i<=odd and i<=x; i+=2) {
+  			int needed = x - i;
+  			if (even >= needed) {
+  				ok = 1;
+  				break;
+  			}
+  		}
+
+  		cout<<(ok? "YES":"NO")<<endl;
   	}
 
     END:

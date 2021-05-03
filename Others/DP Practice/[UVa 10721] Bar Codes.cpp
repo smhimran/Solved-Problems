@@ -127,6 +127,28 @@ bool CMP(int a, int b) { return a>b; }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 
+LL dp[55][55][55];
+
+LL solve(int n, int k, int m) {
+	if (n == 0 and k == 0)
+		return 1;
+	
+	if (k == 0)
+		return 0;
+	
+	LL & ret = dp[n][k][m];
+	
+	if (ret != -1)
+		return ret;
+	
+	ret = 0;
+		
+	for (int i=1; i<=m and  (n - i)>=0; i++) 
+		ret += solve(n - i, k - 1, m);
+	
+	return ret;
+}
+
 int main()
 {
     // FastIO;
@@ -136,20 +158,11 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
-  	}
+    memset(dp, -1, sizeof dp);
+    
+	int n, m, k;
+  	while (~scanf("%d %d %d", &n, &k, &m)) 
+  		printf("%lld\n", solve(n, k, m));
 
     END:
     #ifdef HOME

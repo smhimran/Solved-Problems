@@ -136,19 +136,60 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	int coin[] = {0, 5, 10, 20, 50, 100, 200};
+  	int cnt[7];
+  	
+  	int shopDP[7][505];
+  	
+  	memset(shopDP, 0, sizeof shopDP);
+  	
+  	for (int i=1; i<=500; i++) {
+  		shopDP[0][i] = inf;
+  	}
+  	
+  	shopDP[0][0] = 0;
+  	
+  	for (int i=1; i<=6; i++) {
+  		for (int j=0; j<=500; j++) {
+	  		shopDP[i][j] = shopDP[i-1][j];
+	  		
+	  		if (j >= coin[i]) {
+	  			shopDP[i][j] = min(shopDP[i][j], 1 + shopDP[i][j-coin[i]]);			
+	  		}
+  		}
+  	}
+  	  	
+  	
+  	while (~scanf("%d %d %d %d %d %d", &cnt[1], &cnt[2], &cnt[3], &cnt[4], &cnt[5], &cnt[6])) {
+  		if (cnt[1] == 0 and cnt[2] == 0 and cnt[3] == 0 and cnt[4] == 0 and cnt[5] == 0 and cnt[6] == 0)
+  			break;
+  		
+  		int d, p, amount;
+  		scanf("%d.%d", &d, &p);
+  		
+  		amount = d * 100 + p;  		
+  		
+		int customerDP[7][505];
+  		
+  		for (int i=1; i<=500; i++)
+  			customerDP[0][i] = inf;
+  		
+  		customerDP[0][0] = 0;
+  		
+  		for (int i=1; i<=6; i++) {
+  			for (int j=0; j<=500; j++) {
+  				customerDP[i][j] = inf;
+  				for (int k=0; k <= cnt[i] and k*coin[i]<=j; k++) 
+	  				customerDP[i][j] = min(customerDP[i][j], k + customerDP[i - 1][j - k * coin[i]]);	
+  			}
+  		}
+  		
+  		int ans = inf;
+  		
+  		for (int i = amount; i<=500; i++)
+  			ans = min(ans, customerDP[6][i] + shopDP[6][i - amount]);
+  		
+  		printf("%3d\n", ans);
   	}
 
     END:

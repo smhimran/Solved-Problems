@@ -126,6 +126,7 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int a[350][350];
 
 int main()
 {
@@ -139,16 +140,53 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int n;
+  		cin>>n;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		for (int i=0; i<2*n; i++) {
+  			for (int j=0; j<2*n; j++){
+  				if (i<n and j<n) {
+	  				cin>>a[i][j];
+	  				a[i+n][j] = a[i][j+n] = a[i+n][j+n] = a[i][j];
+  				}
+  				if (i > 0)
+	  				a[i][j] += a[i-1][j];
+  				if (j > 0)
+	  				a[i][j] += a[i][j-1];
+	  			if (i > 0 and j > 0)	
+	  				a[i][j] -= a[i-1][j-1];
+  			}
+  		}
 
-  		ans += k;
+  		// for (int i=1; i<=2*n; i++) {
+  		// 	for (int j=1; j<=2*n; j++)
+  		// 		cout<<a[i][j]<<' ';
+  		// 	cout<<endl;
+  		// }
 
-  		cout<<ans<<endl;
+  		int ans = -inf;
+
+
+		for (int i=0; i<n; i++) {
+			for (int j=0; j<n; j++) {
+				for (int k=i; k<i+n; k++) {
+					for (int l=j; l<j+n; l++) {
+						int now = a[k][l];
+
+						if (i > 0)
+							now -= a[i-1][l];
+						if (j > 0)
+							now -= a[k][j-1];
+						if (i > 0 and j > 0)
+							now += a[i-1][j-1];
+
+						ans = max(ans, now);
+					}
+				}
+			}
+		}
+
+		cout<<ans<<endl;
   	}
 
     END:

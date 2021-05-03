@@ -126,6 +126,16 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+void convertToLower(string &s) {
+	for (int i=0; i<len(s); i++) {
+		if (s[i]>='A' and s[i]<='Z')
+			s[i] = (s[i] - 'A') + 'a';
+	}
+}
+
+bool isAlpha(char c) {
+	return (c>='a' and c<='z') or (c>='A' and c<='Z');
+}
 
 int main()
 {
@@ -136,19 +146,61 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	int k, e, ca = 1;
+  	
+  	while (cin>>k>>e) {
+  		map<string, bool> isKeyword;
+  		
+  		string s, excuse[e+1];
+  		
+  		int excuseScore[e+1], pos = 0, maxScore = 0;
+  		
+  		while (k--) {
+  			cin>>s;
+  			isKeyword[s] = 1;
+  			// debug(s);
+  		}
+  		
+  		getchar();
+  		
+  		for (int pos=0; pos<e; pos++) {
+  			getline(cin, s);
+  			// debug(s);
+  			
+  			string word = "";
+  			
+  			excuseScore[pos] = 0;
+  			excuse[pos] = s;
+  			
+  			for (int i=0; i<len(s); i++) {
+  				if (isAlpha(s[i]))
+  					word += s[i];
+  				
+  				else {
+  					convertToLower(word);
+  					
+  					// debug(word);
+  					
+  					if (isKeyword[word]) 
+  						excuseScore[pos]++;
+  					
+  					word = "";
+  				}
+  			}
+  			
+  			maxScore = max(maxScore, excuseScore[pos]);
+  			
+  			// debug(maxScore, e);
+  		}
+  		
+  		cout<<"Excuse Set #"<<ca++<<endl;
+  		
+  		for (int i=0; i<e; i++) {
+  			if (excuseScore[i] == maxScore) 
+  				cout<<excuse[i]<<endl;
+  		}
+  		
+  		cout<<endl;
   	}
 
     END:

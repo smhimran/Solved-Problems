@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -139,16 +139,26 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int n;
+  		cin>>n;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		bool possible = 0;
 
-  		ans += k;
+  		for (int i=0; 3*i <= n; i++) {
+  			int x = 3 * i;
+  			x = n - x;
+  			if (x % 3 == 0 or x % 7 == 0)
+  				possible = 1;
+  		}
 
-  		cout<<ans<<endl;
+  		for (int i=0; 7*i <= n; i++) {
+  			int x = 7 * i;
+  			x = n - x;
+  			if (x % 3 == 0 or x % 7 == 0)
+  				possible = 1;
+  		}
+
+  		cout<<(possible? "YES":"NO")<<endl;
   	}
 
     END:

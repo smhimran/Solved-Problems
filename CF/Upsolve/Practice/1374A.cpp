@@ -139,16 +139,22 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int x, y, n;
+  		cin>>x>>y>>n;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		int l = n / x;
 
-  		ans += k;
+  		while (l >= 0) {
+  			int now = l * x;
+  			now += y;
 
-  		cout<<ans<<endl;
+  			if (now <= n) {
+  				cout<<now<<endl;
+  				break;
+  			}
+
+  			l--;
+  		}
   	}
 
     END:

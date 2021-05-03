@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -139,16 +139,58 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int n, m;
+  		cin>>n>>m;
+  		cout<<"Case "<<ca++<<":\n";
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		deque<int> q;
 
-  		ans += k;
+  		string op;
+  		int x;
 
-  		cout<<ans<<endl;
+  		while (m--) {
+  			cin>>op;
+
+  			if (op == "pushLeft") {
+  				cin>>x;
+  				if (q.size() == n)
+  					cout<<"The queue is full"<<endl;
+  				else {
+  					q.push_front(x);
+  					cout<<"Pushed in left: "<<x<<endl;
+  				}
+  			}
+
+  			else if (op == "pushRight") {
+  				cin>>x;
+  				if (q.size() == n)
+  					cout<<"The queue is full"<<endl;
+  				else {
+  					q.push_back(x);
+  					cout<<"Pushed in right: "<<x<<endl;
+  				}
+  			}
+
+  			else if (op == "popLeft") {
+  				if (q.empty()) 
+  					cout<<"The queue is empty"<<endl;
+  				else {
+  					x = q.front();
+  					q.pop_front();
+  					cout<<"Popped from left: "<<x<<endl;
+  				}
+  			}
+
+  			else if (op == "popRight") {
+  				if (q.empty()) 
+  					cout<<"The queue is empty"<<endl;
+  				else {
+  					x = q.back();
+  					q.pop_back();
+  					cout<<"Popped from right: "<<x<<endl;
+  				}
+  			}
+  		}
   	}
 
     END:

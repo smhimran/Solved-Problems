@@ -60,10 +60,10 @@ typedef set<char> SC;
 #define BSRC                binary_search
 #define MAX                 10000007
 #define MIN                 -10000007
-#define inf                 int(1e6+9)
+#define inf                 int(1e9+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -121,7 +121,7 @@ void fastscan(int &number)
 } 
 
 LL GCD(LL a, LL b) { return b == 0 ? a : GCD(b , a % b); }
-int LCM(int a, int b) { return a * (b/GCD(a, b)); }
+LL LCM(LL a, LL b) { return a * (b/GCD(a, b)); }
 bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
@@ -129,26 +129,51 @@ bool CMP(int a, int b) { return a>b; }
 
 int main()
 {
-    // FastIO;
+    FastIO;
     #ifdef HOME
      clock_t Start=clock();
      freopen("in.txt", "r", stdin);
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	int n, t;
+  	while (cin>>n>>t) {
+  		if (n==0 and t==0)
+  			break;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		LL coin[n+1];
+  		for (int i=0; i<n; i++)
+  			cin>>coin[i];
 
-  		ans += k;
+  		while (t--) {
+  			LL x;
+  			cin>>x;
 
-  		cout<<ans<<endl;
+  			LL mn = inf, mx = inf;
+
+  			for (int i=0; i<n; i++) {
+  				for (int j=i+1; j<n; j++) {
+  					for (int k=j+1; k<n; k++) {
+  						for (int l=k+1; l<n; l++) {
+  							LL lcm = LCM(coin[i], LCM(coin[j], LCM(coin[k], coin[l])));
+
+  							LL mod = x % lcm;
+  							LL rem = lcm - mod;
+
+  							if (mod == 0) {
+  								mn = mx = 0;
+  								i = j = k = l = n;
+  							}
+  							else {
+  								mn = min(mn, mod);
+  								mx = min(mx, rem);
+  							}
+  						}
+  					}
+  				}
+  			}
+  			cout<<x - mn<<" "<<x + mx<<endl;
+  		}
   	}
 
     END:

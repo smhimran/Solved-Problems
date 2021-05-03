@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -139,16 +139,27 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int n, k;
+  		cin>>n>>k;
+  		int a[n+1];
+  		int solved = 0, max_time = -1;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		for (int i=0; i<n; i++) {
+  			cin>>a[i];
+  			if (a[i] > -1)
+  				solved++;
 
-  		ans += k;
+  			max_time = max(max_time, a[i]);
+  		}
 
-  		cout<<ans<<endl;
+  		if (solved < ceil((1.0 * n)/2))
+  			cout<<"Rejected"<<endl;
+  		else if (max_time > k)
+  			cout<<"Too Slow"<<endl;
+  		else if (solved == n and max_time <= 1)
+  			cout<<"Bot"<<endl;
+  		else
+  			cout<<"Accepted"<<endl;
   	}
 
     END:

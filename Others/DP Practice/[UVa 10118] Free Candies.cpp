@@ -126,6 +126,50 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int n;
+int candy[7][45], dp[45][45][45][45]; 
+bool taken[25];
+
+int solve(int a, int b, int c, int d, int basket) {
+	if (basket == 5)
+		return 0;
+	
+	int &ret = dp[a][b][c][d];
+	
+	if (ret)
+		return ret;
+	
+	int pile[5];
+	
+	pile[0] = a;
+	pile[1] = b;
+	pile[2] = c;
+	pile[3] = d;
+	
+	for (int i=0; i<4; i++) {
+		if (pile[i] == n)
+			continue;
+		
+		int now = candy[i][pile[i]];
+		
+		pile[i]++;
+		
+		if (taken[now]) {
+			taken[now] = 0;
+			ret = max(ret, 1 + solve(pile[0], pile[1], pile[2], pile[3], basket - 1));
+			taken[now] = 1;
+		}
+		else {
+			taken[now] = 1;
+			ret = max(ret, solve(pile[0], pile[1], pile[2], pile[3], basket + 1));
+			taken[now] = 0;
+		}
+		
+		pile[i]--;
+	}
+	
+	return ret;
+}
 
 int main()
 {
@@ -136,19 +180,15 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	while (~scanf("%d", &n) and n) {
+  		memset(dp, 0, sizeof dp);
+  		memset(taken, 0, sizeof taken);
+  		for (int i=0; i<n; i++) 
+  			for (int j=0; j<4; j++)
+  				scanf("%d", &candy[j][i]);
+  			
+  		
+  		printf("%d\n", solve(0, 0, 0, 0, 0));
   	}
 
     END:

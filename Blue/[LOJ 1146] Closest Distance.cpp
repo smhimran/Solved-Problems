@@ -61,6 +61,7 @@ typedef set<char> SC;
 #define MAX                 10000007
 #define MIN                 -10000007
 #define inf                 int(1e6+9)
+#define sqr(x)				((x) * (x))
 #define PI                  acos(-1)
 #define BR                  PF("\n")
 #define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
@@ -126,6 +127,18 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+double distance(double Ax, double Ay, double Bx, double By) {
+	return sqrt(sqr(Ax - Bx) + sqr(Ay - By));
+}
+
+double check(double mid, double Ax, double Ay, double Bx, double By, double Cx, double Cy, double Dx, double Dy) {
+	double Px = Ax + mid * (Bx - Ax);
+	double Py = Ay + mid * (By - Ay);
+	double Qx = Cx + mid * (Dx - Cx);
+	double Qy = Cy + mid * (Dy - Cy);
+	
+	return distance(Px, Py, Qx, Qy);
+}
 
 int main()
 {
@@ -137,18 +150,30 @@ int main()
     #endif
     
   	int t, ca=1;
-  	cin>>t;
+  	scanf("%d", &t);
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	
+  		double ax, ay, bx, by, cx, cy, dx, dy;
+  		
+  		scanf("%lf %lf %lf %lf %lf %lf %lf %lf", &ax, &ay, &bx, &by, &cx, &cy, &dx, &dy);
+  		
+  		double mid1, mid2, low = 0, high = 1, ans = 1e9;
+  		
+  		int iterations = 128;
+  		
+  		while (iterations--) {
+  			mid1 = low + (high - low) / 3.0;
+  			mid2 = high - (high - low) / 3.0;
+  			
+  			if (check(mid1, ax, ay, bx, by, cx, cy, dx, dy) > check(mid2, ax, ay, bx, by, cx, cy, dx, dy))
+  				low = mid1;
+  			else
+  				high = mid2;
+  		}
+  		
+  		
+  		
+  		printf("Case %d: %.10lf\n", ca++, check(low, ax, ay, bx, by, cx, cy, dx, dy));
   	}
 
     END:

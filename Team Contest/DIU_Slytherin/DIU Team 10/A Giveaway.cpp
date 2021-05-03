@@ -126,6 +126,7 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int special[] = {1, 64, 729, 4096, 15625, 46656, 117649, 262144, 531441, 1000000, 1771561, 2985984, 4826809, 7529536, 11390625, 16777216, 24137569, 34012224, 47045881, 64000000, 85766121};
 
 int main()
 {
@@ -136,19 +137,23 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	int n;
+  	while (cin>>n) {
+  		if (n == 0)
+  			break;
+		
+		bool found = 0;
+		
+		for (int i=0; i<21; i++) {
+			if(special[i] == n) {
+				puts("Special");
+				found = 1;
+				break;
+			}
+		}	
+  		
+  		if (!found)
+	  		puts("Ordinary");
   	}
 
     END:

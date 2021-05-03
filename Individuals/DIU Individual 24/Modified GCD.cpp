@@ -126,6 +126,19 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+vector<int> v;
+
+void divisior(LL n) {
+	for (int i=1; i*i<=n; i++) {
+		if (n % i == 0) {
+			LL k = n / i;
+			v.push_back(i);
+
+			if (k != i)
+				v.push_back(k);
+		}
+	}
+}
 
 int main()
 {
@@ -136,20 +149,35 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	LL a, b;
+  	cin>>a>>b;
+  	
+  	LL gcd = GCD(a, b);
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  	divisior(gcd);
 
-  		ans += k;
+  	sort(v.begin(), v.end());
 
-  		cout<<ans<<endl;
+  	LL n;
+  	cin>>n;
+
+  	while (n--) {
+  		LL x, y;
+  		cin>>x>>y;
+
+  		if (gcd % y == 0) {
+  			cout<<y<<endl;
+  			continue;
+  		}
+
+  		LL ans = *(upper_bound(v.begin(), v.end(), y) - 1);
+
+  		if (ans < x)
+  			cout<<-1<<endl;
+  		else
+  			cout<<ans<<endl;
   	}
+
 
     END:
     #ifdef HOME

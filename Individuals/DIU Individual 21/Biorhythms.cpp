@@ -136,19 +136,20 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	int p, e, i, d, ca = 1;
+  	while (cin>>p>>e>>i>>d) {
+  		if (p == -1 and e == -1 and i == -1 and d == -1)
+  			break;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		p %= 23; e %= 28; i %= 33;
 
-  		ans += k;
+  		int ans = 0;
+  		for (int j=d+1; j<=21252+d; j++) {
+  			if (j % 23 == p and j % 28 == e and j % 33 == i)
+  				ans = j;
+  		}
 
-  		cout<<ans<<endl;
+  		cout<<"Case "<<ca++<<": the next triple peak occurs in "<<ans - d<<" days."<<endl;
   	}
 
     END:

@@ -137,18 +137,31 @@ int main()
     #endif
     
   	int t, ca=1;
-  	cin>>t;
+  	scanf("%d", &t);
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		LL n;
+  		scanf("%lld", &n);
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		LL ans = 0;
 
-  		ans += k;
+  		while (n % 5 == 0) {
+  			n /= 5;
+  			n *= 4;
+  			ans++;
+  		}
 
-  		cout<<ans<<endl;
+  		while (n % 3 == 0) {
+  			n /= 3;
+  			n *= 2;
+  			ans++;
+  		}
+
+  		while (n % 2 == 0) {
+  			n /= 2;
+  			ans++;
+  		}
+
+  		printf("%lld\n", n == 1? ans: -1);
   	}
 
     END:

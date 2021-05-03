@@ -126,6 +126,20 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+LL phi(LL n)
+{
+    LL ret=n;
+    for(int i=2; i*i<=n; i++) {
+        if(n%i==0) {
+            while(n%i==0)
+                n/=i;
+            ret-=ret/i;
+        }
+    }
+    if(n>1)
+        ret-=ret/n;
+    return ret;
+}
 
 int main()
 {
@@ -136,19 +150,9 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	LL n;
+  	while (cin>>n and n) {
+  		cout<<phi(n)<<endl;
   	}
 
     END:

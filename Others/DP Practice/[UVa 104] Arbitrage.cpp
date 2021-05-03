@@ -136,19 +136,69 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	int n;
+  	while (cin>>n) {
+  		double dp[n+5][n+5][n+5];
+  		int path[n+5][n+5][n+5];
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		memset(dp, 0, sizeof dp);
+  		memset(path,0, sizeof path);
 
-  		ans += k;
+  		for (int i=1; i<=n; i++) {
+  			for (int j=1; j<=n; j++) {
+  				if (i == j)
+  					dp[i][j][1] = 1.0;
+  				else 
+  					cin>>dp[i][j][1];
+  				path[i][j][1] = j;
+  			}
+  		}
 
-  		cout<<ans<<endl;
+  		for (int step=2; step<=n; step++) {
+  			for (int k=1; k<=n; k++) {
+  				for (int i=1; i<=n; i++) {
+  					for (int j=1; j<=n; j++) {
+  						if (dp[i][j][step] < dp[i][k][step-1] * dp[k][j][1]) {
+	  						dp[i][j][step] = dp[i][k][step-1] * dp[k][j][1];
+	  						path[i][j][step] = k;
+	  					}
+  					}
+  				}
+  			}
+  		}
+
+  		bool found  = 0;
+  		std::vector<int> v;
+
+  		for (int s=2; s<=n; s++) {
+  			for (int i=1; i<=n; i++) {
+  				if (dp[i][i][s] > 1.01) {
+  					found = 1;
+  					int p = i;
+
+  					// debug(i, s, dp[i][i][s]);
+  					v.push_back(i);
+  					for (int j=s; j>1; j--) {
+  						p = path[i][p][j];
+  						v.push_back(p);
+  					}
+  					v.push_back(i);
+  					reverse(v.begin(), v.end());
+  					
+  					break;
+  				}
+  			}
+  			if (found)
+  				break;
+  		}
+  		if (found) {
+  			cout<<v[0];
+  			for (int i=1; i<v.size(); i++)
+  				cout<<" "<<v[i];
+  			cout<<endl;
+  		}
+  		else
+  			cout<<"no arbitrage sequence exists"<<endl;
   	}
 
     END:
@@ -156,4 +206,4 @@ int main()
      fprintf(stderr, "\n>>Runtime: %.10fs\n", (double) (clock() - Start) / CLOCKS_PER_SEC);
     #endif
     return 0;
-}
+}g

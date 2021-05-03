@@ -60,7 +60,7 @@ typedef set<char> SC;
 #define BSRC                binary_search
 #define MAX                 10000007
 #define MIN                 -10000007
-#define inf                 int(1e6+9)
+#define inf                 int(1e9+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
 #define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
@@ -126,6 +126,32 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int n, a[15][1005], dp[15][1005];
+
+int solve(int i, int j) {
+	if (j == n) {
+		if (i == 0)
+			return 0;
+		else
+			return inf;
+	}
+
+	int &ret = dp[i][j];
+
+	if (ret != -1)
+		return ret;
+
+	ret = inf;
+
+	if (i < 9)
+		ret = min(ret, (60 - a[i][j]) + solve(i+1, j+1));
+	if (i > 0)
+		ret = min(ret, (20 - a[i][j]) + solve(i-1, j+1));
+
+	ret = min(ret, (30 - a[i][j]) + solve(i, j+1));
+
+	return ret;
+}
 
 int main()
 {
@@ -139,16 +165,22 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		cin>>n;
+  		n /= 100;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		for (int i=9; i>=0; i--) 
+  			for (int j=0; j<n; j++) 
+  				cin>>a[i][j];
 
-  		ans += k;
+  		memset(dp, -1, sizeof dp);
 
-  		cout<<ans<<endl;
+  		cout<<solve(0, 0)<<endl;
+		cout<<endl;
+  		// for (int i=0; i<n; i++) {
+  		// 	for (int j=0; j<n; j++)
+  		// 		printf("%3d ", dp[i][j]);
+  		// 	cout<<endl;
+  		// }
   	}
 
     END:

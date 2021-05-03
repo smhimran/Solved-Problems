@@ -60,7 +60,7 @@ typedef set<char> SC;
 #define BSRC                binary_search
 #define MAX                 10000007
 #define MIN                 -10000007
-#define inf                 int(1e6+9)
+#define inf                 int(1e7+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
 #define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
@@ -127,6 +127,26 @@ bool CMP(int a, int b) { return a>b; }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 
+LL sumdiv[inf + 1];
+
+int minNumber[inf + 1];
+
+void precal() {
+	for (int i = 1; i <= inf; ++i) {
+			sumdiv[i] += i;
+		for (int j = i+i; j <= inf; j += i) {
+	 		sumdiv[j] += i;
+		}
+	}
+	 	
+	for (int i=1; i<=inf; i++) {
+		int x = sumdiv[i];
+		
+		if (x <= inf and minNumber[x] == 0)
+			minNumber[x] = i;
+	}
+}
+
 int main()
 {
     // FastIO;
@@ -136,19 +156,19 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
+    precal();
+    
   	int t, ca=1;
-  	cin>>t;
+  	scanf("%d", &t);
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	
+  		int num;
+  		scanf("%d", &num);
+  		
+  		if (minNumber[num] == 0)
+  			printf("-1\n");
+  		else 
+  			printf("%d\n", minNumber[num]);
   	}
 
     END:

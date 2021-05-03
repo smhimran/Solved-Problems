@@ -139,16 +139,21 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int n;
+  		cin>>n;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		LL x[n+1], y[n+1];
 
-  		ans += k;
+      for (int i=0; i<n; i++)
+        cin>>x[i]>>y[i];
 
-  		cout<<ans<<endl;
+      sort(x, x+n);
+      sort(y, y+n);
+
+      LL disx = x[n / 2] - x[(n - 1) / 2] + 1;
+      LL disy = y[n / 2] - y[(n - 1) / 2] + 1;
+
+      cout<<disx * disy<<endl;
   	}
 
     END:

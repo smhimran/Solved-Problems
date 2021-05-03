@@ -1,4 +1,12 @@
-#include<bits/stdc++.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <map>
+#include <set>
+#include <utility>
+#include <algorithm>
+#include <cstdio>
+#include <cstring>
 using namespace std;
 
 // #pragma comment(linker, "/stack:200000000")
@@ -63,7 +71,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -136,20 +144,64 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	int n;
+  	cin>>n;
+  	map<string, int> cnt;
+  	std::vector<string> v;
+  	while (n--) {
+  		string s;
+  		cin>>s;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		string number = "";
 
-  		ans += k;
+  		for (int i=0; i<len(s); i++) {
+  			if (s[i]>='0' and s[i]<='9')
+  				number += s[i];
+  			else {
+  				if (s[i] == 'A' or s[i] == 'B' or s[i] == 'C')
+  					number += '2';
+  				else if (s[i] == 'D' or s[i] == 'E' or s[i] == 'F')
+  					number += '3';
+  				else if (s[i] == 'G' or s[i] == 'H' or s[i] == 'I')
+  					number += '4';
+  				else if (s[i] == 'J' or s[i] == 'K' or s[i] == 'L')
+  					number += '5';
+  				else if (s[i] == 'M' or s[i] == 'N' or s[i] == 'O')
+  					number += '6';
+  				else if (s[i] == 'P' or s[i] == 'R' or s[i] == 'S')
+  					number += '7';
+  				else if (s[i] == 'T' or s[i] == 'U' or s[i] == 'V')
+  					number += '8';
+  				else if (s[i] == 'W' or s[i] == 'X' or s[i] == 'Y')
+  					number += '9';		
+  				else
+  					continue;
+  			}
 
-  		cout<<ans<<endl;
+  			if (len(number) == 3)
+  				number += '-';
+
+  		}
+
+  		cnt[number]++;
+
+  		if (cnt[number] == 1)
+	  		v.push_back(number);
   	}
+
+  	sort(v.begin(), v.end());
+
+  	int outs = 0;
+  	
+	for (int i=0; i<v.size(); i++) {
+		if (cnt[v[i]] > 1) {
+			outs++;
+			cout<<v[i]<<" "<<cnt[v[i]]<<endl;
+		}
+	}
+
+	if (!outs)
+		cout<<"No duplicates."<<endl;
 
     END:
     #ifdef HOME

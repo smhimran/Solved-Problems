@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -126,6 +126,19 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+LL ans[30000007];
+
+void precal() {
+	for (LL i = 1; i < 30000007; i++) {
+		for (LL j = 1; i*j + i < 30000007; j++) {
+			if (((i*j + i) ^ (i*j)) == i) 
+				ans[i*j + i]++;
+		}
+	}
+
+	for (int i=2; i<30000007; i++)
+		ans[i] += ans[i-1];
+}
 
 int main()
 {
@@ -136,19 +149,13 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
+    precal();
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  		int n;
+  		cin>>n;
+  		cout<<"Case "<<ca++<<": "<<ans[n]<<endl;
   	}
 
     END:

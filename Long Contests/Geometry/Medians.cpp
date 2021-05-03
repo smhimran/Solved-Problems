@@ -126,6 +126,18 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+double heronsTriangle(double a, double b, double c, double S) {
+	double area = (S - a) * (S - b) * (S - c);
+	
+	area *= S;
+	
+	if (area <= 0)
+		return -1;
+	
+	area = sqrt(area);
+	
+	return area;
+}
 
 int main()
 {
@@ -136,19 +148,23 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	double m1, m2, m3;
+  	
+  	while (~scanf("%lf %lf %lf", &m1, &m2, &m3)) {
+  		
+  		double sigma = m1 + m2 + m3;
+  		
+  		sigma /= 2;
+  		
+  		double area = heronsTriangle(m1, m2, m3, sigma);
+  		
+  		area /= 3;
+  		area *= 4;
+  		
+  		if (area <=0.0)
+  			area = -1;
+  			
+  		printf("%.3lf\n", area);
   	}
 
     END:

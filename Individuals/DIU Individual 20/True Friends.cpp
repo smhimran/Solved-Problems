@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -126,10 +126,27 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+std::vector<int> v[105], g[105];
+bool visited[105], is_friend[105][105];
+
+void dfs(int user, int i) {
+	is_friend[user][i] = 1;
+	for (auto x: g[i]) {
+		if (!is_friend[user][x])
+			dfs(user, x);
+	}
+}
+
+void dfs2(int i) {
+	visited[i] = 1;
+	for (auto x: v[i])
+		if (!visited[x])
+			dfs2(x);
+} 
 
 int main()
 {
-    // FastIO;
+    FastIO;
     #ifdef HOME
      clock_t Start=clock();
      freopen("in.txt", "r", stdin);
@@ -139,14 +156,48 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int n;
+  		cin>>n;
+  		string s[n+1];
+  		for (int i=1; i<=n; i++) 
+  			cin>>s[i];
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		for (int i=0; i<=102; i++) {
+  			v[i].clear();
+  			g[i].clear();
+  		}
 
-  		ans += k;
+  		for (int i=1; i<=n; i++) {
+  			for (int j=0; j<len(s[i]); j++)
+  				if (s[i][j] == 'Y')
+  					g[i].push_back(j+1);
+  		}
+
+  		memset(is_friend, 0, sizeof is_friend);
+  		memset(visited, 0, sizeof visited);
+
+  		for (int i=1; i<=n; i++)
+  			dfs(i, i);
+
+  		for (int i=1; i<=n; i++) {
+  			for (int j=1; j<=n; j++) {
+  				if (i == j)
+  					continue;
+  				if (is_friend[i][j] and is_friend[j][i]) {
+  					v[i].push_back(j);
+  					v[j].push_back(i);
+  				}
+  			}
+  		}
+
+  		int ans = 0;
+
+  		for (int i=1; i<=n; i++) {
+  			if (!visited[i]) {
+  				dfs2(i);
+  				ans++;
+  			}
+  		}
 
   		cout<<ans<<endl;
   	}

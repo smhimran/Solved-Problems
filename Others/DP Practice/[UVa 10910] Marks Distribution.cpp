@@ -125,7 +125,25 @@ int LCM(int a, int b) { return a * (b/GCD(a, b)); }
 bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
+int N, P, T, dp[80][5000];
 
+
+int solve(int i, int sum) {
+	if (i == N) 
+		return sum == T;
+
+	int &ret = dp[i][sum];
+
+	if (ret != -1)
+		return ret;
+
+	ret = 0;
+
+	for (int j=P; j<=(T - (N * P) + P); j++) 
+		ret += solve(i+1, sum+j);
+
+	return ret;
+}
 
 int main()
 {
@@ -139,16 +157,10 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		cin>>N>>T>>P;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  		memset(dp, -1, sizeof dp);
+  		cout<<solve(0, 0)<<endl;
   	}
 
     END:

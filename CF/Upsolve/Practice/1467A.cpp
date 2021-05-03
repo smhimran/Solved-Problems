@@ -139,16 +139,22 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int n;
+  		cin>>n;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		if (n == 1)
+  			cout<<9<<endl;
+  		else {
+  			string ans = "98";
+  			int now = 9;
 
-  		ans += k;
-
-  		cout<<ans<<endl;
+  			for (int i=2; i<n; i++) {
+  				now %= 10;
+  				ans += (now + '0');
+  				now++;
+  			}
+  			cout<<ans<<endl;
+  		}
   	}
 
     END:

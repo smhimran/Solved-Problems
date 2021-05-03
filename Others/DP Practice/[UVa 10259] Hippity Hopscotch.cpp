@@ -126,6 +126,35 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int a[105][105], dp[105][105], n, K;
+bool visited[105][105];
+
+int solve(int i, int j) {
+	if (i >= n or j >= n or i < 0 or j < 0)
+		return 0;
+
+	int &ret = dp[i][j];
+
+	if (ret != - 1)
+		return ret;
+
+	int now = a[i][j];
+	ret = 0;
+
+	for (int k=1; k<=K; k++) {
+		for (int p=0; p<4; p++) {
+			int r = i + (ROW[p] * k), c = j + (COL[p] * k);
+
+			if (r >= 0 and c >= 0 and r < n and c < n and a[r][c] > now) {
+				ret = max(ret, solve(r, c));
+			}
+		}
+	}
+
+	ret += now;
+
+	return ret;
+}
 
 int main()
 {
@@ -139,16 +168,18 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		cin>>n>>K;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		for (int i=0; i<n; i++) 
+  			for (int j=0; j<n; j++)
+  				cin>>a[i][j];
 
-  		ans += k;
+  		memset(dp, -1, sizeof dp);
 
-  		cout<<ans<<endl;
+  		cout<<solve(0, 0)<<endl;
+
+  		if (t)
+  			cout<<endl;
   	}
 
     END:

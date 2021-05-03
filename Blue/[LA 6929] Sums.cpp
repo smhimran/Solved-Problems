@@ -60,7 +60,7 @@ typedef set<char> SC;
 #define BSRC                binary_search
 #define MAX                 10000007
 #define MIN                 -10000007
-#define inf                 int(1e6+9)
+#define inf                 int(1e5+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
 #define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
@@ -126,6 +126,25 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+unordered_map<LL, bool> isSum, pow2;
+vector<LL> sum;
+
+void precal() {
+	sum.push_back(0);
+	sum.push_back(1);
+	
+	isSum[0] = 1;
+	isSum[1] = 1;
+	
+	for (LL i=2; i<=inf; i++) {
+		LL s = (i * (i-1)) / 2;
+		sum.push_back(s);
+		isSum[s] = 1;
+	}
+	
+	for (LL i=1; i<=1e9; i*=2)
+		pow2[i] = 1;
+}
 
 int main()
 {
@@ -136,19 +155,52 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
+    precal();
   	int t, ca=1;
-  	cin>>t;
+  	scanf("%d", &t);
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	
+  		int n;
+  		scanf("%d", &n);
+  		
+  		if (pow2[n]) {
+  			puts("IMPOSSIBLE");
+  		}
+  		
+  		else if (n&1) {
+  			printf("%d = %d + %d\n", n, (n / 2), (n / 2) + 1);
+  		}
+  		
+  		
+  		else {
+  			for (int i=2; i<sum.size(); i++) {
+  				
+  				if (sum[i] == n) {
+  					printf("%d = 1", n);
+  					for (int j=2; j<=n; j++) 
+  						printf(" + %d", j);
+  					
+  					printf("\n");
+  					
+  					break;
+  				}
+  				
+  				if ((n - sum[i]) % i == 0) {
+  					int j = (n - sum[i]) / i;
+  					
+  					printf("%d = %d", n, j);
+  					
+  					j++;
+  					
+  					for (int k = 2; k<=i; k++, j++) 
+  						printf(" + %d", j);
+  						
+  					printf("\n");
+  					
+  					break;
+  				}
+  			}
+  		}
   	}
 
     END:

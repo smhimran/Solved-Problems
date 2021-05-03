@@ -126,6 +126,79 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+class Dish {
+public:
+	int cost;
+	double value;
+
+	Dish(){}
+
+	Dish(int cost, double value) {
+		this -> cost = cost;
+		this -> value = value;
+	}
+
+	bool operator<(const Dish &a) {
+		if (cost == a.cost)
+			return value > a.value;
+		return cost < a.cost;
+	}
+} dish[60];
+
+double dp[25][105][55][5];
+
+int path[25][105];
+
+int k, n, m;
+
+double solve(int i, int cost, int prev, int times) {
+	if (i == k)
+		return 0;
+
+	double &ret = dp[i][cost][prev][times];
+
+	if (ret != -1)
+		return ret;
+
+
+	ret = -inf;
+
+
+	for (int j=1; j<=n; j++) {
+		double ret1 = 0, ret2 = 0;
+
+		if (cost + dish[j].cost <= m) {
+			if (prev == j and times == 1)
+				ret1 = (dish[j].value / 2.0) + solve(i+1, cost + dish[j].cost, j, times + 1);
+			else if (prev != j)
+				ret2 = dish[j].value + solve(i+1, cost + dish[j].cost, j, 1);
+			// else 
+			// 	ret2 = solve(i+1, cost + dish[j].cost, j, 1);
+
+			// debug(ret1, ret2, ret);
+
+			if (ret1 > ret or ret2 > ret) {
+				path[i][cost] = j;
+
+				ret = max(ret1, ret2);
+			}
+		}
+	}
+	// debug(ret);
+
+	return ret;
+}
+
+void print(int i, int now) {
+	if (i == k)
+		return;
+
+	int p = path[i][now];
+
+	cout<<path[i][now]<<' ';
+
+	print(i+1, now + dish[p].cost);
+}
 
 int main()
 {
@@ -136,19 +209,34 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	while (cin>>k>>n>>m) {
+  		if (k==0 and n==0 and m==0)
+  			break;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		for (int i=1; i<=n; i++) {
+  			int c;
+  			double v;
+  			cin>>c>>v;
 
-  		ans += k;
+  			dish[i] = Dish(c, v);
+  		}
 
-  		cout<<ans<<endl;
+  		for (int i=0; i<=21; i++) {
+  			for (int j=0; j<=101; j++) {
+  				for (int k=0; k<=52; k++) {
+  					dp[i][j][k][0] = -1;
+  					dp[i][j][k][1] = -1;
+  					dp[i][j][k][2] = -1;
+  				}
+  				path[i][j] = 0;
+  			}
+  		}
+
+  		// sort(dish + 1, dish + n + 1);
+
+  		cout<<solve(0, 0, 0, 0)<<endl;
+  		print(0, 0);
+  		cout<<endl;
   	}
 
     END:

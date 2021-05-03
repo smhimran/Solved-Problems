@@ -139,16 +139,21 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int n, c0, c1, h;
+  		string s;
+  		cin>>n>>c0>>c1>>h>>s;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		int zero = 0, one = 0;
 
-  		ans += k;
+  		for (int i=0; i<n; i++) 
+  			zero += (s[i]=='0'), one += (s[i] == '1');
 
-  		cout<<ans<<endl;
+  		int cost = (zero * c0) + (one * c1);
+
+  		cost = min(cost, (zero * h) + (n * c1));
+  		cost = min(cost, (one * h) + (n * c0));
+  		
+  		cout<<cost<<endl;
   	}
 
     END:

@@ -136,20 +136,27 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	int n;
+  	cin>>n;
+  	map<LL, LL> freq;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	while (n--) {
+  		LL x;
+  		cin>>x;
+  		freq[x]++;
   	}
+
+  	LL ans = 0;
+
+  	if (freq[0])
+  		ans += (freq[0]) * (freq[0] - 1) / 2;
+
+  	for (int i=1; i<=10; i++) {
+  		if (freq[i] and freq[(i * -1)]) 
+  			ans += freq[i] * freq[(i * -1)];
+  	}
+
+  	cout<<ans<<endl;
 
     END:
     #ifdef HOME

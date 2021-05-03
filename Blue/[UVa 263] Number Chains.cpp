@@ -136,19 +136,36 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	LL n;
+  	
+  	while (cin>>n and n) {
+  		
+  		map<LL, bool> visited;
+  		
+  		int chainLength = 0;
+  		
+  		cout<<"Original number was "<<n<<endl;
+  		
+  		while (!visited[n]) {
+  			visited[n] = 1;
+  			
+  			string s = to_string(n);
+  			
+  			string ascendingString = s, descendingString = s;
+  			
+  			sort(ascendingString.begin(), ascendingString.end());
+  			rsort(descendingString);
+  			
+  			LL ascendingNumber = stol(ascendingString), descendingNumber = stol(descendingString);
+  			
+  			n = descendingNumber - ascendingNumber;
+  			
+  			cout<<descendingNumber<<" - "<<ascendingNumber<<" = "<<n<<endl;
+  			
+  			chainLength++;
+  		}
+  		
+  		cout<<"Chain length "<<chainLength<<endl<<endl;
   	}
 
     END:

@@ -61,9 +61,10 @@ typedef set<char> SC;
 #define MAX                 10000007
 #define MIN                 -10000007
 #define inf                 int(1e6+9)
+#define eps 				1e-9
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -125,7 +126,35 @@ int LCM(int a, int b) { return a * (b/GCD(a, b)); }
 bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
+int s, p;
+PII outpost[505];
+bool hasSat[505];
 
+double dis(PII a, PII b) {
+	double ret = ((a.first * 1.0) - (b.first * 1.0)) * ((a.first * 1.0) - (b.first * 1.0));
+	ret += ((a.second * 1.0) - (b.second * 1.0)) * ((a.second * 1.0) - (b.second * 1.0)); 
+	return sqrt(ret);
+}
+
+bool possible(double n) {
+	int sats = 0;
+	memset(hasSat, 0, sizeof hasSat);
+	for (int i=0; i<p-1; i++) {
+		if (dis(outpost[i], outpost[i+1]) > n) {
+			if (hasSat[i] == 1) {
+				sats++;
+				hasSat[i+1] = 1;
+			}
+			else {
+				sats += 2;
+				hasSat[i] = 1;
+				hasSat[i+1] = 1;
+			}
+		}
+	}
+
+	return sats <= s;
+}
 
 int main()
 {
@@ -137,18 +166,27 @@ int main()
     #endif
     
   	int t, ca=1;
-  	cin>>t;
+  	scanf("%d", &t);
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		scanf("%d %d", &s, &p);
+  		for (int i=0; i<p; i++)
+  			scanf("%d %d", &outpost[i].first, &outpost[i].second);
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		sort(outpost, outpost+p);
+  		double left = 1, right = 10000;
+  		double mid;
 
-  		ans += k;
+  		while (abs(left-right) > eps) {
+  			mid = (left+right)/2.0;
 
-  		cout<<ans<<endl;
+  			if (possible(mid))
+  				right = mid;
+  			else
+  				left = mid;
+  		}
+
+
+  		printf("%.2lf\n", mid);
   	}
 
     END:

@@ -1,4 +1,12 @@
-#include<bits/stdc++.h>
+#include<iostream>
+#include<vector>
+#include <utility>
+#include <cstdio>
+#include <map>
+#include <set>
+#include <algorithm>
+#include <string>
+#include <cstring>
 using namespace std;
 
 // #pragma comment(linker, "/stack:200000000")
@@ -63,7 +71,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -126,6 +134,30 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+map<string, int> inv;
+
+int bubble_sort(string s) {
+	int ret = 0;
+	while (1) {
+		bool ok = 1;
+		for (int i=1; i<len(s); i++) {
+			if (s[i] < s[i-1]) {
+				ok = 0;
+				ret++;
+				swap(s[i], s[i-1]);
+			}
+		}
+		if (ok)
+			break;
+	}
+	return ret;
+}
+
+bool cmp(PIS a, PIS b) {
+	if (inv[a.second] == inv[b.second])
+		return a.first < b.first;
+	return inv[a.second] < inv[b.second];
+}
 
 int main()
 {
@@ -136,20 +168,18 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
-  	}
+		int n, m;
+		cin>>n>>m;
+		PIS s[m+1];
+		for (int i=0; i<m; i++) {
+			string x;
+			cin>>x;
+			inv[x] = bubble_sort(x);
+			s[i] = {i, x};
+		}
+		sort(s, s+m, cmp);
+		for (int i=0; i<m; i++)
+			cout<<s[i].second<<endl;
 
     END:
     #ifdef HOME

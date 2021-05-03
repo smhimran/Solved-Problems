@@ -135,21 +135,33 @@ int main()
      freopen("in.txt", "r", stdin);
      freopen("out.txt", "w", stdout);
     #endif
-    
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  
+	int n, times = 100;
+	cin>>n;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+	int left = 1, right = n, mid;
 
-  		ans += k;
+	while (times--) {
+		mid = (left+right)>>1;
+		int curr, l, r;
+		cout<<"? "<<mid<<endl;
+		cin>>curr;
+		cout<<"? "<<mid-1<<endl;
+		cin>>l;
+		cout<<"? "<<mid+1<<endl;
+		cin>>r;
 
-  		cout<<ans<<endl;
-  	}
+		if (curr < l and curr < r) {
+			cout<<"! "<<mid<<endl;
+			break;
+		}
+
+		else if (curr > l) 
+			right = mid - 1;
+
+		else if (curr > r)
+			left = mid + 1;
+	}
 
     END:
     #ifdef HOME

@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -126,6 +126,35 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+map<string, int> points, wins, goal_diff, goals, goals_agianst, games_played, ties;
+
+bool isSmaller(string a, string b) {
+	for (int i=0; i<len(a); i++)
+		a[i] = toupper(a[i]);
+	for (int i=0; i<len(b); i++)
+		b[i] = toupper(b[i]);
+
+	return a < b;
+}
+
+bool cmp(string a, string b) {
+	if (points[a] == points[b]) {
+		if (wins[a] == wins[b]) {
+			if (goal_diff[a] == goal_diff[b]) {
+				if (goals[a] == goals[b]) {
+					if (games_played[a] == games_played[b]) {
+						return isSmaller(a, b);
+					}
+					return games_played[a] < games_played[b];
+				}
+				return goals[a] > goals[b];
+			}
+			return goal_diff[a] > goal_diff[b];
+		}
+		return wins[a] > wins[b];
+	}
+	return points[a] > points[b];
+}
 
 int main()
 {
@@ -138,17 +167,95 @@ int main()
     
   	int t, ca=1;
   	cin>>t;
+  	getchar();
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		string tournament;
+  		getline(cin, tournament);
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		int n;
+  		cin>>n;
+  		getchar();
 
-  		ans += k;
+  		string team[n+1];
+  		for (int i=0; i<n; i++)
+  			getline(cin, team[i]);
 
-  		cout<<ans<<endl;
+  		int games;
+  		cin>>games;
+  		getchar();
+
+  		while (games--) {
+  			string s, team1, team2, goal1, goal2;
+  			getline(cin, s);
+  			int i;
+  			for (i=0; i<len(s); i++) {
+  				if (s[i] == '#')
+  					break;
+  				team1 += s[i];
+  			}
+  			i++;
+  			for (; i<len(s); i++) {
+  				if (s[i] == '@')
+  					break;
+  				goal1 += s[i];
+  			}
+  			i++;
+  			for (; i<len(s); i++) {
+  				if (s[i] == '#')
+  					break;
+  				goal2 += s[i];
+  			}
+  			i++;
+  			for (; i<len(s); i++) {
+  				team2 += s[i];
+  			}
+
+  			int g1 = stoi(goal1), g2 = stoi(goal2);
+
+  			goals[team1] += g1, goals[team2] += g2;
+  			goal_diff[team1] += (g1 - g2);
+  			goal_diff[team2] += (g2 - g1);
+
+  			goals_agianst[team1] += g2, goals_agianst[team2] += g1;
+
+  			games_played[team1]++;
+  			games_played[team2]++;
+
+  			if (g1 > g2) {
+  				points[team1] += 3;
+  				wins[team1]++;
+  			}
+  			else if (g1 < g2) {
+  				points[team2] += 3;
+  				wins[team2]++;
+  			}
+  			else {
+  				points[team1]++;
+  				points[team2]++;
+  				ties[team1]++;
+  				ties[team2]++;
+  			}
+  		}
+
+  		sort(team, team+n, cmp);
+
+  		cout<<tournament<<endl;
+
+  		for (int i=0; i<n; i++) {
+  			string now = team[i];
+  			cout<<i+1<<") "<<now<<" "<<points[now]<<"p, "<<games_played[now]<<"g ("<<wins[now]<<"-"<<ties[now]<<"-"<<(games_played[now] - (wins[now] + ties[now]))<<"), "<<goal_diff[now]<<"gd ("<<goals[now]<<"-"<<goals_agianst[now]<<")"<<endl;
+  		}
+
+  		if (t)
+  			cout<<endl;
+
+  		points.clear();
+  		wins.clear();
+  		goals.clear();
+  		goal_diff.clear();
+  		games_played.clear();
+  		ties.clear();
+  		goals_agianst.clear();
   	}
 
     END:

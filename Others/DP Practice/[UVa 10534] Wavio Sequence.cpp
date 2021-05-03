@@ -136,19 +136,62 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	int n;
+  	while (cin>>n) {
+  		int a[n+1];
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		for (int i=0; i<n; i++)
+  			cin>>a[i];
 
-  		ans += k;
+  		int lis[n], lds[n+1];
+  		vector<int> v;
+	    lis[0]=1;
+	    for (int i=0; i<n; i++) {
+	        if (v.empty())
+	            v.PB(a[i]);
+	        else {
+	            auto it=lower_bound(v.begin(), v.end(), a[i]);
+	            lis[i]=(it-v.begin()) +1;
+	            if (it==v.end())
+	                v.push_back(a[i]);
+	            else 
+	                *it=a[i];
+	        }
+	    }
 
-  		cout<<ans<<endl;
+	    lds[0]=1;
+	    v.clear();
+	    reverse(a, a+n);
+	    for (int i=0; i<n; i++) {
+	        if (v.empty())
+	            v.PB(a[i]);
+	        else {
+	            auto it=lower_bound(v.begin(), v.end(), a[i]);
+	            lds[i]=(it-v.begin()) +1;
+	            if (it==v.end())
+	                v.push_back(a[i]);
+	            else 
+	                *it=a[i];
+	        }
+	    }
+
+	    // pvec(v);
+	    // cout<<endl;
+	    // for (int i=0; i<n; i++)
+	    // 	cout<<lis[i]<<' ';
+	    // cout<<endl;
+
+	    // for (int i=0; i<n; i++)
+	    // 	cout<<lds[i]<<' ';
+	    // cout<<endl;
+
+	    reverse(lds, lds+n);
+
+	    int mx = 0;
+
+	    for (int i=0; i<n; i++) 
+    		mx = max(mx, 2 * min(lis[i], lds[i]) - 1);
+	    cout<<mx<<endl;
   	}
 
     END:

@@ -139,15 +139,19 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
+  	
+  		LL n, m, x;
+  		cin>>n>>m>>x;
+  		
+  		x--;
+  		
+  		LL col = x / n, row = x % n;
+  		
+  		LL ans = row * m;
+  		ans += col;
+  		
+  		ans++;
+  		
   		cout<<ans<<endl;
   	}
 

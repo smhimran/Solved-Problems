@@ -126,6 +126,20 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+bool isPalindrome(string str)
+{
+    int l = 0;
+    int h = len(str) - 1;
+  
+    while (h > l)
+    {
+        if (str[l++] != str[h--])
+        {
+            return 0;
+        }
+    }
+    return 1;
+}
 
 int main()
 {
@@ -136,19 +150,102 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
+  	int t;
   	cin>>t;
+  	
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  		int a, b;
+  		cin>>a>>b;
+  		string s;
+  		cin>>s;
+  		
+  		int n = len(s);
+  		
+  		if (a + b != n) {
+  			cout<<-1<<endl;
+  			continue;
+  		}
+  		
+  		int q = 0;
+  		
+  		for (int i=0; i<n; i++) {
+  			
+  			if (s[i] == '1')
+  				b--;
+  			else if (s[i] == '0')
+  				a--;
+  			else
+  				q++;
+  		}
+  		
+  		if (!q) {
+  			if (a==0 and b==0 and isPalindrome(s)) {
+  				cout<<s<<endl;
+  				continue;
+  			}
+  			else {
+  				cout<<-1<<endl;
+  				continue;
+  			}
+  		}
+  		
+  		bool possible = 1;
+  		
+  		for (int i=0, j=n-1; i <= j; i++, j--) {
+  			if (i == j and s[i] == '?') {
+  				if ((a&1) ^ (b&1)) {
+  					if (a&1) {
+  						s[i] = '0';
+  						a--;
+  					}
+  					else {
+  						s[i] = '1';
+  						b--;
+  					}
+  				}
+  				else if (a >= b) {
+  					s[i] = '0';
+  					a--;
+  				}
+  				else {
+  					s[i] = '1';
+  					b--;
+  				}
+  			}
+  			else if (s[i] == '?' and s[j] == '?') {
+  				if (a >= b) {
+  					s[i] = '0';
+  					s[j] = '0';
+  					a -= 2;
+  				}
+  				else {
+  					s[i] = '1';
+  					s[j] = '1';
+  					b -= 2;	
+  				}
+  			}
+  			else if (s[i] == '?') {
+  				s[i] = s[j];
+  				if (s[j] == '0') 
+  					a--;
+  				else
+  					b--;
+  			}
+  			else if (s[j] == '?') {
+  				s[j] = s[i];
+  				if (s[i] == '0') 
+  					a--;
+  				else
+  					b--;
+  			}
+  		}
+  		
+  		bool ok = isPalindrome(s);
+  		
+  		if (ok and a==0 and b==0)
+  			cout<<s<<endl;
+  		else
+  			cout<<-1<<endl;
   	}
 
     END:

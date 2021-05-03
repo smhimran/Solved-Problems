@@ -126,6 +126,43 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int marble[10], dp[10][120005];
+int sum;
+
+bool made;
+
+int solve(int i, int now) {
+	// debug(i);
+	if (made)
+		return 1;
+
+	if (now == sum) {
+		// debug(i, now, sum);
+		made = 1;
+		return 1;
+	}
+
+	if (i > 6)
+		return 0;
+
+	int &ret = dp[i][now];
+
+	if (ret != -1)
+		return ret;
+
+	ret = 0;
+
+	for (int j=0; j<=marble[i]; j++) {
+		if ((now + (j * i))<= sum) {
+			// debug(i, j, now);
+			ret |= solve(i+1, now + (j * i));
+		}
+	}
+
+	ret |= solve(i+1, now);
+
+	return ret;
+} 
 
 int main()
 {
@@ -136,20 +173,36 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+    int ca = 1;
+    while (true) {
+    	sum = 0;
+    	for (int i=1; i<=6; i++) {
+    		cin>>marble[i];
+    		sum += (marble[i] * i);
+    	}
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+    	if (sum == 0)
+    		break;
 
-  		ans += k;
+    	cout<<"Collection #"<<ca++<<":"<<endl;
 
-  		cout<<ans<<endl;
-  	}
+    	if (sum & 1) {
+    		cout<<"Can't be divided."<<endl<<endl;
+    		continue;
+    	}
+
+    	sum /= 2;
+
+    	made = 0;
+
+    	memset(dp, -1, sizeof dp);
+
+    	if (solve(1, 0))
+    		cout<<"Can be divided."<<endl<<endl;
+    	else
+    		cout<<"Can't be divided."<<endl<<endl;
+
+    }
 
     END:
     #ifdef HOME

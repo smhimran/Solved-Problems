@@ -136,19 +136,28 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	int n, k;
+  	while (cin>>k>>n) {
+  		double dp[105][16];
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		memset(dp, 0, sizeof dp);
 
-  		ans += k;
+  		for (int i=0; i<=k; i++)
+  			dp[1][i] = 100.0 / (k + 1);
 
-  		cout<<ans<<endl;
+  		for (int i=1; i<n; i++) 
+  			for (int j=0; j<=k; j++)
+  				for (int l=-1; l<=1; l++)
+  					if (l+j >= 0 and l+j <= k) 
+  						dp[i+1][j+l] += dp[i][j]/(k + 1);
+
+  		double ans = 0;
+
+  		for (int i=0; i<=k; i++)
+  			ans += dp[n][i];
+
+  		printf("%.5lf\n", ans);
+  		
   	}
 
     END:

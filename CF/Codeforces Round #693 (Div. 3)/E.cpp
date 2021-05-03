@@ -60,10 +60,10 @@ typedef set<char> SC;
 #define BSRC                binary_search
 #define MAX                 10000007
 #define MIN                 -10000007
-#define inf                 int(1e6+9)
+#define inf                 int(1e9+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -139,16 +139,33 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int n;
+  		cin>>n;
+  		PII a[n+1], mn = {inf, inf};
+  		int pos = 0;
+  		int ans[n+1];
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		for (int i=1; i<=n; i++) {
+  			int x, y;
+  			cin>>x>>y;
+  			a[i] = {x, y};
+  			if (a[i] < mn) {
+  				mn = a[i];
+  				pos = i;
+  			}
+  			ans[i] = -1;
+  		}
 
-  		ans += k;
+  		for (int i=1; i<=n; i++) {
+  			if (a[i].first > mn.first and a[i].second > mn.second)
+  				ans[i] = pos;
+  			// if (a[i].first > mn.second and a[i].second > mn.first)
+  			// 	ans[i] = pos;
+  		}
 
-  		cout<<ans<<endl;
+  		for (int i=1; i<=n; i++)
+  			cout<<ans[i]<<" ";
+  		cout<<endl;
   	}
 
     END:

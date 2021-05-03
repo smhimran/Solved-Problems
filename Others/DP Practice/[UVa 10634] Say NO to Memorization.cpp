@@ -126,6 +126,23 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+LL dp[3000][3000];
+
+LL ncr(int n, int k)
+{
+    if (k > n)
+        return 0;
+    if (k == 0 || k == n)
+        return 1;
+    
+    LL &ret = dp[n][k];
+    
+    if (ret != -1)
+    	return ret;
+
+    return ret = ncr(n - 1, k - 1)
+           + ncr(n - 1, k);
+}
 
 int main()
 {
@@ -136,18 +153,20 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
+  	memset(dp, -1, sizeof dp);
+  	
+  	int n, k;
+  	while (cin>>n>>k) {
+  		if (n == 0 and k == 0)
+  			break;
+  		
+  		int start = (n & 1);
+  		
+  		LL ans = 0;
+  		
+  		for (int i=start; i<=n; i+=2) 
+  			ans += ncr(k + i -1, k - 1);
+  		
   		cout<<ans<<endl;
   	}
 

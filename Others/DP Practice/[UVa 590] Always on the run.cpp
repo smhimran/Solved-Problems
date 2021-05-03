@@ -60,7 +60,7 @@ typedef set<char> SC;
 #define BSRC                binary_search
 #define MAX                 10000007
 #define MIN                 -10000007
-#define inf                 int(1e6+9)
+#define inf                 LL(1e18)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
 #define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
@@ -126,6 +126,44 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+vector<LL> flight[15][15];
+
+int n, k;
+LL dp[15][1005];
+
+LL solve(int i, int day) {
+	if (day > k) 
+		return i == n? 0LL: inf;
+	
+	if (i > n)
+		return inf;
+	
+	LL  &ret = dp[i][day];
+	
+	if (ret != -1)
+		return ret;
+	
+	ret = inf;
+	
+	for (int j=1; j<=n; j++) {
+		if (i == j)
+			continue;
+		
+		int now = day - 1;
+		now = now % (flight[i][j].size());
+		
+		if (flight[i][j][now])
+			ret = min(ret, flight[i][j][now] + solve(j, day + 1));
+	}
+	
+	return ret;
+}
+
+void clear() {
+	for (int i=0; i<=12; i++) 
+		for (int j=0; j<=12; j++)
+			flight[i][j].clear();
+}
 
 int main()
 {
@@ -136,19 +174,42 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+    int ca = 1;
+  	while (~scanf("%d %d", &n, &k)) {
+  		if (n==0 and k==0)
+  			break;
+  		
+  		clear();
+  		
+  		for (int i=1; i<=n; i++) {
+  			for (int j=1; j<=n; j++) {
+  				if (i == j)
+  					continue;
+  				
+  				LL x, y;
+  				scanf("%lld", &x);
+  				for (int k=0; k<x; k++) {
+  					scanf("%lld", &y);
+  					
+  					flight[i][j].push_back(y);
+  				}
+  			}
+  		}
+  		
+  		memset(dp, -1, sizeof  dp);
+  		
+  		LL ans = solve(1, 1);
+  		// debug(ans);
+  		
+  		printf("Scenario #%d\n", ca++);
+  		
+  		if (ans >= inf)
+  			puts("No flight possible.");
+  		
+  		else
+  			printf("The best flight costs %lld.\n", ans);
+  		
+  		puts("");
   	}
 
     END:

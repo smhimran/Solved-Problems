@@ -126,6 +126,46 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+class node {
+public:
+	int number, value;
+
+	node();
+	node(int number, int value) {
+		this -> number = number;
+		this -> value = value;
+	}
+};
+
+map<int, int> value;
+
+vector<int> v[1000];
+bool visited[1000];
+int dp[1000], N;
+
+int dfs(int i) {
+	if (i == 1) {
+		return 0;
+	}
+
+	if (visited[i])
+		return dp[i];
+
+	visited[i] = 1;
+
+	int &ret = dp[i];
+
+	ret = 100000000;
+
+	for (auto x: v[i]) {
+		// debug(x);
+		int next = dfs(x);
+		// debug(next);
+		ret = min({ret, abs(next + value[x]), abs(next - value[x])});
+	}
+
+	return ret;
+}
 
 int main()
 {
@@ -136,19 +176,50 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	int n;
+  	while (cin>>n and n) {
+  		vector<node> a[2 * n];
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		int cnt = 1;
+  		getchar();
+  		for (int i=0; i<2*n - 1; i++) {
+  			string s;
+  			int x;
 
-  		ans += k;
+  			getline(cin, s);
 
-  		cout<<ans<<endl;
+  			stringstream ss(s);
+
+  			while (ss>>x) {
+  				value[cnt] = abs(x);
+  				// debug(x, cnt);
+  				a[i].push_back(node(cnt++, abs(x)));
+  			}
+  		}
+  		
+  		N = cnt - 2;
+
+  		for (int i=0; i<n -1; i++) {
+  			for (int j=0; j<a[i].size(); j++) {
+  				node now = a[i][j];
+  				// debug(now.number, now.value);
+  				v[a[i+1][j].number].push_back(now.number);
+  				v[a[i+1][j+1].number].push_back(now.number);
+  			}
+  		}
+
+  		for (int i=2*n-2; i>=n; i--) {
+  			for (int j=0; j<a[i].size(); j++) {
+  				node now = a[i][j];
+  				// debug(now.number, now.value);
+  				v[now.number].push_back(a[i-1][j].number);
+  				v[now.number].push_back(a[i-1][j+1].number);
+  			}	
+  		}
+
+  		v[0].push_back(cnt - 1);
+
+  		cout<<dfs(0)<<endl;
   	}
 
     END:

@@ -126,6 +126,45 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+string s;
+
+int dp[100][10][10], l;
+
+bool isVowel(char c) {
+	return c == 'A' or c == 'E' or c == 'I' or c == 'O' or c == 'U';
+}
+
+int solve(int pos, int vowels, int consonants) {
+	int &ret = dp[pos][vowels][consonants];
+	
+	if (ret != -1)
+		return ret;
+	
+	if (vowels == 3 or consonants == 5) 
+		return ret = 0;
+	
+	if (pos == l)
+		return 1;
+	
+	if (s[pos] != '?') {
+		if (isVowel(s[pos]))
+			ret = solve(pos + 1, vowels + 1, 0);
+		else 
+			ret = solve(pos + 1, 0, consonants + 1);
+		
+		return ret;
+	}
+	
+	int nextVowel = solve(pos + 1, vowels + 1, 0);
+	int nextConsonant = solve(pos + 1, 0, consonants + 1);
+	
+	if (nextVowel == nextConsonant)
+		ret = nextConsonant;
+	else 
+		ret = 2;
+	
+	return ret;
+}
 
 int main()
 {
@@ -139,16 +178,23 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	
+  		cin>>s;
+  		l = len(s);
+  		
+  		memset(dp, -1, sizeof dp);
+  		int ans = solve(0, 0, 0);
+  		
+  		cout<<"Case "<<ca++<<": ";
+  		
+  		if (ans == 0)
+  			cout<<"BAD"<<endl;
+  		
+  		else if (ans == 1)
+  			cout<<"GOOD"<<endl;
+  		
+  		else 
+  			cout<<"MIXED"<<endl;
   	}
 
     END:

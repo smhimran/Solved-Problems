@@ -136,20 +136,18 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	double h, l;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  	scanf("%lf %lf", &h, &l);
 
-  		ans += k;
+  	l *= l;
+  	l -= h * h;
 
-  		cout<<ans<<endl;
-  	}
+  	h *= 2.0;
+
+  	double x = l / h;
+
+  	printf("%.9lf\n", x);
 
     END:
     #ifdef HOME

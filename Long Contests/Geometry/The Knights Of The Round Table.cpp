@@ -136,19 +136,21 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	double a, b, c;
+  	
+  	while (~scanf("%lf %lf %lf", &a, &b, &c)) {
+  		double S = a + b + c;
+  		S /= 2;
+  		
+  		double r = (S - a) * (S - b) * (S - c);
+  		
+  		if (S) {
+	  		r /= S;
+	  		r = sqrt(r);
+  		}
+	  		
+  		
+  		printf("The radius of the round table is: %.3lf\n", r);
   	}
 
     END:

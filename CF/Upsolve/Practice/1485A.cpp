@@ -139,14 +139,18 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int a, b, ans = inf;
+  		cin>>a>>b;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		for (int i= (b<2? 2-b: 0); i<=6; i++) {
+  			int now = a, x = i;
 
-  		ans += k;
+  			while (now) {
+  				now /= b + i;
+  				x++;
+  			}
+  			ans = min(ans, x);
+  		}
 
   		cout<<ans<<endl;
   	}

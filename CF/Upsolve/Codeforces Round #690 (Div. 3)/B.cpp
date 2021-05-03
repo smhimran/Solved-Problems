@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -139,16 +139,30 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int n;
+  		string s;
+  		cin>>n>>s;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		bool possible = 0;
 
-  		ans += k;
+  		string left = "", right = "";
+  		for (int i=0; i<n; i++) {
+  			right = "";
+  			for (int j = n-1; j>= n - 4 + i; j--) {
+  				// debug(s[j]);
+  				right += s[j];
+  			}
 
-  		cout<<ans<<endl;
+  			reverse(right.begin(), right.end());
+  			string temp = left + right;
+  			// debug(left, right);
+  			if (temp == "2020")
+  				possible = 1;
+
+  			left += s[i];
+  		}
+
+  		cout<<(possible? "YES":"NO")<<endl;
   	}
 
     END:

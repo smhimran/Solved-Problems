@@ -60,7 +60,7 @@ typedef set<char> SC;
 #define BSRC                binary_search
 #define MAX                 10000007
 #define MIN                 -10000007
-#define inf                 int(1e6+9)
+#define inf                 int(1e9+7)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
 #define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
@@ -125,7 +125,60 @@ int LCM(int a, int b) { return a * (b/GCD(a, b)); }
 bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
+int Set(int N, int i) {return N=(N|(1<<i));}
+int reset(int N,int pos){return N= N & ~(1<<pos);}
+bool check(int N,int pos){return (bool)(N & (1<<pos));}
 
+vector<int> applicant[105];
+int salary[105], dp[105][65540], mx;
+
+int s, m, n;
+
+int solve(int i, int mask) {
+	// debug(i, mask, 2 * s);
+	// cout<<(1 << (2*s) - 1)<<endl;
+
+	if (i == n) {
+		// else
+		if (mask == mx) {
+			// debug(i);
+			return 0;
+		}
+		return inf;
+	}
+
+	int &ret = dp[i][mask];
+
+	if (~ret)
+		return ret;
+
+	ret = inf;
+
+	int newMask = mask;
+
+
+	for (auto j: applicant[i]) {
+		int x = j;
+		x *= 2;
+		x--;
+		if (check(mask, x))
+			x--;
+		newMask = Set(newMask, x);
+	}
+
+	// if (mask != newMask)
+	ret = salary[i] + solve(i+1, newMask);
+	ret = min(ret, solve(i+1, mask));
+
+	return ret;
+}
+
+void clear() {
+	for (int i=0; i<=102; i++) {
+		salary[i] = 0;
+		applicant[i].clear();
+	}
+}
 
 int main()
 {
@@ -136,19 +189,66 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	while (cin>>s>>m>>n) {
+  		if (s==0 and m==0 and n==0)
+  			break;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		clear();
+  		
+  		LL cost = 0;
+  		LL mask = 0;
 
-  		ans += k;
+  		// debug(s, m, n);
 
-  		cout<<ans<<endl;
+  		mx = 1 << (s + s);
+  		mx--;
+
+  		getchar();
+
+  		for (int i=0; i<m; i++) {
+  			string st;
+  			getline(cin, st);
+  			// debug(st);
+
+  			stringstream ss(st);
+
+  			int c;
+  			ss>>c;
+  			cost += c;
+
+  			while (ss>>c) {
+  				// debug(c);
+  				c *= 2;
+  				c--;
+  				if (check(mask, c))
+	  				c--;
+  				mask = Set(mask, c);
+		  		// debug(mask);
+  			}
+  		}
+
+  		for (int i=0; i<n; i++) {
+  			string str;
+  			getline(cin, str);
+  			// debug(str);
+
+  			stringstream ss(str);
+
+  			int c;
+  			ss>>c;
+
+  			salary[i] = c;
+
+  			while (ss>>c) 
+  				applicant[i].push_back(c);
+  		}
+
+  		// debug(mask);
+
+  		memset(dp, -1, sizeof dp);
+
+  		cout<<cost + solve(0, mask)<<endl;
+
   	}
 
     END:

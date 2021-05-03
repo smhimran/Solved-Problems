@@ -126,6 +126,105 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+char sudoku[12][12];
+bool found = 0;
+bool row[12][12], column[12][12], grid[12][12];
+int grid_number[12][12];
+
+void solve(int i, int j) {
+
+	if (i==9 and j>9) {
+		bool ok = 1;
+
+		for (int k=1; k<=9; k++) {
+			for (int l=1; l<=9; l++) {
+				if (sudoku[k][l] == '.') {
+					ok = 0;
+				}
+			}
+		}
+
+		if (ok) {
+			found = 1;
+
+			for (int k=1; k<=9; k++) {
+				for (int l=1; l<=9; l++) {
+					cout<<sudoku[k][l]<<' ';
+					if (l % 3 == 0)
+						cout<< "| ";
+				}
+				if (k % 3 == 0)
+					cout<<endl<<"-----------------------";
+				cout<<endl;
+			}
+		}
+
+		return;
+	}
+
+	if (j > 9) {
+		i++;
+		j = 1;
+	}
+
+	if (found) 
+		return;
+
+	if (sudoku[i][j] == '.') {
+		int gNumber = grid_number[i][j];
+		// debug(gNumber);
+		for (int k=1; k<=9; k++) {
+			if (found) 
+				return;
+
+			if (!row[i][k] and !column[j][k] and !grid[gNumber][k]) {
+				row[i][k] = 1;
+				column[j][k] = 1;
+				grid[gNumber][k] = 1;
+				sudoku[i][j] = k + '0';
+
+				solve(i, j+1);
+
+				row[i][k] = 0;
+				column[j][k] = 0;
+				grid[gNumber][k] = 0;
+				sudoku[i][j] = '.';
+			}
+		}
+	}
+	solve(i, j+1);
+}
+
+void precal() {
+	for (int i=1; i<=9; i++) {
+		for (int j=1; j<=9; j++) {
+			if (i<=3) {
+				if (j<=3)
+					grid_number[i][j] = 1;
+				else if (j<=6)
+					grid_number[i][j] = 2;
+				else 
+					grid_number[i][j] = 3;
+			}
+			else if (i<=6) {
+				if (j<=3)
+					grid_number[i][j] = 4;
+				else if (j<=6)
+					grid_number[i][j] = 5;
+				else 
+					grid_number[i][j] = 6;
+			}
+			else {
+				if (j<=3)
+					grid_number[i][j] = 7;
+				else if (j<=6)
+					grid_number[i][j] = 8;
+				else 
+					grid_number[i][j] = 9;	
+			}
+		}
+	}
+}
 
 int main()
 {
@@ -136,19 +235,35 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
+    precal();
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		getchar();
+  		for (int i=1; i<10; i++) {
+  			for (int j=1; j<10; j++) {
+  				cin>>sudoku[i][j];
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  				if (sudoku[i][j] != '.') {
+  					int z = sudoku[i][j] + '0', gNumber = grid_number[i][j];
 
-  		ans += k;
+  					row[i][z] = 1;
+  					column[j][z] = 1;
+  					grid[gNumber][z] =1;
+  				}
+  			}
+  		}
 
-  		cout<<ans<<endl;
+  // 		for (int k=1; k<=9; k++) {
+		// 	for (int l=1; l<=9; l++) {
+		// 		cout<<sudoku[k][l];
+		// 	}
+		// 	cout<<endl;
+		// }
+
+  		cout<<"Case "<<ca++<<":"<<endl;
+
+  		solve(1, 1);
   	}
 
     END:

@@ -126,6 +126,29 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int n, candy[40], dp[40][900][900], total;
+
+int solve(int i, int sum1, int sum2) {
+	if (i == n) {
+		int let = sum1 + sum2;
+		int rem = total - let;
+
+		return (max({sum1, sum2, rem}) - min({sum1, sum2, rem}));
+	}
+
+	int &ret = dp[i][sum1][sum2];
+
+	if (ret != -1)
+		return ret;
+
+	ret = inf;
+
+	ret = min(ret, solve(i+1, sum1 + candy[i], sum2));
+	ret = min(ret, solve(i+1, sum1, sum2 + candy[i]));
+	ret = min(ret, solve(i+1, sum1, sum2));
+
+	return ret;
+}
 
 int main()
 {
@@ -139,16 +162,18 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		cin>>n;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		total = 0;
 
-  		ans += k;
+  		for (int i=0; i<n; i++) {
+  			cin>>candy[i];
+  			total += candy[i];
+  		}
 
-  		cout<<ans<<endl;
+  		memset(dp, -1, sizeof dp);
+
+  		cout<<"Case "<<ca++<<": "<<solve(0, 0, 0)<<endl;
   	}
 
     END:

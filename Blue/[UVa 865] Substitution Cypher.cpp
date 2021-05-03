@@ -138,17 +138,44 @@ int main()
     
   	int t, ca=1;
   	cin>>t;
+	getchar();
+	getchar();
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	
+  		string alpha, substituition;
+  		
+  		getline(cin, alpha);
+  		getline(cin, substituition);
+  		
+  		
+  		map<char, char> replace;
+  		
+  		for (int i=0; i<len(alpha); i++) 
+  			replace[alpha[i]] = substituition[i];
+  	
+  		string text;
+  		
+  		cout<<substituition<<endl;
+  		cout<<alpha<<endl;
+  		
+  		// getline(cin, text);
+  		while (getline(cin, text)) {
+  			if (text == "")
+  				break;
+  			
+	  		for (int i=0; i<len(text); i++) {
+	  			if (replace.count(text[i])) {
+	  				text[i] = replace[text[i]];
+	  			}
+	  		}
+	  		
+	  		cout<<text<<endl;
+  			
+  		}
+  		
+  		if (t)
+  			cout<<endl;
+  		
   	}
 
     END:

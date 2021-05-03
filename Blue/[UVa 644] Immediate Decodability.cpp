@@ -126,6 +126,60 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+// Trie
+
+class Node {
+public:
+	bool ended;
+	
+	Node *next[30];
+	
+	Node() {
+		ended = 0;
+		
+		for (int i=0; i<30; i++)
+			next[i] = NULL;
+	}	
+}  *root;
+
+void insert(string s) {
+	int n = len(s);
+	
+	Node *curr = root;
+	for (int i=0; i<n; i++) {
+		int pos = int(s[i] - '0');
+		
+		if (curr -> next[pos] == NULL) 
+			curr -> next[pos] = new Node();
+		
+		curr = curr -> next[pos];
+	}
+	
+	curr -> ended = true;
+}
+
+void del(Node *curr) {
+	for (int i=0; i<30; i++) {
+		if (curr -> next[i] != NULL) 
+			del(curr -> next[i]);
+	}
+	
+	delete(curr);
+}
+
+bool hasPrefix(Node *curr) {
+	
+	for (int i=0; i<30; i++) {
+		if (curr -> next[i] != NULL) {
+			if (curr -> ended == true)
+				return 1;
+			if (hasPrefix(curr -> next[i]))
+				return 1;
+		}
+	}
+
+	return 0;
+}
 
 int main()
 {
@@ -136,19 +190,29 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	int ca=1;
+    
+    string s;
+    bool start = 0;
+    
+  	while (cin>>s) {
+      
+      if (!start)
+        root = new Node();
+      
+      start = 1;
+      
+      if (s == "9") {
+        cout<<"Set "<<ca++<<" is "<<(hasPrefix(root)? "not ":"")<<"immediately decodable"<<endl;
+      
+        del(root);
+        
+        start = 0;
+        
+        continue;  
+      }
+      
+      insert(s);
   	}
 
     END:

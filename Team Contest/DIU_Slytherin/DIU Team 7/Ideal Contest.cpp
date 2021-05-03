@@ -126,30 +126,173 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+bool solved[355][35];
+int rankPosition[355], solveCount[355], teamsSolved[35], lastSolved[35];
+
+double instable[35];
 
 int main()
 {
-    // FastIO;
+    FastIO;
     #ifdef HOME
      clock_t Start=clock();
-     freopen("in.txt", "r", stdin);
-     freopen("out.txt", "w", stdout);
     #endif
+     
+     freopen("ideal.in", "r", stdin);
+     freopen("ideal.out", "w", stdout);
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	string s;
+  	while (true) {
+  		getline(cin, s);
+  		
+  		// Checking if this is the header I want
+  		stringstream ss(s);
+  		string x;
+  		ss>>x;
+  		if (x == "Team")
+  			break;
   	}
+  	
+  	reverse(s.begin(), s.end());
+  	
+  	stringstream ss(s);
+  	
+  	string x;
+  	
+  	// Trash input
+  	ss>>x;
+  	ss>>x;
+  	ss>>x;
+  	
+  	// Getting the number of problems
+  	ss>>x;
+  	
+  	int problems = x[0] - 'A';
+  	problems++;
+  	
+  	getline(cin, s);
+  	
+  	int team = 1;
+  	
+  	// Getting all team solve details
+  	
+  	while (getline(cin, s)) {
+  		
+  		int r, timeTaken, cnt;
+  		
+  		reverse(s.begin(), s.end());
+  		
+  		stringstream strs(s);
+  		
+  		// Getting the rank of current team
+  		
+  		strs>>x;
+  		
+  		reverse(x.begin(), x.end());
+  		
+  		r = stoi(x);
+  		
+  		rankPosition[team] = r;
+  		
+  		// Trash input
+  		strs>>x;
+  		
+  		// Getting solve count of a team;
+  		strs>>x;
+  		
+  		reverse(x.begin(), x.end());
+  		
+  		cnt = stoi(x);
+  		
+  		solveCount[team] = cnt;
+  		
+  		// Marking problems solved by this team
+  		
+  		for (int i=problems; i>=1; i--) {
+  			strs>>x;
+  			reverse(x.begin(), x.end());
+  			
+  			if (x[0] == '+')
+  				solved[team][i] = 1;
+  		}
+  		
+  		team++;
+  	}
+  	
+  	// for (int i=1; i<team; i++) {
+  	// 	for (int j=1; j<=problems; j++)
+  	// 		cout<<solved[i][j]<< ' ';
+  	// 	cout<<endl;
+  	// }
+  	
+  	int teams = team - 1;
+  	
+  	double instability = 0, vainness = 0, oversimplification = 0, evenness = 0, unsolvability = 0;
+  	
+  	for (int i=teams; i>=1; i--) {
+  		if (solveCount[i] == 0) {
+  			vainness += (1.0 / double(teams));
+  			continue;
+  		}
+  		
+  		if (solveCount[i] == problems) 
+  			oversimplification += (1.0 / double(teams));
+  		
+  		if (i < teams and (solveCount[i] - solveCount[i+1]) > 1) {
+  			double diff = solveCount[i] - solveCount[i + 1];
+  			
+  			diff--;
+  			
+  			evenness += diff / double(problems);
+  		}
+  		
+  		for (int j=1; j<=problems; j++) {
+  			if (solved[i][j]) {
+				if (lastSolved[j] == 0) 
+	  				lastSolved[j] = i;
+	  			
+	  			teamsSolved[j]++;
+  			}
+  		}
+  	}
+  	
+  	for (int i=1; i<=problems; i++) {
+  		if (teamsSolved[i] == 0) {
+  			unsolvability += (1.0 / double(problems));
+  		}
+  		
+  		int last = lastSolved[i];
+  		
+  		for (int j=last - 1; j>=1; j--) {
+  			if (last != j and rankPosition[j] < rankPosition[last]) {
+  				if (!solved[j][i]) {
+  					instable[i] += (1.0 / double(teams));
+  				}
+  			}
+  		}
+		instability += instable[i];
+  	}
+  	
+  	instability /= double(problems);
+  	
+  	double ans = 1.03 * vainness;
+  	ans += (3.141 * oversimplification);
+  	ans += (2.171 * evenness);
+  	ans += (1.414 * unsolvability);
+  	ans += instability;
+  	
+  	cout<< fixed << setprecision(3);
+  	
+  	cout<<"Vainness = "<<vainness<<endl;
+  	cout<<"Oversimplification = "<<oversimplification<<endl;
+  	cout<<"Evenness = "<<evenness<<endl;
+  	cout<<"Unsolvability = "<<unsolvability<<endl;
+  	
+  	for (int i=1; i<=problems; i++) {
+  		cout<<"Instability "<<i<<" = "<<instable[i]<<endl;
+  	}
+  	
+  	cout<<"Negidealness = "<<ans<<endl;
 
     END:
     #ifdef HOME

@@ -137,18 +137,30 @@ int main()
     #endif
     
   	int t, ca=1;
-  	cin>>t;
+  	scanf("%d", &t);
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	
+  		int n, k;
+  		scanf("%d %d", &n, &k);
+  		
+  		int a[n+1];
+  		for (int i=0; i<n; i++)
+  			scanf("%d", a+i);
+  		
+  		int low = 0, high = n-1;
+  		
+  		while (k-- and low != high) {
+  			if (a[low] == 0) 
+  				low++;
+  			
+  			a[low]--;
+  			a[high]++;
+  		}
+  		
+  		for (int i=0; i<n; i++)
+  			printf("%d ", a[i]);
+  		
+  		printf("\n");
   	}
 
     END:

@@ -139,16 +139,22 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int n;
+  		cin>>n;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		LL a[n+1];
+  		for (int i=0; i<n; i++) 
+  			cin>>a[i];
+  		
+  		sort(a, a+n);
 
-  		ans += k;
+  		LL x = a[0], y = a[n-1], z = a[1], p = a[n-2];
 
-  		cout<<ans<<endl;
+  		LL sumx = abs(x-y) + abs(y-z) + abs(x-z);
+
+  		LL sumy = abs(x-y) + abs(y-p) + abs(x-p);
+
+  		cout<<min(sumy, sumx)<<endl;
   	}
 
     END:

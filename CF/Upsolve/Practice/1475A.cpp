@@ -139,16 +139,13 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		LL n;
+  		cin>>n;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		while (n % 2LL == 0) 
+  			n /= 2LL;
 
-  		ans += k;
-
-  		cout<<ans<<endl;
+  		cout<<(n > 1? "Yes":"No")<<endl;
   	}
 
     END:

@@ -136,20 +136,25 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	int n;
+  	cin>>n;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  	LL k = 18, cnt = 0;
 
-  		ans += k;
+  	while (cnt != n) {
+  		k++;
+  		LL x = k, sum = 0;
 
-  		cout<<ans<<endl;
+  		while (x) {
+  			sum += x % 10;
+  			x /= 10;
+  		}
+
+  		if (sum == 10)
+  			cnt ++;
   	}
+
+  	cout<<k<<endl;
 
     END:
     #ifdef HOME

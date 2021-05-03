@@ -126,6 +126,51 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+class Combination {
+public:
+	int a, b, c, score;
+
+	Combination(int a, int b, int c, int score) {
+		this-> a = a;
+		this-> b = b;
+		this-> c = c;
+		this-> score = score;	
+	}
+
+	bool operator<(const Combination &x) {
+		return score < x.score;
+	}
+};
+
+bool taken[10];
+vector<Combination> v;
+int n, ca=1, ans;
+
+void solve(int i, int groups, int sum) {
+
+	if (groups == 3) {
+		ans = max(ans, sum);
+		return;
+	}
+
+	if (i == n)
+		return;
+
+	auto x = v[i];
+
+	if (!taken[x.a] and !taken[x.b] and !taken[x.c]) {
+		taken[x.a] = 1;
+		taken[x.b] = 1;
+		taken[x.c] = 1;
+
+		solve(i+1, groups+1, sum+x.score);
+
+		taken[x.a] = 0;
+		taken[x.b] = 0;
+		taken[x.c] = 0;
+	}
+	solve(i+1, groups, sum);
+}
 
 int main()
 {
@@ -135,20 +180,21 @@ int main()
      freopen("in.txt", "r", stdin);
      freopen("out.txt", "w", stdout);
     #endif
-    
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	
+  	while (cin>>n and n) {
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		for (int i=0; i<n; i++) {
+  			int a, b, c, s;
+  			cin>>a>>b>>c>>s;
 
-  		ans += k;
+  			v.push_back(Combination(a, b, c, s));
+  		}
 
-  		cout<<ans<<endl;
+  		ans = -1;
+  		solve(0, 0, 0);
+  		v.clear();
+
+  		cout<<"Case "<<ca++<<": "<<ans<<endl;
   	}
 
     END:

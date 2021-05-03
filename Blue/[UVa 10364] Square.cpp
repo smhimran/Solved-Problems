@@ -126,6 +126,36 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int Set(int N, int i) {return N=(N|(1<<i));}
+int reset(int N,int pos){return N= N & ~(1<<pos);}
+bool check(int N,int pos){return (bool)(N & (1<<pos));}
+
+int n, stick[25], total;
+int dp[1<<20];
+
+bool solve(int length, int mask) {
+	int &ret = dp[mask];
+
+	if (ret != -1)
+		return ret;
+
+	ret = 0;
+	
+	if (length > total / 4)
+		return 0;
+	
+	if (length == total / 4) {
+		if (mask == (1<<n) -1) 
+			return ret = 1;
+		length = 0;
+	}
+	
+	for (int i=0; i<n; i++) 
+		if (!check(mask, i)) 
+			ret |= solve(length + stick[i], Set(mask, i));
+	
+	return ret;
+}
 
 int main()
 {
@@ -137,18 +167,27 @@ int main()
     #endif
     
   	int t, ca=1;
-  	cin>>t;
+  	scanf("%d", &t);
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	
+  		scanf("%d", &n);
+  		
+  		total = 0;
+  		
+  		for (int i=0; i<n; i++) {
+  			scanf("%d", stick + i);
+  			total += stick[i];
+  		}
+  		
+  		
+  		if (total % 4 != 0) {
+  			puts("no");
+  			continue;
+  		}
+  		
+  		memset(dp, -1, sizeof dp);
+  		
+  		printf("%s\n", solve(0, 0)? "yes": "no");
   	}
 
     END:

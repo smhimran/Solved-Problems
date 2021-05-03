@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -136,19 +136,31 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	double k, l, s, w;
+  	while (cin>>k>>l>>s>>w) {
+  		if (k==0 and l==0 and s==0 and w==0)
+  			break;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		if (l>=s) {
+  			double v = sqrt(2 * 9.81 * s);
+  			if (v > 10) 
+  				cout<<"Killed by the impact."<<endl;
+  			else
+  				cout<<"James Bond survives."<<endl;
+  		}
+  		else {
+  			double energy = (w * 9.81 * s) - (0.5 * k * (s - l) * (s-l));
+  			if (energy < 0)
+  				cout<<"Stuck in the air."<<endl;
+  			else {
+  				double v = sqrt(2 * energy / w);
 
-  		ans += k;
-
-  		cout<<ans<<endl;
+  				if (v > 10) 
+  					cout<<"Killed by the impact."<<endl;
+  				else
+  					cout<<"James Bond survives."<<endl;
+  			}
+  		}
   	}
 
     END:

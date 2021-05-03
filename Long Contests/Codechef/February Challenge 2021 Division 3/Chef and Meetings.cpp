@@ -139,14 +139,47 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int h, m;
+  		char c;
+  		string s;
+  		cin>>h>>c>>m>>s;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		if(h == 12 and s == "AM")
+  			h = 0;
+  		else if (h != 12 and s == "PM")
+  			h += 12;
 
-  		ans += k;
+  		int meeting = h * 60 + m;
+
+  		int n;
+  		cin>>n;
+
+  		string ans;
+
+  		while (n--) {
+  			cin>>h>>c>>m>>s;
+
+  			if(h == 12 and s == "AM")
+	  			h = 0;
+	  		else if (h != 12 and s == "PM")
+	  			h += 12;
+
+	  		int start = h * 60 + m;
+
+	  		cin>>h>>c>>m>>s;
+
+  			if(h == 12 and s == "AM")
+	  			h = 0;
+	  		else if (h != 12 and s == "PM")
+	  			h += 12;
+
+	  		int end = h * 60 + m;
+
+	  		if (start<=meeting and end>=meeting)
+	  			ans += '1';
+	  		else
+	  			ans += '0';
+  		}
 
   		cout<<ans<<endl;
   	}

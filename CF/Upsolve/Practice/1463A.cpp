@@ -139,16 +139,21 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int a, b, c;
+  		cin>>a>>b>>c;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		int needed = (a + b + c);
+  		if (needed % 9) {
+  			cout<<"No"<<endl;
+  			continue;
+  		}
 
-  		ans += k;
+  		needed /= 9;
 
-  		cout<<ans<<endl;
+  		if (a < needed or b < needed or c < needed)
+  			cout<<"No"<<endl;
+  		else
+  			cout<<"Yes"<<endl;
   	}
 
     END:

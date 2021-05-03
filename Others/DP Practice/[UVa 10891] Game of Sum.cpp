@@ -126,6 +126,33 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int sum[120], dp[120][120];
+
+int solve(int i, int j) {
+	int &ret = dp[i][j];
+
+	if (ret != inf)
+		return ret;
+
+	ret = sum[j] - sum[i - 1];
+
+	for (int k=i; k<j; k++) {
+		int temp = sum[k] - sum[i - 1];
+
+		temp -= solve(k+1, j);
+		ret = max(ret, temp);
+	}
+
+	for (int k=i; k<j; k++) {
+		int temp = sum[j] - sum[k];
+
+		temp -= solve(i, k);
+		ret = max(ret, temp);
+	}
+
+	return ret;
+}
+
 
 int main()
 {
@@ -136,19 +163,19 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	int n;
+  	while (cin>>n and n) {
+  		for (int i=1; i<=n; i++) {
+  			int x;
+  			cin>>x;
+  			sum[i] = sum[i-1] + x;
+  		}
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		for (int i=0; i<=102; i++)
+  			for (int j=0; j<=102; j++)
+  				dp[i][j] = inf;
 
-  		ans += k;
-
-  		cout<<ans<<endl;
+  		cout<<solve(1, n)<<endl;
   	}
 
     END:

@@ -126,6 +126,20 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+void solve(LL n, LL k) {
+	if (n == 0)
+		return;
+
+	if (k >= n-1) {
+		printf("(");
+		solve(n-1, k-(n-1));
+		printf(")");
+	}
+	else {
+		printf("()");
+		solve(n-1, k);
+	}
+}
 
 int main()
 {
@@ -136,20 +150,18 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	LL n, k;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  	scanf("%lld %lld", &n, &k);
 
-  		ans += k;
+  	LL sum = n* (n -1);
+  	sum /= 2;
 
-  		cout<<ans<<endl;
-  	}
+  	if (sum < k) 
+  		printf("Impossible\n");
+
+  	else 
+  		solve(n, k);
 
     END:
     #ifdef HOME

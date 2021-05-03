@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -136,19 +136,26 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
+    char alpha[30];
+    for (int i=0; i+'A'<='Z'; i++)
+    	alpha[i] = i+'A';
+
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int n, k;
+  		cin>>n>>k;
+  		string s;
+  		for (int i=0; i<n; i++)
+  			s += alpha[i];
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		cout<<"Case "<<ca++<<":"<<endl;
 
-  		ans += k;
+  		k--;
 
-  		cout<<ans<<endl;
+  		do {
+  			cout<<s<<endl;
+  		} while (next_permutation(s.begin(), s.end()) and k--);
   	}
 
     END:

@@ -126,6 +126,41 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+string suffix[3][6];
+
+// const string specialO = string(1, (char)243);
+
+void precal() {
+	
+	// 1st Conjugation
+	
+	suffix[0][0] = "o";
+	suffix[0][1] = "as";
+	suffix[0][2] = "a";
+	suffix[0][3] = "amos";
+	suffix[0][4] = "ais";
+	suffix[0][5] = "am";
+		
+		
+	// 2nd Conjugation
+	
+	suffix[1][0] = "o";
+	suffix[1][1] = "es";
+	suffix[1][2] = "e";
+	suffix[1][3] = "emos";
+	suffix[1][4] = "eis";
+	suffix[1][5] = "em";
+		
+		
+	// 3rd Conjugation
+	
+	suffix[2][0] = "o";
+	suffix[2][1] = "es";
+	suffix[2][2] = "e";
+	suffix[2][3] = "imos";
+	suffix[2][4] = "is";
+	suffix[2][5] = "em";
+}
 
 int main()
 {
@@ -136,19 +171,60 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+    precal();
+    
+  	string word, meaning;
+  	
+  	bool started = 0;
+  	
+  	while(cin>>word>>meaning) {
+  		
+  		if (started)
+  			cout<<endl;
+  		
+  		started = 1;
+  		
+  		cout<<word<<" (to "<<meaning<<")"<<endl;
+  		
+  		int n = len(word);
+  		
+  		string root = word;
+  		
+  		root.pop_back();
+  		root.pop_back();
+  		
+  		
+  		if (word[n-1] == 'r' and word[n-2] == 'a') {
+  			cout<<"eu        "<<root + suffix[0][0]<<endl;
+  			cout<<"tu        "<<root + suffix[0][1]<<endl;
+  			cout<<"ele/ela   "<<root + suffix[0][2]<<endl;
+  			cout<<"n"<<char(243)<<"s       "<<root + suffix[0][3]<<endl;
+  			cout<<"v"<<char(243)<<"s       "<<root + suffix[0][4]<<endl;
+  			cout<<"eles/elas "<<root + suffix[0][5]<<endl;
+  		}
+  		
+  		else if (word[n-1] == 'r' and word[n-2] == 'e') {
+  			cout<<"eu        "<<root + suffix[1][0]<<endl;
+  			cout<<"tu        "<<root + suffix[1][1]<<endl;
+  			cout<<"ele/ela   "<<root + suffix[1][2]<<endl;
+  			cout<<"n"<<char(243)<<"s       "<<root + suffix[1][3]<<endl;
+  			cout<<"v"<<char(243)<<"s       "<<root + suffix[1][4]<<endl;
+  			cout<<"eles/elas "<<root + suffix[1][5]<<endl;
+  		}
+  		
+  		else if (word[n-1] == 'r' and word[n-2] == 'i') {
+  			cout<<"eu        "<<root + suffix[2][0]<<endl;
+  			cout<<"tu        "<<root + suffix[2][1]<<endl;
+  			cout<<"ele/ela   "<<root + suffix[2][2]<<endl;
+  			cout<<"n"<<char(243)<<"s       "<<root + suffix[2][3]<<endl;
+  			cout<<"v"<<char(243)<<"s       "<<root + suffix[2][4]<<endl;
+  			cout<<"eles/elas "<<root + suffix[2][5]<<endl;
+  		}
+  		
+  		else {
+  			cout<<"Unknown conjugation"<<endl;
+  		}
+  		
   	}
 
     END:

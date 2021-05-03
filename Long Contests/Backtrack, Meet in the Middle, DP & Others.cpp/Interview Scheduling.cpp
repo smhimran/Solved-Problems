@@ -58,12 +58,12 @@ typedef set<char> SC;
 #define ALLN(a, n)          (a, a+n)
 #define BSRCN(a, n, x)      binary_search(ALLN(a, n), x)
 #define BSRC                binary_search
-#define MAX                 10000007
-#define MIN                 -10000007
-#define inf                 int(1e6+9)
+#define MAX                 1000007
+#define MIN                 -1000007
+#define inf                 LL(1e18+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -126,6 +126,27 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+LL n;
+LL interview[200], train[200];
+
+LL dp[200][3000];
+
+LL solve(LL i, LL current_time) {
+	if (i == n)
+		return 0;
+
+	LL &ret = dp[i][current_time];
+	if (ret != -1)
+		return ret;
+
+	ret = 0;
+
+	if (current_time + interview[i] <= train[i])
+		ret = max(ret, 1LL+solve(i+1, current_time+interview[i]));
+	ret = max(ret, solve(i+1, current_time));
+
+	return ret;
+}
 
 int main()
 {
@@ -139,16 +160,36 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		cin>>n;
+  		LL temp[n+1];
+  		for (int i=0; i<n; i++)
+  			cin>>temp[i];
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		LL k = 0;
+  		std::vector<PII> v;
+  		for (int i=0; i<n; i++) {
+  			LL x;
+  			cin>>x;
+  			if (x == -1) {
+  				continue;
+  			}
+  			v.push_back({x, temp[i]});
+  		}
 
-  		ans += k;
+  		sort(v.begin(), v.end());
 
-  		cout<<ans<<endl;
+  		for (int i=0; i<v.size(); i++) {
+  			train[k] = v[i].first - 30;
+  			interview[k] = v[i].second;
+  			k++;
+  		}
+
+  		n = v.size();
+
+  		memset(dp, -1, sizeof dp);
+
+  		cout<<"Case "<<ca++<<": "<<(n -solve(0, 0))<<endl;
+
   	}
 
     END:

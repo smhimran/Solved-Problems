@@ -136,19 +136,51 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	int n, ca=1;
+  	
+  	while (cin>>n and n) {
+  		
+  		string s, d;
+  		map<string, int> pos;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		for (int i=1; i<=n; i++) {
+  			cin>>s;
+  			pos[s] = i;
+  		}
 
-  		ans += k;
+  		double dp[n+5][n+5];
 
-  		cout<<ans<<endl;
+  		for (int i=1; i<=n; i++) {
+  			for (int j=1; j<=n; j++) {
+  				if (i == j)
+  					dp[i][j] = 1.00;
+  				else
+  					dp[i][j] = 0;
+  			}
+  		}
+
+  		int m;
+  		cin>>m;
+
+  		while (m--) {
+  			double rate;
+  			cin>>s>>rate>>d;
+
+  			dp[pos[s]][pos[d]] = rate;
+  		}
+
+  		for (int k=1; k<=n; k++)
+  			for (int i=1; i<=n; i++)
+  				for (int j=1; j<=n; j++)
+  					dp[i][j] = max(dp[i][j], dp[i][k]*dp[k][j]);
+
+  		bool possible = 0;
+
+  		for (int i=1; i<=n; i++) 
+  			if (dp[i][i] > 1 + 1e-5) 
+  				possible = 1;
+
+  		cout<<"Case "<<ca++<<": "<<(possible? "Yes":"No")<<endl;
   	}
 
     END:

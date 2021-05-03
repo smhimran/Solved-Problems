@@ -139,16 +139,11 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		string s;
+  		cin>>s;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  		bool possible = (len(s) % 2 == 0 and s[0] != ')' and s[len(s) - 1] != '(');
+  		cout<<(possible? "YES":"NO")<<endl;
   	}
 
     END:

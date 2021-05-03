@@ -126,6 +126,32 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int dp[105][105], n, m;
+
+void result_trace(string x, string y) {
+    printf("%d\n", dp[n][m]);
+    int step = 0, i = n, j = m;
+    while (i or j) {
+        if (i>0 and j>0 and x[i - 1] == y[j - 1]) {
+            i--, j--;
+            continue;
+        }
+        printf("%d ", ++step);
+        if (i > 0 and dp[i][j] == dp[i - 1][j] + 1) { // delete
+            printf("Delete %d", i);
+            i--;
+        }
+        else if (j > 0 and dp[i][j] == dp[i][j - 1] + 1) { // insert
+            printf("Insert %d,%c", i + 1, y[j - 1]);
+            j--;
+        }
+        else if (i > 0 and j > 0) {  // replace
+            printf("Replace %d,%c", i, y[j - 1]);
+            i--; j--;
+        }
+        putchar('\n');
+    }
+}
 
 int main()
 {
@@ -136,19 +162,65 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	string s, t;
+  	bool ok = 0;
+  	while (getline(cin,s)) {
+  		getline(cin, t);
+  		n=len(s), m=len(t);
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		for (int i=0; i<=n; i++)
+  			dp[i][0] = i;
+  		for (int j=0; j<=m; j++)
+  			dp[0][j] = j;
 
-  		ans += k;
+  		for (int i=1; i<=n; i++) {
+            for (int j=1; j<=m; j++) {
+                if (s[i-1] == t[j-1])
+                    dp[i][j] = dp[i-1][j-1] ;
+                else 
+                    dp[i][j] = 1 + min({dp[i-1][j-1], dp[i-1][j], dp[i][j-1]});
+            }
+        }
 
-  		cout<<ans<<endl;
+        if (ok)
+        	cout<<endl;
+
+        result_trace(s, t);
+
+  		// cout<<dp[n][m]<<endl;
+
+  		// // for (int i=0; i<=n; i++) {
+  		// // 	for (int j=0; j<=m; j++) {
+  		// // 		cout<<dp[i][j]<<" ";
+  		// // 	}
+  		// // 	cout<<endl;
+  		// // }
+
+  		// int i = n, j = m, cnt = 1;
+
+  		// while (i or j) {
+  		// 	if (s[i-1] == t[j-1]) {
+  		// 		i--;
+  		// 		j--;
+  		// 	}
+
+  		// 	else if (i and j and dp[i][j] == dp[i - 1][j - 1] + 1) {
+  		// 		cout<<cnt++<<" Replace "<<j<<","<<t[j-1]<<endl;
+  		// 		i--;
+  		// 		j--;
+  		// 	}
+
+  		// 	else if (i and dp[i][j] == dp[i - 1][j] + 1) {
+  		// 		cout<<cnt++<<" Delete "<<i<<endl;
+  		// 		i--;
+  		// 	}
+
+  		// 	else if (j and dp[i][j] == dp[i][j - 1] + 1) {
+  		// 		cout<<cnt++<<" Insert "<<j<<","<<t[j-1]<<endl;
+  		// 		j--;
+  		// 	}
+  		// }
+  		ok = 1;
   	}
 
     END:

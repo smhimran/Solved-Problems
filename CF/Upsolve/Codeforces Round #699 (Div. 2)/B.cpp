@@ -139,16 +139,38 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int n, k;
+  		cin>>n>>k;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		int a[n+1];
+  		for (int i=1; i<=n; i++) 
+  			cin>>a[i];
 
-  		ans += k;
+  		map<int, int> ans;
 
-  		cout<<ans<<endl;
+  		int boulder = 1;
+  		while (true) {
+  			int i = 1;
+  			while (i < n) {
+  				if (a[i] >= a[i+1])
+	  				i++;
+	  			else {
+	  				a[i]++;
+		  			break; 
+	  			}
+  			}
+
+  			if (i == n)
+  				break;
+
+  			ans[boulder] = i;
+  			boulder++;
+  		}
+
+  		if (ans[k])
+  			cout<<ans[k]<<endl;
+  		else
+  			cout<<-1<<endl;
   	}
 
     END:

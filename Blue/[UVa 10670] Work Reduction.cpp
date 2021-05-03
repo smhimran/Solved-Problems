@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -126,6 +126,20 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+class Agency 
+{
+public:
+	string name;
+	int A, B;
+
+	Agency() {};
+
+	Agency(string name, int A, int B) {
+		this->name = name;
+		this->A = A;
+		this->B = B;
+	}
+};
 
 int main()
 {
@@ -139,16 +153,56 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int n, m, l;
+  		cin>>n>>m>>l;
+  		vector<Agency> agencies;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		for (int i=0; i<l; i++) {
+  			string name = "";
+  			char c;
+  			getchar();
+  			while (1) {
+  				c = getchar();
+  				if (c == ':')
+  					break;
+  				name += c;
+  			}
+  			int a, b;
+  			cin>>b>>c>>a;
+  			agencies.push_back(Agency(name, a, b));
+  		}
 
-  		ans += k;
+  		pair<int, string> list[l+1];
 
-  		cout<<ans<<endl;
+  		for (int i=0; i<l; i++) {
+  			int k = n, cost = 0;
+
+  			while (k > m) {
+  				if (k/2 >= m) {
+  					int done = k - (k/2);
+  					if (agencies[i].A < (agencies[i].B * done)) {
+  						k -= done;
+  						cost += agencies[i].A;
+  					}
+  					else {
+  						cost += agencies[i].B * (k - m);
+	  					k = m;
+  					}
+  				} 
+  				else {
+  					cost += agencies[i].B * (k - m);
+  					k = m;
+  				}
+  			}
+
+  			list[i] = {cost, agencies[i].name};
+  		}
+
+  		sort(list, list+l);
+  		cout<<"Case "<<ca++<<endl;
+
+  		for (int i=0; i<l; i++)
+  			cout<<list[i].second<<" "<<list[i].first<<endl;
   	}
 
     END:

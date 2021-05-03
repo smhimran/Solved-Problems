@@ -139,16 +139,21 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int n;
+  		string s;
+  		cin>>n>>s;
+  		int p = 0;
+  		for (int i=0; i<len(s); i++) {
+  			if (s[i] == ')')
+  				p++;
+  			else
+  				p = 0;
+  		}
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  		if (p > (len(s) - p))
+  			cout<<"YES"<<endl;
+  		else
+  			cout<<"No"<<endl;
   	}
 
     END:

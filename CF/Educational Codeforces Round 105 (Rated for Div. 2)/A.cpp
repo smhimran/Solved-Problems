@@ -139,16 +139,113 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		string s;
+  		cin>>s;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+		int cnt = 0;
+		bool valid = 1;
+		for (int i=0; i<len(s); i++) {
+			if (s[i] == 'A')
+				cnt++;
+			else 
+				cnt--;
 
-  		ans += k;
+			if (cnt < 0)
+				valid = 0;
+		}
 
-  		cout<<ans<<endl;
+		if (valid and cnt == 0) {
+			cout<<"YES"<<endl;
+			continue;
+		}
+
+		cnt = 0;
+		valid = 1;
+		for (int i=0; i<len(s); i++) {
+			if (s[i] != 'A')
+				cnt++;
+			else 
+				cnt--;
+
+			if (cnt < 0)
+				valid = 0;
+		}
+
+		if (valid and cnt == 0) {
+			cout<<"YES"<<endl;
+			continue;
+		}
+
+		cnt = 0;
+		valid = 1;
+		for (int i=0; i<len(s); i++) {
+			if (s[i] == 'B')
+				cnt++;
+			else 
+				cnt--;
+
+			if (cnt < 0)
+				valid = 0;
+		}
+
+		if (valid and cnt == 0) {
+			cout<<"YES"<<endl;
+			continue;
+		}
+
+		cnt = 0;
+		valid = 1;
+		for (int i=0; i<len(s); i++) {
+			if (s[i] != 'B')
+				cnt++;
+			else 
+				cnt--;
+
+			if (cnt < 0)
+				valid = 0;
+		}
+
+		if (valid and cnt == 0) {
+			cout<<"YES"<<endl;
+			continue;
+		}
+
+		cnt = 0;
+		valid = 1;
+		for (int i=0; i<len(s); i++) {
+			if (s[i] == 'C')
+				cnt++;
+			else 
+				cnt--;
+
+			if (cnt < 0)
+				valid = 0;
+		}
+
+		if (valid and cnt == 0) {
+			cout<<"YES"<<endl;
+			continue;
+		}
+
+		cnt = 0;
+		valid = 1;
+		for (int i=0; i<len(s); i++) {
+			if (s[i] != 'C')
+				cnt++;
+			else 
+				cnt--;
+
+			if (cnt < 0)
+				valid = 0;
+		}
+
+		if (valid and cnt == 0) {
+			cout<<"YES"<<endl;
+			continue;
+		}
+
+
+		cout<<"NO"<<endl;
   	}
 
     END:

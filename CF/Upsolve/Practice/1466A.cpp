@@ -139,16 +139,19 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int n;
+  		cin>>n;
+  		int a[n+1];
+  		for (int i=0; i<n; i++)
+  			cin>>a[i];
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		set<int> st;
 
-  		ans += k;
+  		for (int i=0; i<n-1; i++)
+  			for (int j=i+1; j<n; j++) 
+  				st.insert(abs(a[i] - a[j]));
 
-  		cout<<ans<<endl;
+  		cout<<st.size()<<endl;
   	}
 
     END:

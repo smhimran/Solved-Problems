@@ -139,16 +139,29 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int n, d;
+  		cin>>n>>d;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		int a[n+1];
+  		bool ok = 1;
+  		for (int i=0; i<n; i++) {
+  			cin>>a[i];
 
-  		ans += k;
+  			if (a[i] > d)
+  				ok = 0;
+  		}
 
-  		cout<<ans<<endl;
+  		if (ok) {
+  			cout<<"YES"<<endl;
+  			continue;
+  		}
+
+  		sort(a, a+n);
+
+  		if (a[0] + a[1] <= d)
+  			cout<<"YES"<<endl;
+  		else
+  			cout<<"NO"<<endl;
   	}
 
     END:

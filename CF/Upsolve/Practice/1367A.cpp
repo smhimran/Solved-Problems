@@ -139,14 +139,16 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		string s;
+  		cin>>s;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		string ans = "";
+  		ans += s[0];
+  		ans += s[1];
 
-  		ans += k;
+
+  		for (int i=3; i<len(s); i+=2)
+  			ans += s[i];
 
   		cout<<ans<<endl;
   	}

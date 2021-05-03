@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -136,19 +136,37 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	int n, k;
+  	cin>>n>>k;
+  	int dim = pow(n, k);
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  	char grid[dim+5][dim+5], model[n+5][n+5];
 
-  		ans += k;
+  	for (int i=0; i<n; i++)
+  		for (int j=0; j<n; j++)
+  			cin>>model[i][j];
 
-  		cout<<ans<<endl;
+  	
+	for (int i=0; i<dim; i++) {
+		for (int j=0; j<dim; j++) {
+			// debug(i, j, k);
+			// debug((i/k)%n, (j/k)%n);
+			for (int p=k-1; p>=0; p--) {
+				int x = pow(n, p);
+				if (model[(i/x)%n][(j/x)%n] == '*')
+					grid[i][j] = '*';
+				else
+					grid[i][j] = '.';
+				// debug(grid[i][j]);
+			}
+		}
+	}
+  	
+
+  	for (int i=0; i<dim; i++) {
+  		for (int j=0; j<dim; j++)
+  			cout<<grid[i][j];
+  		cout<<endl;
   	}
 
     END:

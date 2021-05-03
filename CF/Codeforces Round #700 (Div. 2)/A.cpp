@@ -139,16 +139,29 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		string s;
+  		cin>>s;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		for (int i=0; i<len(s); i++) {
+  			if (!(i&1)) {
+  				for (char c='a'; c<='z'; c++) {
+  					if (c != s[i]) {
+  						s[i] = c;
+  						break;
+  					}
+  				}
+  			}
+  			else {
+  				for (char c='z'; c>='a'; c--) {
+  					if (c != s[i]) {
+  						s[i] = c;
+  						break;
+  					}
+  				}
+  			}
+  		}
 
-  		ans += k;
-
-  		cout<<ans<<endl;
+  		cout<<s<<endl;
   	}
 
     END:

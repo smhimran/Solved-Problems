@@ -68,7 +68,7 @@ typedef set<char> SC;
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
 #define rsort(a)            sort(a.rbegin(), a.rend())
-#define pvec(v)             for(auto x: v) cout<<x<<" "
+#define pvec(v)             for(auto x: v) cout<<x<<endl
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 /*----------------------Graph Moves----------------*/
@@ -136,20 +136,43 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	int a, b, n = 1;
+  	vector<pair<PII, int> > v;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  	while (cin>>a>>b) 
+  		v.push_back({MP(a, b), n++});
 
-  		ans += k;
+  	sort(v.begin(), v.end());
 
-  		cout<<ans<<endl;
+  	int dp[n+1], lis[n+1], mx = 0;
+
+  	for (int i=0; i<n; i++) {
+  		dp[i] = 1;
+  		lis[i] = i;
+
+  		for (int j=0; j<i; j++) {
+  			if ((v[j].first.first < v[i].first.first and v[j].first.second > v[i].first.second) and dp[i] < dp[j] + 1) {
+  				dp[i] = dp[j] + 1;
+  				lis[i] = j;
+  				mx = max(mx, dp[i]);
+  			}
+  		}
   	}
+
+  	vector<int> ans;
+
+  	int pos = find(dp, dp + n, mx) - dp;
+  	int now = 0;
+
+  	do {
+  		ans.push_back(v[pos].second);
+  		now = pos;
+  		pos = lis[pos];
+  	} while (pos != now);
+
+  	reverse(ans.begin(), ans.end());
+  	cout<<ans.size()<<endl;
+  	pvec(ans);
 
     END:
     #ifdef HOME

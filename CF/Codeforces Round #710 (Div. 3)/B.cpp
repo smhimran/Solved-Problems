@@ -139,15 +139,45 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
+  		int n, k;
+  		
+  		string s;
+  		
+  		cin>>n>>k>>s;
+  		
+  		int first = -1, last = -1;
+  		
+  		for (int i=0; i<len(s); i++) {
+  			if (s[i] == '*') {
+  				if (first == -1)
+  					first = i;
+  				last = i;
+  			}
+  		}
+  		
+  		if (first == last) {
+  			cout<<1<<endl;
+  			continue;
+  		}
+  		
+  		if (first + 1 == last or (last - first <= k)) {
+  			cout<<2<<endl;
+  			continue;
+  		}
+  		
+  		int ans = 2;
+  		
+  		for (int i=first; i + k <last; ) {
+  			int next = i + k;
+  			
+  			while (s[next] != '*')
+  				next--;
+  			
+  			i = next;
+  			
+  			ans++;
+  		}
+  		
   		cout<<ans<<endl;
   	}
 

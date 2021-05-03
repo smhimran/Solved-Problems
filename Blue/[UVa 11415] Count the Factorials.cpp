@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -127,6 +127,41 @@ bool CMP(int a, int b) { return a>b; }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 
+LL factorization(long long n) {
+	LL ret = 0;
+	if (n % 2 == 0) {
+	    while (n % 2 == 0) {
+	        ret++;
+	        n /= 2;
+	    }
+	}
+    for (long long d = 3; d * d <= n; d += 2) { 
+    	if (n % d == 0) {
+	        while (n % d == 0) {
+	            ret++;
+	            n /= d;
+	        }
+	    }
+    }
+    if (n > 1) {
+	    ret++;
+    }
+    return ret;
+}
+
+
+int primeCount[MAX+1], i;
+
+void precal() {
+	primeCount[0] = 1;
+	primeCount[1] = 1;
+	primeCount[2] = 1;
+	for (i=3; i<=2703670; i++) {
+		primeCount[i] = primeCount[i-1] + factorization(i);
+		
+	}
+}
+
 int main()
 {
     // FastIO;
@@ -136,19 +171,15 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
+  	precal();
+  	int t;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  		LL n;
+  		cin>>n;
+  		auto ans = upper_bound(primeCount, primeCount+i, n);
+  		ans--;
+  		cout<< (ans - primeCount) + 1 <<endl;
   	}
 
     END:

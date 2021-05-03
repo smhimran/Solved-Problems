@@ -136,19 +136,43 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	int n, b;
+  	while (cin>>n>>b) {
+  		if (n==0 and b==0)
+  			break;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		int dp[n+5][n+5];
 
-  		ans += k;
 
-  		cout<<ans<<endl;
+  		for (int i=1; i<=n; i++) {
+  			for (int j=1; j<=n; j++) {
+  				if (i == j)
+		  			dp[i][j] = 0;
+		  		else
+		  			dp[i][j] = inf;
+  			}
+  		}
+
+  		while (b--) {
+  			int x, y, t;
+  			cin>>x>>y>>t;
+
+  			dp[x][y] = t;
+  			dp[y][x] = t * (-1);
+  		}
+
+  		for (int k=1; k<=n; k++)
+  			for (int i=1; i<=n; i++)
+  				for (int j=1; j<=n; j++)
+  					dp[i][j] = min(dp[i][j], dp[i][k] + dp[k][j]);
+
+  		bool found = 0;
+
+  		for (int i=1; i<=n; i++)
+  			if (dp[i][i] < 0)
+  				found = 1;
+
+  		cout<<(found? "Y":"N")<<endl;
   	}
 
     END:

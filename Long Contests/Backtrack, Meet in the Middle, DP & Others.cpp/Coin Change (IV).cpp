@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -125,7 +125,18 @@ int LCM(int a, int b) { return a * (b/GCD(a, b)); }
 bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
+vector<int> L, R;
+int coin[20];
 
+void subset(int sum, int i, int finish, vector<int> &v) {
+	if (i==finish) {
+		v.push_back(sum);
+		return;
+	}
+
+	for (int j=0; j<=2; j++)
+		subset(sum+(coin[i]*j), i+1, finish, v);
+}
 
 int main()
 {
@@ -139,16 +150,29 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int n, k;
+  		cin>>n>>k;
+  		for (int i=0; i<n; i++)
+  			cin>>coin[i];
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		int mid = n / 2;
+  		L.clear(); R.clear();
 
-  		ans += k;
+  		subset(0,0, mid, L);
+  		subset(0, mid, n, R);
 
-  		cout<<ans<<endl;
+  		sort(R.begin(), R.end());
+
+  		bool found = 0;
+  		for (int i=0; i<L.size(); i++) {
+  			int needed = k - L[i];
+  			if (binary_search(R.begin(), R.end(), needed)) {
+  				found = 1;
+  				break;
+  			}
+  		}
+
+  		cout<<"Case "<<ca++<<": "<<(found? "Yes":"No")<<endl;
   	}
 
     END:

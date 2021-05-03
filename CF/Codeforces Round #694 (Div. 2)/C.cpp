@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -139,14 +139,34 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		LL n, m;
+  		cin>>n>>m;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		LL a[n+1], c[m+1];
 
-  		ans += k;
+  		for (int i=0; i<n; i++)
+  			cin>>a[i];
+
+  		for (int i=1; i<=m; i++)
+  			cin>>c[i];
+
+  		sort(a, a+n, CMP);
+
+  		set<LL> rmn;
+  		for (int i=1; i<=a[0]; i++)
+  			rmn.insert(c[i]);
+
+  		LL ans = 0;
+  		for (int i=0; i<n; i++) {
+  			LL mn = *rmn.begin();
+
+  			if (mn < c[a[i]]) {
+  				ans += mn;
+  				rmn.erase(rmn.begin());
+  			}
+  			else 
+  				ans += c[a[i]];
+  		}
 
   		cout<<ans<<endl;
   	}

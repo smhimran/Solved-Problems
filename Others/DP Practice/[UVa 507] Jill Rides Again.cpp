@@ -139,16 +139,39 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int n;
+  		cin>>n;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		int a[n+1];
+  		a[0] = 0;
 
-  		ans += k;
+  		for (int i=1; i<n; i++)
+  			cin>>a[i];
 
-  		cout<<ans<<endl;
+  		a[n] = 0;
+
+  		int start = 0, end = 0, s = 1, ans = -inf, current = 0, length = 0;
+
+  		for (int i=1; i<n; i++) {
+  			current += a[i];
+
+  			if (current > ans or (current >= ans and (i + 1 - s) > length)) {
+  				ans = current;
+  				start = s;
+  				end = i + 1;
+  				length = end - start;
+  			}
+
+  			if (current < 0) {
+  				current = 0;
+  				s = i + 1;
+  			}
+  		}
+
+  		if (ans <= 0)
+  			cout<<"Route "<<ca++<<" has no nice parts"<<endl;
+  		else
+	  		cout<<"The nicest part of route "<<ca++<<" is between stops "<<start<<" and "<<end<<endl;
   	}
 
     END:

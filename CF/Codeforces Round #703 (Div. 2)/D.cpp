@@ -136,20 +136,45 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	int n, k;
+  	cin>>n>>k;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  	int a[n+1];
 
-  		ans += k;
+  	for (int i=0; i<n; i++)
+  		cin>>a[i];
 
-  		cout<<ans<<endl;
+  	int low = 1, high = n + 1, mid;
+
+  	while (high - low > 1) {
+  		mid = (low + high) >> 1;
+
+  		int b[n+1];
+
+  		for (int i=0; i<n; i++) {
+  			if (a[i] >= mid)
+  				b[i] = 1;
+  			else
+  				b[i] = -1;
+  		}
+
+  		for (int i=1; i<n; i++)
+  			b[i] += b[i-1];
+
+  		int mx = b[k - 1], mn = 0;
+
+  		for (int i=k; i<n; i++) {
+  			mn = min(mn, b[i - k]);
+  			mx = max(mx, b[i] - mn);
+  		}
+
+  		if (mx > 0)
+  			low = mid;
+  		else
+  			high = mid;
   	}
+
+  	cout<<low<<endl;
 
     END:
     #ifdef HOME

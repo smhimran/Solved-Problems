@@ -60,10 +60,10 @@ typedef set<char> SC;
 #define BSRC                binary_search
 #define MAX                 10000007
 #define MIN                 -10000007
-#define inf                 int(1e6+9)
+#define inf                 int(1e9+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -136,19 +136,56 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	int t, r, h;
+  	while (cin>>t>>r>>h) {
+  		bool TR[t+1][r+1], RH[r+1][h+1], HT[h+1][t+1];
+  		int travel[t+1], restaurant[r+1], hotel[h+1];
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		for (int i=1; i<=t; i++) {
+  			cin>>travel[i];
+  			for (int j=1; j<=r; j++) {
+  				cin>>TR[i][j];
+  			}
+  		}
 
-  		ans += k;
+  		for (int i=1; i<=r; i++) {
+  			cin>>restaurant[i];
+  			for (int j=1; j<=h; j++) {
+  				cin>>RH[i][j];
+  			}
+  		}
 
-  		cout<<ans<<endl;
+  		for (int i=1; i<=h; i++) {
+  			cin>>hotel[i];
+  			for (int j=1; j<=t; j++) {
+  				cin>>HT[i][j];
+  			}
+  		}
+
+  		int cost = inf, H = -1, R = -1, T = -1;
+
+  		for (int i=1; i<=t; i++) {
+  			for (int j=1; j<=r; j++) {
+  				if (!TR[i][j]) {
+  					for (int k=1; k<=h; k++) {
+  						if (!RH[j][k] and !HT[k][i]) {
+  							int now = travel[i] + restaurant[j] + hotel[k];
+  							if (now < cost) {
+  								cost = now;
+  								T = i-1;
+  								R = j-1;
+  								H = k-1;
+  							}
+  						}
+  					}
+  				}
+  			}
+  		}
+
+  		if (T == -1) 
+  			cout<<"Don't get married!"<<endl;
+  		else 
+  			cout<<T<<" "<<R<<" "<<H<<":"<<cost<<endl;
   	}
 
     END:

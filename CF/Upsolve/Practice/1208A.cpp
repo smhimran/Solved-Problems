@@ -139,16 +139,11 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int a[3], n;
+  		cin>>a[0]>>a[1]>>n;
+  		a[2] = a[0] ^ a[1];
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  		cout<<a[n%3]<<endl;
   	}
 
     END:

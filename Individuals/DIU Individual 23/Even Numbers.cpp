@@ -126,6 +126,27 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+string dec_to_bin(int n) {
+    string ret = "";
+    bool started = 0;
+    for (int i = 31; i >= 0; i--) {
+        int k = 1 << i;
+        if (n & k) {
+        	started = 1;
+        	ret += '1';
+        }
+        else if (started)
+        	ret += '0';
+    }
+    return ret;
+}
+
+int bin_to_dec(string s) {
+    int ret = 0;
+    for (int i = 0; i < len(s) and i < 32; i++) 
+        ret = (2*ret) + s[i]-'0';
+    return ret;
+}
 
 int main()
 {
@@ -139,16 +160,16 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  		int n;
+  		cin>>n;
+  		if (n & 1)
+  			cout<<n<<endl;
+  		else {
+  			string s = dec_to_bin(n);
+  			reverse(s.begin(), s.end());
+  			// debug(s);
+	  		cout<<bin_to_dec(s)<<endl;
+  		}
   	}
 
     END:

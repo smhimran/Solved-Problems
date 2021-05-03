@@ -136,19 +136,41 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	double p;
+  	int n;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  	int ca = 1;
+  	while (cin>>p>>n) {
+  		double dp[205];
 
-  		ans += k;
+  		dp[0] = 0;
+  		for (int i=1; i<=202; i++)
+  			dp[i] = dp[i-1] + p;
 
-  		cout<<ans<<endl;
+  		while (n--) {
+  			int amount;
+  			double price;
+
+  			cin>>amount>>price;
+
+  			for (int i=amount; i<=200; i++) 
+  				dp[i] = min(dp[i], dp[i-amount] + price);
+  		}
+
+  		for (int i=200; i>=0; i--)
+  			dp[i] = min(dp[i], dp[i+1]);
+
+  		getchar();
+
+  		string s;
+  		getline(cin, s);
+
+  		stringstream ss(s);
+
+  		printf("Case %d:\n", ca++);
+
+  		while (ss>>n) 
+  			printf("Buy %d for $%.2lf\n", n, dp[n]);
   	}
 
     END:

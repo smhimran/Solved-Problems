@@ -62,6 +62,7 @@ typedef set<char> SC;
 #define MIN                 -10000007
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
+#define sqr(x) 				((x) * (x))
 #define BR                  PF("\n")
 #define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
 #define READ()              freopen("input.txt", "r", stdin)
@@ -138,17 +139,51 @@ int main()
     
   	int t, ca=1;
   	cin>>t;
+  	
+	string s;
+  	getchar();
+  	
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	
+  		getline(cin, s);
+  		
+  		stringstream ss(s);
+  		
+  		double x, y, ans;
+  		int z, input[3], k = 0;
+  		
+  		while (ss>>z) 
+  			input[k++] = z;
+  		
+  		
+  		if (k == 2) {
+  			x = input[0];
+  			y = input[1];
+  			
+  			double area1 = PI * sqr(x);
+  			double area2 = PI * sqr(y);
+  			double r = x + y;
+  			
+  			double area = PI * sqr(r);
+  			
+  			area -= (area1 + area2);
+  			
+  			ans = area;
+  		}
+  		
+  		else {
+  			x = input[0];
+  			
+  			double area = PI * sqr(x / 2);
+  			
+  			double area1 = PI * sqr(x / 4);
+  			
+  			area -= (area1 * 2);
+  			
+  			ans = area;
+  		}
+  		
+  		cout << fixed << setprecision(4) << ans << endl;
   	}
 
     END:

@@ -126,6 +126,7 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int a[100020], pos[100020], nxt[100020];
 
 int main()
 {
@@ -136,20 +137,42 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	int n;
+  	scanf("%d", &n);
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  	for (int i=1; i<=n; i++)
+  		scanf("%d", a+i);
 
-  		ans += k;
+  	for (int i=0; i<=n; i++) 
+  		pos[i] = n + 1;
 
-  		cout<<ans<<endl;
+  	for (int i=n; i>=0; i--) {
+  		nxt[i] = pos[a[i]];
+  		pos[a[i]] = i;
   	}
+ 
+  	int x = 0, y = 0, ans = 0;
+
+  	for (int i=1; i<=n; i++) {
+  		if (a[i] == a[x]) {
+  			ans += !(a[i] == a[y]);
+  			y = i;
+  		}
+  		else if (a[i] == a[y]) {
+  			ans += !(a[i] == a[x]);
+  			x = i;
+  		}
+  		else if (nxt[x] < nxt[y]) {
+  			ans += !(a[i] == a[x]);
+  			x = i;
+  		}
+  		else {
+  			ans += !(a[i] == a[y]);
+  			y = i;
+  		}
+  	}
+ 
+  	printf("%d\n", ans);
 
     END:
     #ifdef HOME

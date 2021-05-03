@@ -62,6 +62,7 @@ typedef set<char> SC;
 #define MIN                 -10000007
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
+#define sqr(x)				((x) * (x))
 #define BR                  PF("\n")
 #define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
 #define READ()              freopen("input.txt", "r", stdin)
@@ -126,6 +127,15 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+double triangleArea(double a, double b, double c, double S) {
+	double area = (S - a) * (S - b) * (S - c);
+	
+	area *= S;
+	
+	area = sqrt(area);
+	
+	return area;
+}
 
 int main()
 {
@@ -137,18 +147,31 @@ int main()
     #endif
     
   	int t, ca=1;
-  	cin>>t;
+  	scanf("%d", &t);
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  		double a, b, c, d;
+  		
+  		scanf("%lf %lf %lf %lf", &a, &b, &c, &d);
+  		
+  		double diagonal = (a * (sqr(d) - sqr(c))) + (c * (sqr(a) - sqr(b)));
+  	
+  		diagonal /= (a - c);
+  		
+  		diagonal = sqrt(diagonal);
+  		
+  		double S = a + b + diagonal;
+  		S /= 2;
+  		
+  		double firstTriangleArea = triangleArea(a, b, diagonal, S);
+  		
+  		S = c + d + diagonal;
+  		S /= 2;
+  		
+  		double secondTriangleArea = triangleArea(c, d, diagonal, S);
+  		
+  		double totalArea = firstTriangleArea + secondTriangleArea;
+  		
+  		printf("Case %d: %.7lf\n", ca++, totalArea);
   	}
 
     END:

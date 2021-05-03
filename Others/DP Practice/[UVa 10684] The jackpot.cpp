@@ -136,19 +136,23 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	int n;
+  	while (cin>>n and n) {
+  		int a[n+1], dp[n+1];
+  		dp[0] = 0;
+  		for (int i=1; i<=n; i++) {
+  			cin>>a[i];
+  			dp[i] = dp[i-1] + a[i];
+  			if (dp[i] < 0)
+  				dp[i] = 0;
+  		}
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		int k = *max_element(dp+1, dp+n+1);
 
-  		ans += k;
-
-  		cout<<ans<<endl;
+  		if (k)
+  			cout<<"The maximum winning streak is "<<k<<"."<<endl;
+  		else
+  			cout<<"Losing streak."<<endl;
   	}
 
     END:

@@ -126,6 +126,7 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int freq[inf + 1];
 
 int main()
 {
@@ -137,18 +138,80 @@ int main()
     #endif
     
   	int t, ca=1;
-  	cin>>t;
+  	scanf("%d", &t);
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	
+  		int n, w;
+  		
+  		scanf("%d %d", &n, &w);
+  		
+  		memset(freq, 0, sizeof freq);
+  		
+  		int a[n+1];
+  		
+  		for (int i=0; i<n; i++) {
+  			scanf("%d", a+i);
+  			freq[a[i]]++;
+  		}
+  		
+  		sort(a, a+n);
+  		
+  		int remaining = n, current = w, ans = 1;
+  		
+  		while (remaining) {
+  			int got = -inf;
+  			
+  			int low = 0, high = n-1;
+  			
+  			
+  			if (current < a[0]) {
+  				ans++;
+  				current = w;
+  			}
+  			
+  			// debug(current, remaining);
+  			
+  			while (low <= high) {
+  				int mid = low + (high - low + 1) / 2;
+  				
+  				int midValue = a[mid];
+  				
+  				// debug(midValue, mid);
+  				
+  				
+  				if (midValue <= current) {
+  					
+  					if (freq[midValue]) {
+  						got = max(got, midValue);
+	  					low = mid + 1;
+  					}
+  					
+  					else {
+  						high = mid - 1;
+  					}
+  					
+  				}
+  				
+  				else {
+  					high = mid - 1;
+  				}
+  			}
+  			
+  			// debug(got);
+  			
+  			if (got > 0) {
+  				freq[got]--;
+  				remaining--;
+  				current -= got;
+  			}
+  			
+  			else {
+  				ans++;
+  				current = w;
+  			}
+  		}
+  		
+  		printf("%d\n", ans);
   	}
 
     END:

@@ -126,6 +126,17 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+LL po[69];
+
+void precal() {
+	po[0] = 1;
+	LL now = 1;
+
+	for (int i=1; i<63; i++) {
+		now *= 2;
+		po[i] = po[i-1] + now;
+	}
+}
 
 int main()
 {
@@ -136,19 +147,19 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
+    precal();
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		LL n;
+  		cin>>n;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  		for (int i=1; i<63; i++) {
+  			if (n % po[i] == 0) {
+  				cout<<n / po[i]<<endl;
+  				break;
+  			}
+  		}
   	}
 
     END:

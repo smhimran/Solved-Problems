@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -126,6 +126,42 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+#define mx int(1e6+5)
+LL a[mx], tree[mx*4], n;
+
+int build(int node, int s, int e) 
+{
+    if (s==e) {
+        return tree[node]=a[s];
+    }
+    int left=node*2, right=left +1;
+    int mid=(s+e)/2;
+    return tree[node]=min(build(left, s, mid), build(right, mid+1, e));
+}
+
+LL query(int node, int i, int j, int s=1, int e=n)
+{
+    if (e<i or s>j)
+        return inf;
+    if (s>=i and e<=j)
+        return tree[node];
+    int left=node*2, right=left+1;
+    int mid=(s+e)/2;
+    return min(query(left, i, j, s, mid), query(right, i, j, mid+1, e));
+}
+
+LL update(int node, int i, int val, int s=1, int e=n)
+{
+    if (e<i or s>i)
+        return tree[node];
+    if (s==e) {
+        return tree[node]=val;
+    }
+    int left=node*2, right=left+1;
+    int mid=(s+e)/2;
+    return tree[node]=update(left, i, val, s, mid)+update(right, i, val, mid+1, e);
+}
+
 
 int main()
 {
@@ -139,16 +175,21 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int q;
+  		cin>>n>>q;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		for (int i=1; i<=n; i++)
+  			cin>>a[i];
 
-  		ans += k;
+  		build(1, 1, n);
 
-  		cout<<ans<<endl;
+  		cout<<"Case "<<ca++<<":"<<endl;
+
+  		while (q--) {
+  			int i, j;
+  			cin>>i>>j;
+  			cout<<query(1, i, j)<<endl;
+  		}
   	}
 
     END:

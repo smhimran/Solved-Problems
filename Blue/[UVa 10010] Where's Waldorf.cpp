@@ -139,16 +139,31 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	
+  		int n, m;
+  		cin>>n>>m;
+  		
+  		char grid[n+1][m+1];
+  		
+  		for (int i=1; i<=n; i++) 
+  			for (int j=1; j<=m; j++)
+  				cin>>grid[i][j];
+  		
+  		
+  		int q;
+  		cin>>q;
+  		
+  		while (q--) {
+  			string s;
+  			
+  			cin>>s;
+  			
+  			int row = 1, col = 1, k = 0;
+  			
+  			while (row) {
+  				
+  			}
+  		}
   	}
 
     END:

@@ -132,23 +132,42 @@ int main()
     // FastIO;
     #ifdef HOME
      clock_t Start=clock();
-     freopen("in.txt", "r", stdin);
+     freopen("bugged.in", "r", stdin);
      freopen("out.txt", "w", stdout);
     #endif
     
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int n, m;
+  		cin>>n>>m;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		int stations[n + 1];
 
-  		ans += k;
+  		for (int i=1; i<=n; i++)
+  			cin>>stations[i];
 
-  		cout<<ans<<endl;
+  		map<int, int> in, out;
+
+  		LL ans = 0;
+
+  		while (m--) {
+  			int x, y;
+  			cin>>x>>y;
+
+  			in[x]++;
+  			out[y]++;
+
+  			ans += abs(stations[x] - stations[y]);
+  		}
+
+  		bool possible = 1;
+
+  		for (int i=1; i<=n; i++) 
+  			if (in[i] != out[i])
+  				possible = 0;
+
+  		cout<<(possible? ans: -1LL)<<endl;
   	}
 
     END:

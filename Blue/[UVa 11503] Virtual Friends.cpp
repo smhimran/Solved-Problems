@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -126,6 +126,32 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int parent[100007], sizeOfComponent[100007];
+
+int find(int n) {
+	if (parent[n] == n)
+		return n;
+	return find(parent[n]);
+}
+
+int uni(int a, int b) {
+	int parA = find(a), parB = find(b);
+
+	if (parA == parB)
+		return sizeOfComponent[parA];
+
+	parent[parB] = parA;
+
+	sizeOfComponent[parA] += sizeOfComponent[parB];
+	return sizeOfComponent[parA];
+}
+
+void init() {
+	for (int i=0; i<100007; i++) {
+		parent[i] = i;
+		sizeOfComponent[i] = 1;
+	}
+}
 
 int main()
 {
@@ -139,16 +165,23 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		init();
+  		int q;
+  		cin>>q;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		map<string, int> pos;
 
-  		ans += k;
+  		int x = 1;
+  		while (q--) {
+  			string a, b;
+  			cin>>a>>b;
+  			if (!pos.count(a))
+  				pos[a] = x++;
+  			if (!pos.count(b))
+  				pos[b] = x++;
 
-  		cout<<ans<<endl;
+  			cout<<uni(pos[a], pos[b])<<endl;
+  		}
   	}
 
     END:

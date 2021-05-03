@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -126,6 +126,52 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+LL cnt[] = {1, 20, 300, 4000, 50000, 600000, 7000000, 80000000, 900000000};
+LL zeroes[] = {0, 9, 189, 2889, 38889, 488889, 5888889, 68888889, 788888889};
+
+LL digits[10];
+std::vector<int> s;
+LL lim, dp[12][10][10][100];
+
+
+LL solve(LL pos, LL small, LL start, LL val, LL digit) {
+    if (pos==lim) 
+        return val;
+    LL &ret = dp[pos][small][start][val];
+    if (ret != -1)
+        return ret;
+    LL finish = small? 9: s[pos];
+    // cout<<finish<<" ";
+    ret = 0;
+    if (!start) {
+        for (int i=0; i<=finish; i++)
+            ret += solve(pos+1, small | i<s[pos], 0, (i==digit) + val, digit);
+    }
+    else {
+        for (int i=1; i<=finish; i++)
+            ret += solve(pos+1, small | i<s[pos], 0, (i==digit) + val, digit);
+        ret += solve(pos+1, 1, 1, 0, digit);
+    }
+    // cout<<pos<<" "<<small<<" "<<finish<<" "<<ret<<endl;
+    return ret;
+}
+
+void count( LL x )
+{
+    if( x < 0 ) return;
+    s.clear();
+    while( x )
+    {
+        s.push_back(x%10);
+        x/=10;
+    }
+    reverse(s.begin(),s.end()); 
+    lim = s.size();
+    for (int i=0; i<=9; i++) {
+      memset(dp, -1, sizeof dp);
+      digits[i] = solve(0, 0, 1, 0, i);
+    }
+}
 
 int main()
 {
@@ -136,19 +182,33 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	LL a, b;
+  	while (cin>>a>>b) {
+  		if (a==0 and b==0)
+  			break;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+      if (a > b)
+        swap(a, b);
 
-  		ans += k;
+  		int ans[10];
+  		memset(digits, 0, sizeof digits);
+  		count(b);
 
-  		cout<<ans<<endl;
+  		for (int i=0; i<=9; i++){
+        ans[i] = digits[i];
+      }
+
+      memset(digits, 0, sizeof digits);
+      count(a-1);
+
+      ans[0] -= digits[0];
+      cout<<ans[0];
+
+      for (int i=1; i<=9; i++){
+        ans[i] -= digits[i];
+        cout<<" "<<ans[i];
+      }
+      cout<<endl;
   	}
 
     END:

@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -126,6 +126,12 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int getPosition(string s, char c) {
+	for (int i=0; i<len(s); i++)
+		if (s[i] == c)
+			return i+1;
+	return -1;
+}
 
 int main()
 {
@@ -136,20 +142,44 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	string a, b, c, s = "ABC", ans = "Impossible";
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  	cin>>a>>b>>c;
 
-  		ans += k;
+  	do {
+  		bool ok = 1;
+  		// debug(s);
+  		int x = getPosition(s, a[0]), y = getPosition(s, a[2]);
+  		// debug(a, x, y);
+  		if (a[1] == '<')
+  			ok &= x < y;
+  		else 
+  			ok &= x > y;
 
-  		cout<<ans<<endl;
-  	}
+  		x = getPosition(s, b[0]), y = getPosition(s, b[2]);
+  		// debug(b, x, y, b[1]);
+  		if (b[1] == '<')
+  			ok &= x < y;
+  		else 
+  			ok &= x > y;
+
+  		x = getPosition(s, c[0]), y = getPosition(s, c[2]);
+  		// debug(c, x, y);
+  		if (c[1] == '<')
+  			ok &= x < y;
+  		else 
+  			ok &= x > y;
+
+  		// debug(ok);
+
+  		if (ok) {
+  			ans = s;
+  			break;
+  		}
+
+  	} while (next_permutation(s.begin(), s.end()));
+
+  	cout<<ans<<endl;
 
     END:
     #ifdef HOME

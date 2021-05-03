@@ -1,3 +1,5 @@
+// Unsolved
+
 #include<bits/stdc++.h>
 using namespace std;
 
@@ -126,6 +128,12 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int Set(int N, int i) {return N=(N|(1<<i));}
+int reset(int N,int pos){return N= N & ~(1<<pos);}
+bool check(LL N,LL pos){return (bool)(N & (1LL<<pos));}
+
+
+LL dp[100005];
 
 int main()
 {
@@ -139,16 +147,36 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		LL n, total;
+  		cin>>n;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		LL weight[n+1];
+  		total = 0;
 
-  		ans += k;
+  		for (int i=0; i<n; i++) {
+  			cin>>weight[i];
+  			total += weight[i];
+  		}
 
-  		cout<<ans<<endl;
+  		sort(weight, weight + n);
+
+  		memset(dp, 0, sizeof dp);
+
+  		dp[0] = 1LL;
+
+  		for (int i=0; i<n; i++) 
+  			for (int j=total; j>=0 and j>=weight[i]; j--) 
+  				dp[j] |= dp[j-weight[i]] << 1LL;
+  		
+  		for (int i=total/2; i>=0; i--) {
+  			if (check(dp[i], n/2LL) or check(dp[i], (n+1) / 2LL)) {
+  				cout<<i<<" "<<total - i<<endl;
+  				break;
+  			}
+  		}
+
+  		if (t)
+  			cout<<endl;
   	}
 
     END:

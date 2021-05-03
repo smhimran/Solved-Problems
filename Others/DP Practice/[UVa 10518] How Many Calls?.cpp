@@ -126,6 +126,7 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+LL dp[1000005];
 
 int main()
 {
@@ -136,19 +137,28 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	LL n, b, ca=1;
+  	while (cin>>n>>b) {
+  		if (n==0 and b==0)
+  			break;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		LL i = 2;
+  		dp[0] = 1;
+  		dp[1] = 1;
 
-  		ans += k;
+  		for (; i<1000000; i++) {
+  			dp[i] = (dp[i - 1] + dp[i - 2] + 1) % b;
 
-  		cout<<ans<<endl;
+  			// if (dp[i] >= b)
+  			// 	dp[i] -= b;
+
+  			if (dp[i] == 1 and dp[i-1] == 1)
+  				break;
+  		}
+
+  		i--;
+
+  		cout<<"Case "<<ca++<<": "<<n<<" "<<b<<" "<<dp[n%i]<<endl;
   	}
 
     END:

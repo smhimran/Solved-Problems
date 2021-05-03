@@ -136,19 +136,63 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	int invalids;
+  	scanf("%d", &invalids);
+  	double a, b, c;
+  	
+  	while (~scanf("%lf %lf %lf", &a, &b, &c)) {
+  		
+  		if (a == 0.0 or b == 0.0 or c == 0.0) {
+  			printf("These are invalid inputs!\n");
+  			invalids--;
+  			
+  			if (!invalids)
+  				break;
+  			
+  			continue;
+  		}
+  		
+  		double ra = (1.0 / a);
+  		double rb = (1.0 / b);
+  		double rc = (1.0 / c);
+  		
+  		double semi_sum = ra + rb + rc;
+  		
+  		semi_sum /= 2.0;
+  		
+  		double area = semi_sum;
+  		area *= (semi_sum - ra);
+  		area *= (semi_sum - rb);
+  		area *= (semi_sum - rc);
+  		
+  		if (area <= 0 or area != area) {
+  			printf("These are invalid inputs!\n");
+  			invalids--;
+  			
+  			if (!invalids)
+  				break;
+  			
+  			continue;
+  		}
+  		
+  		area = sqrt(area);
+  		
+  		area *= 4.0;
+  		
+  		if (area != area) {
+  			printf("These are invalid inputs!\n");
+  			invalids--;
+  			
+  			if (!invalids)
+  				break;
+  			
+  			continue;
+  		}
+  		
+  		area = 1.0 / area;
+  		
+  		
+  		printf("%.3lf\n", area);
   	}
 
     END:

@@ -137,18 +137,29 @@ int main()
     #endif
     
   	int t, ca=1;
-  	cin>>t;
+  	scanf("%d", &t);
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	
+  		LL a[3];
+  		
+  		for (int i=0; i<3; i++)
+  			scanf("%lld", a+i);
+  		
+  		sort(a, a+3);
+  		
+  		printf("Case %d: ", ca++);
+  		
+  		if (a[0] + a[1] <= a[2])
+			puts("Invalid");
+			
+		else if (a[0] == a[1] and a[0] == a[2])
+			puts("Equilateral");
+			
+		else if ((a[0] == a[1] and a[0] != a[2]) or (a[1] == a[2] and a[0] != a[1]))
+			puts("Isosceles");
+		
+		else 
+			puts("Scalene");
   	}
 
     END:

@@ -126,7 +126,6 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-
 int main()
 {
     // FastIO;
@@ -139,15 +138,33 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
+  		
+  		string a, b;
+  		cin>>a>>b;
+  		
+  		int longest = 0;
+  		
+  		int m = len(a), n= len(b);
+  		
+  		int dp[m + 1][n + 1];
+	    
+	    for (int i = 0; i <= m; i++) {
+	        for (int j = 0; j <= n; j++) {
+	            if (i == 0 || j == 0)
+	                dp[i][j] = 0;
+	 
+	            else if (a[i - 1] == b[j - 1]) {
+	                dp[i][j] = dp[i - 1][j - 1] + 1;
+	                longest = max(longest, dp[i][j]);
+	            }
+	            else
+	                dp[i][j] = 0;
+	        }
+	    }
+  		
+  		int ans = len(a) - longest;
+  		ans += len(b) - longest;
+  		
   		cout<<ans<<endl;
   	}
 

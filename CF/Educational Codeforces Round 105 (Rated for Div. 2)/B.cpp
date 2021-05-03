@@ -139,16 +139,33 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int n, u, r, d, l;
+  		cin>>n>>u>>r>>d>>l;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		if (u and r) {
+  			u--;
+  			r--;
+  		}
 
-  		ans += k;
+  		if (u and l) {
+  			u--;
+  			l--;
+  		}
 
-  		cout<<ans<<endl;
+  		if (d and r) {
+  			d--;
+  			r--;
+  		}
+
+  		if (d and l) {
+  			d--;
+  			l--;
+  		}
+
+  		if (u<n-1 and d<n-1 and r<n-1 and r<n-1)
+  			cout<<"YES"<<endl;
+  		else 
+  			cout<<"NO"<<endl;
   	}
 
     END:

@@ -139,14 +139,27 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int n;
+  		cin>>n;
+  		int a[n+1];
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		for (int i=0; i<n; i++)
+  			cin>>a[i];
 
-  		ans += k;
+  		int ans = 0;
+
+  		for (int i=0; i<n-1; i++) {
+  			int x = min(a[i], a[i+1]), y = max(a[i], a[i+1]);
+
+  			if ((y - 1) / x >= 2) {
+  				int k = 2 * x;
+
+  				while (k < y) {
+  					k *= 2;
+  					ans++;
+  				}
+  			}	
+  		}
 
   		cout<<ans<<endl;
   	}

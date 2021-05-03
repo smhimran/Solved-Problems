@@ -126,6 +126,29 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+LL n, m, l, dp[100][100][100];
+string a, b;
+
+LL solve(LL length, LL string1, LL string2) {
+	LL &ret = dp[length][string1][string2];
+	
+	if (ret != -1)
+		return ret;
+	
+	if (length == l) 
+		return string1 == n and string2 == m;
+	
+	if (string1 == n)
+		return ret = solve(length + 1, string1, string2 + 1);
+	
+	if (string2 == m)
+		return ret = solve(length + 1, string1 + 1, string2);
+	
+	if (a[string1] == b[string2])
+		return ret = solve(length + 1, string1 + 1, string2 + 1);
+	
+	return ret = solve(length + 1, string1 + 1, string2) + solve(length + 1, string1, string2 + 1);
+}
 
 int main()
 {
@@ -139,16 +162,29 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	
+  		cin>>a>>b;
+  		
+  		n = len(a), m = len(b);
+  		
+  		LL lcs[n+1][m+1];
+  		
+  		for (int i=0; i<=n; i++) {
+  			for (int j=0; j<=m; j++) {
+  				if (i==0 or j==0)
+  					lcs[i][j] = 0;
+  				else if (a[i-1] == b[j-1])
+  					lcs[i][j] = 1 + lcs[i-1][j-1];
+  				else
+  					lcs[i][j] = max(lcs[i-1][j], lcs[i][j-1]);
+  			}
+  		}
+  		
+  		l = n + m - lcs[n][m];
+  		
+  		memset(dp, -1, sizeof dp);
+  		
+  		cout<<"Case "<<ca++<<": "<<l<<" "<<solve(0, 0, 0)<<endl; 
   	}
 
     END:

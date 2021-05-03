@@ -60,7 +60,7 @@ typedef set<char> SC;
 #define BSRC                binary_search
 #define MAX                 10000007
 #define MIN                 -10000007
-#define inf                 int(1e6+9)
+#define inf                 int(1e8+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
 #define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
@@ -139,16 +139,54 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		int dis, n = 1;
+  		cin>>dis;
+  		string s;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		getchar();
 
-  		ans += k;
+  		LL dp[105][205], a[105], cost[105];
 
-  		cout<<ans<<endl;
+  		a[0] = 0, cost[0] = 0;
+
+  		while (getline(cin, s)) {
+  			if (len(s) == 0)
+  				break;
+  			// debug(s);
+  			stringstream ss(s);
+  			ss>>a[n]>>cost[n];
+  			n++;
+  		}
+
+  		a[n] = dis, cost[n] = inf;
+
+  		for (int i=0; i<=n; i++) 
+  			for (int j=0; j<=201; j++)
+  				dp[i][j] = inf;
+
+  		dp[0][100] = 0;
+
+  		for (int i=1; i<=n; i++) {
+  			int distance = a[i] - a[i-1];
+  			for (int j=distance; j<=200; j++) 
+				dp[i][j-distance] = min(dp[i][j-distance], dp[i-1][j]);
+
+			for (int j=1; j<=200; j++)
+				dp[i][j] = min(dp[i][j], dp[i][j-1] + cost[i]);
+  		}
+
+  		LL ans = inf;
+
+  		for (int i=100; i<=200; i++) 
+  			ans = min(ans, dp[n][i]);
+
+  		if (ans == inf)
+  			cout<<"Impossible"<<endl;
+  		else
+  			cout<<ans<<endl;
+
+  		if (t)
+  			cout<<endl;
   	}
 
     END:

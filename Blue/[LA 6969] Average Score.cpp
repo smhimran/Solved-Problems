@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -136,19 +136,35 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
+  	int t;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		double n, m;
+  		cin>>n>>m;
+  		double a[int(n+1)], b [int(m+1)], suma = 0, sumb = 0;
+  		for (int i = 0; i < int(n - 1); i++) {
+  			cin>>a[i];
+  			suma += a[i];
+  		}
+  		for (int i = 0; i < int(m); i++) {
+  			cin>>b[i];
+  			sumb += b[i];
+  		}
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		double ava = suma / (n-1), avb = sumb / m;
 
-  		ans += k;
+  		int mn = inf, mx = -1;
 
-  		cout<<ans<<endl;
+  		for (int i = 0; i<=100; i++) {
+  			double tempa = suma + i, tempb = sumb + i;
+
+  			tempa /= (n), tempb /=(m+1);
+
+  			if (tempa < ava and tempb > avb) 
+  				mn = min(mn, i), mx = max(mx, i);
+  		}
+
+  		cout<<mn<<" "<<mx<<endl;
   	}
 
     END:

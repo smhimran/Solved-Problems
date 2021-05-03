@@ -136,19 +136,13 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	int n;
+  	cin>>n;
+  	for (int i=10; i>=1; i--) {
+  		if (n%i == 0) {
+  			cout<<i<<endl;
+  			break;
+  		}
   	}
 
     END:

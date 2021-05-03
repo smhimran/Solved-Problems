@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -126,6 +126,121 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+LL a[inf], segment[1000], lazy[1000], sum;
+int val, n, siz, t, ca=1, q, k, x, y, curr, seg, p;
+
+void build()
+{
+    curr=-1;
+    siz=sqrt(n);
+    for (int i=0; i<n; i++) {
+        if (i%siz==0)
+            curr++;
+        segment[curr]+=a[i];
+        lazy[curr]=0;
+    }
+}
+
+LL query(int i, int j)
+{
+    // cout<<i<<endl;
+    sum = 0;
+    while (i<=j and i%siz!=0) {
+    	if (lazy[i/siz] & 1)
+	        sum += !a[i];
+    	else 
+    		sum += a[i];
+
+    	i++;
+    }
+
+    while (i+siz<=j) {
+    	if (lazy[i/siz] & 1) 
+	        sum += siz - segment[i/siz];
+	    else 
+	    	sum += segment[i/siz];
+        // cout<<sum<<" <--"<<i<<endl;
+        i+=siz;
+    }
+
+    while (i<=j){
+    	if (lazy[i/siz] & 1)
+	        sum += !a[i];
+    	else 
+    		sum += a[i];
+
+    	i++;
+    }
+
+    return sum;
+}
+
+void update(int i, int val)
+{
+    seg=i/siz;
+    segment[seg]+=val;
+    // lazy[i/siz]=val;
+    a[i]+=val;
+}
+
+void range_update(int i, int j)
+{
+	if (i<=j and i % siz != 0) {
+		int seg = i/siz, f = seg * siz, e = (seg + 1) * siz;
+
+		segment[i/siz] = 0;
+		while (f < e) {
+			if (lazy[i/siz] & 1)
+				a[f] = !a[f];
+			segment[i/siz] += a[f];
+			f++;
+		}
+		lazy[i/siz] = 0;
+	}
+
+    while (i<=j and i%siz!=0) {
+        segment[i/siz] -= a[i];
+        // lazy[i/siz]=val;
+        a[i] = !a[i];
+        segment[i/siz] += a[i];
+        i++;
+    }
+
+    while (i+siz<=j) {
+        lazy[i/siz]++;
+        i+=siz;
+    }
+
+    if (i<=j) {
+		int seg = i/siz, f = seg * siz, e = (seg + 1) * siz;
+
+		segment[i/siz] = 0;
+		while (f < e) {
+			if (lazy[i/siz] & 1)
+				a[f] = !a[f];
+			segment[i/siz] += a[f];
+			f++;
+		}
+		lazy[i/siz] = 0;
+	}
+
+    while (i<=j) {
+        segment[i/siz] -= a[i];
+        // lazy[i/siz]=val;
+        a[i] = !a[i];
+        segment[i/siz] += a[i];
+        i++;
+    }
+}
+
+void clear()
+{
+    for (p=0; p<n; p++) {
+        lazy[p]=segment[p]=a[p]=0;
+    }
+}
+
+
 
 int main()
 {
@@ -139,16 +254,45 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		clear();
+  		string s;
+  		cin>>s;
+  		n = len(s);
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		for (int i=0; i<n; i++)
+  			a[i] = s[i] - '0';
 
-  		ans += k;
+  		build();
 
-  		cout<<ans<<endl;
+  		cin>>q;
+
+  		cout<<"Case "<<ca++<<":"<<endl;
+
+  		// debug(q);
+
+  		while (q--) {
+  			char c;
+  			int x, y;
+
+  			cin>>c>>x;
+  			// debug(c, x);
+
+  			if (c == 'I') {
+  				cin>>y;
+  				// debug(c, x, y);
+  				range_update(x - 1, y - 1);
+  				// cout<<"update done"<<endl;
+  			}
+
+  			else {
+  				int ans = a[x - 1];
+
+  				if (lazy[(x-1)/siz] & 1)
+  					ans = !ans;
+
+  				cout<<ans<<endl;
+  			}
+  		}
   	}
 
     END:

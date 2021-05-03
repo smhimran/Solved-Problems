@@ -126,6 +126,20 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+class Block {
+public:
+	int x, y, height;
+
+	Block(int x, int y, int height) {
+		this->x = x;
+		this->y = y;
+		this->height = height;
+	}
+
+	bool operator<(const Block &a) {
+		return (x * y) < (a.x * a.y);
+	}
+};
 
 int main()
 {
@@ -136,19 +150,42 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	int n, ca=1;
+  	while (cin>>n and n) {
+  		vector<Block> v;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		for (int i=0; i<n; i++) {
+  			int x, y, h;
+  			cin>>x>>y>>h;
+  			v.push_back(Block(x, y, h));
+  			v.push_back(Block(y, x, h));
+  			v.push_back(Block(x, h, y));
+  			v.push_back(Block(h, x, y));
+  			v.push_back(Block(y, h, x));
+  			v.push_back(Block(h, y, x));
+  		}
 
-  		ans += k;
+  		sort(v.begin(), v.end());
 
-  		cout<<ans<<endl;
+  		int l = v.size();
+
+  		LL dp[l+1];
+  		dp[0] = 0;
+  		for (int i=0; i<l; i++) {
+  			dp[i] = v[i].height;
+  		}
+
+  		LL ans = 0;
+
+  		for (int i=1; i<l; i++) {
+  			for (int j=0; j<i; j++) {
+  				if (v[j].x < v[i].x and v[j].y < v[i].y) 
+  					dp[i] = max(dp[i], dp[j] + v[i].height);
+  			}
+  			ans = max(ans, dp[i]);
+  		}
+
+  		cout<<"Case "<<ca++<<": maximum height = "<<ans<<endl;
   	}
 
     END:

@@ -139,16 +139,66 @@ int main()
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	
+  		int n;
+  		cin>>n;
+  		
+  		int a[n+5];
+  		
+  		LL total = 0;
+  		
+  		for (int i=0; i<n+2; i++) {
+  			cin>>a[i];
+  			total += a[i];;
+  		}
+  		
+  		sort(a, a+n+2);
+  		
+		// cout<<"--------debug-------"<<endl;
+  // 		for (int i=0; i<n+2; i++) {
+  // 			cout<<a[i]<<" ";
+  // 		}
+		// cout<<endl;
+		// cout<<"--------debug-------"<<endl;
+  		
+  		LL sum = total - a[n+1];
+  		
+  		bool possible = 0;
+  		
+  		int extra = -1;
+  		
+  		for (int i=0; i<n+1; i++) {
+  			LL curr = sum - a[i];
+  			
+  			if (curr == a[n+1]) {
+  				possible = 1;
+  				extra = i;
+  				break;
+  			}
+  		}
+  		
+  		if (possible) {
+  			for (int i=0; i<n+1; i++) {
+  				if (i != extra) 
+  					cout<<a[i]<<' ';
+  			}
+  			cout<<endl;
+  			continue;
+  		}
+  		
+  		sum = total - a[n];
+  		
+  		LL curr = sum - a[n + 1];
+  		
+  		if (curr == a[n]) {
+  			for (int i=0; i<n; i++)
+  				cout<<a[i]<<' ';
+  			cout<<endl;
+  			
+  			continue;
+  		}
+  		
+  		cout<<-1<<endl;
   	}
 
     END:

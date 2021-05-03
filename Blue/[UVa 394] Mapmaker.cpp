@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -136,19 +136,57 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	int n, r;
+  	cin>>n>>r;
+  	string s;
+  	map<string, int> B, size, D, C0;
+  	map<string, vector<PII> > bounds;
+  	map<string, vector<int> > C;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  	for (int i=0; i<n; i++) {
+  		cin>>s;
+  		int b, sz, d;
+  		cin>>b>>sz>>d;
+  		B[s] = b;
+  		size[s] = sz;
+  		D[s] = d;
+  		for (int j=0; j<d; j++) {
+  			int x, y;
+  			cin>>x>>y;
+  			bounds[s].push_back({x, y});
+  		}
 
-  		ans += k;
+  		C[s].resize(d, 0);
+  		C[s][d-1] = sz;
 
-  		cout<<ans<<endl;
+
+  		for (int j=d-2; j>=0; j--) {
+  			C[s][j] = C[s][j+1] * (bounds[s][j+1].second - bounds[s][j+1].first + 1);
+  		}
+
+  		int c0 = b;
+
+  		for (int j=0; j<d; j++) 
+  			c0 -= C[s][j] * bounds[s][j].first;
+
+  		C0[s] = c0;
+  	}
+
+  	while (r--) {
+  		cin>>s;
+  		int indices[D[s] + 1];
+  		for (int i=0; i<D[s]; i++)
+  			cin>>indices[i];
+
+  		int ans = C0[s];
+  		for (int i=0; i<D[s]; i++)
+  			ans += indices[i] * C[s][i];
+
+  		cout<<s<<"[";
+  		cout<<indices[0];
+  		for (int i=1; i<D[s]; i++)
+  			cout<<", "<<indices[i];
+  		cout<<"] = "<<ans<<endl;
   	}
 
     END:

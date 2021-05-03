@@ -126,29 +126,101 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+/*By Arg_007*/
+struct FindHash{
+    int b1 = 129, b2 = 371 ;
+    vector <int> bp1 , bp2 ;
+    vector <int> h1 , h2 ;
+    string s ;
+    int sz ;
+ 
+    LL mod1 = 998244353LL , mod2 = 1000000009LL ;
+ 
+    void init( string _s)
+    {
+        bp1.clear() ;
+        bp2.clear() ;
+        h1.clear() ; h2.clear() ;
+ 
+        s = _s ;
+        sz = s.size() ;
+ 
+        bp1.PB(1) ; bp2.PB(1) ;
+ 
+        for(int i=1 ; i < sz+2 ; i++)
+        {
+            bp1.PB( (1LL*bp1.back()*b1)%mod1 ) ;
+            bp2.PB( (1LL*bp2.back()*b2)%mod2 ) ;
+        }
+ 
+        h1.PB(s[0]-'a' + 1) ; h2.PB(s[0]-'a' + 1) ;
+ 
+        for(int i=1 ; i<sz ; i++)
+        {
+            h1.PB( (1LL*h1.back()*b1 + s[i]-'a' + 1) % mod1 ) ;
+            h2.PB( (1LL*h2.back()*b2 + s[i]-'a' + 1) % mod2 ) ;
+        }
+    }
+ 
+    pair<int,int> Get(int i, int j)
+    {
+        pair<int,int> res = MP( h1[j],h2[j] ) ;
+        if(i>0) res=MP((res.first-1LL*h1[i-1]*bp1[j-i+1])%mod1,(res.second-1LL*h2[i-1]*bp2[j-i+1])%mod2);
+        res = MP((res.first%mod1+mod1)%mod1,(res.second%mod2+mod2)%mod2);
+        return res ;
+    }
+ 
+}f1, f2;
+ 
+inline bool isPal(int l,int r,int n) {return f1.Get(l, r)==f2.Get(n-r-1, n-l-1);}
+
+int dp[5005][5005], n;
+
+int solve(int i, int j) {
+	if (i > j)
+		return 0;
+
+	int &ret = dp[i][j];
+
+	if (ret != -1)
+		return ret;
+
+	ret = isPal(i, j, n);
+
+	ret += solve(i+1, j);
+	ret += solve(i, j-1);
+
+	ret -= solve(i+1, j-1);
+
+	return ret;
+}
 
 int main()
 {
-    // FastIO;
+    FastIO;
     #ifdef HOME
      clock_t Start=clock();
      freopen("in.txt", "r", stdin);
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	string s;
+  	cin>>s;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  	f1.init(s);
+  	reverse(s.begin(), s.end());
+  	f2.init(s);
 
-  		ans += k;
+  	n = len(s);
+  	memset(dp, -1, sizeof dp);
 
-  		cout<<ans<<endl;
+  	int q;
+  	cin>>q;
+
+  	while (q--) {
+  		int i, j;
+  		cin>>i>>j;
+  		cout<<solve(i-1, j-1)<<'\n';
   	}
 
     END:

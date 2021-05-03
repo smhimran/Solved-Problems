@@ -58,8 +58,8 @@ typedef set<char> SC;
 #define ALLN(a, n)          (a, a+n)
 #define BSRCN(a, n, x)      binary_search(ALLN(a, n), x)
 #define BSRC                binary_search
-#define MAX                 10000007
-#define MIN                 -10000007
+#define MAX                 100007
+#define MIN                 -100007
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
@@ -126,6 +126,68 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+LL tree[6*MAX],arr[6*MAX],lazy[6*MAX];
+
+void buildtree(LL node, LL b, LL e){
+    if(b==e){
+	    tree[node]=arr[e];
+	    return;
+    }
+    LL left=node<<1;
+    LL right=left+1;
+    LL mid=(b+e)/2;
+    buildtree(left,b,mid);
+    buildtree(right,mid+1,e);
+    tree[node]=tree[left]+tree[right];
+}
+
+void clearlazy(LL node,LL b, LL e){
+	if (lazy[node] != -1)
+	    tree[node]=(e-b+1)*lazy[node];
+    if(b!=e and lazy[node] != -1) {
+        LL left=node<<1;
+        LL right =left+1;
+        lazy[left]=lazy[node];
+        lazy[right]=lazy[node];
+    }
+    lazy[node]=-1;
+}
+
+void update(LL node, LL b, LL e, LL i, LL j, LL x){
+    clearlazy(node,b,e);
+    if (i>e||j<b)
+        return;
+    if (b>=i&&e<=j)
+    {
+        lazy[node]=x;
+        tree[node] = (e-b+1)*x;
+        clearlazy(node,b,e);
+        return;
+    }
+    LL Left = node<<1;
+    LL Right = Left + 1;
+    LL mid = (b + e) / 2;
+    update(Left, b, mid, i, j, x);
+    update(Right, mid + 1, e, i, j, x);
+    tree[node]= tree[Left]+ tree[Right];
+}
+
+LL query(LL node, LL b, LL e, LL i, LL j){
+    clearlazy(node,b,e);
+    if (i > e || j < b)
+        return 0;
+
+    if (b >= i && e <= j)
+        return tree[node];
+
+    LL Left = node<<1;
+    LL Right = Left + 1;
+    LL mid = (b + e)/2;
+
+    LL p1 = query(Left, b, mid, i, j);
+    LL p2 = query(Right, mid + 1, e, i, j);
+    return p1 + p2;
+}
 
 int main()
 {
@@ -137,18 +199,60 @@ int main()
     #endif
     
   	int t, ca=1;
-  	cin>>t;
+  	scanf("%d", &t);
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
-
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
-
-  		ans += k;
-
-  		cout<<ans<<endl;
+  	
+  		int n, q;
+  		scanf("%d %d", &n, &q);
+  		
+  		memset(arr, 0, sizeof arr);
+  		memset(lazy, -1, sizeof lazy);
+  		
+  		buildtree(1, 1, n);
+  		
+  		printf("Case %d:\n", ca++);
+  		
+  		while (q--) {
+  			int op, i, j, v;
+  			scanf("%d", &op);
+  			
+  			
+  			if (op == 1) {
+  				scanf("%d %d %d", &i, &j, &v);
+  				
+  				i++;
+  				j++;
+  				
+  				update(1, 1, n, i, j, v);
+  			}
+  			
+  			else {
+  				scanf("%d %d", &i, &j);
+  			// debug(op);
+  				
+  				i++;
+  				j++;
+  				
+  				LL sum = query(1, 1, n, i, j);
+  				
+  				LL num = j - i + 1;
+  				
+  				LL gcd = GCD(sum, num);
+  				// debug(sum, num, gcd);
+  				
+  				sum /= gcd;
+  				num /= gcd;
+  				
+  				if (sum == 0)
+  					printf("0\n");
+  				
+  				else if (num == 1)
+  					printf("%lld\n", sum);
+  				
+  				else 
+  					printf("%lld/%lld\n", sum, num);
+  			}
+  		}
   	}
 
     END:

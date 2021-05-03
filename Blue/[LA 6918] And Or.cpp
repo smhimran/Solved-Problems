@@ -63,7 +63,7 @@ typedef set<char> SC;
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
 #define BR                  PF("\n")
-#define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define FastIO              ios_base::sync_with_stdio(false)
 #define READ()              freopen("input.txt", "r", stdin)
 #define WRITE()             freopen("output.txt", "w", stdout)
 #define len(a)              a.length()
@@ -126,6 +126,52 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+LL pow_2[65];
+
+void precal() {
+	LL k = 1;
+	for (LL i=0; i<=64; i++) {
+		pow_2[i] = k;
+		k *= 2;
+	}
+}
+
+int getPower(LL n) {
+	for (int i=0; i<=64; i++) 
+		if (pow_2[i] > n)
+			return i;
+
+	return 0;
+}
+
+string dec_to_bin(LL n) {
+	bool started = 0;
+	string ret = "";
+	LL k = 1;
+	for (LL i=63; i>=0; i--) {
+		if (n&(k<<i)) {
+			started = 1;
+			ret += '1';
+		}
+		else if (started)
+			ret += '0';
+	}
+
+	if (ret.empty())
+		ret = "0";
+
+	return ret;
+}
+
+LL bin_to_dec(string s) {
+	LL ret = 0;
+	reverse(s.begin(), s.end());
+
+	for (int i=0; i<len(s); i++) 
+		ret += pow_2[i] * (s[i] - '0');
+
+	return ret;
+}
 
 int main()
 {
@@ -136,19 +182,45 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
+    precal();
   	int t, ca=1;
   	cin>>t;
   	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  		LL a, b;
+  		cin>>a>>b;
+  		int powa = getPower(a), powb = getPower(b);
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  		cout<<"Case "<<ca++<<": ";
 
-  		ans += k;
+  		if (powa != powb) 
+  			cout<<pow_2[max(powa, powb)] - 1<<" "<<0<<endl;
 
-  		cout<<ans<<endl;
+  		else {
+  			string bina = dec_to_bin(a), binb = dec_to_bin(b);
+  			string resOR = "", resAND = "";
+
+  			bool misMatch = 0;
+
+  			for (int i=0; i<len(bina); i++) {
+  				if (misMatch) {
+  					resAND += '0';
+  					resOR += '1';
+  				}
+  				else if (bina[i] == binb[i]) {
+  					resOR += bina[i];
+  					resAND += bina[i];
+  				}
+  				else {
+  					misMatch = 1;
+  					resAND += '0';
+  					resOR += '1';  					
+  				}
+  			}
+
+  			LL OR = bin_to_dec(resOR), AND = bin_to_dec(resAND);
+
+  			cout<<OR<<" "<<AND<<endl;
+  		}
   	}
 
     END:

@@ -126,6 +126,13 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int ask(int l, int r) {
+    if (l >= r) return -1;
+    cout << "? " << l + 1 << ' ' << r + 1 << endl;
+    int ret;
+    cin >> ret;
+    return ret - 1;
+}
 
 int main()
 {
@@ -136,19 +143,39 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	int t, ca=1;
-  	cin>>t;
-  	while (t--) {
-  		LL x, y, k;
-  		cin>>x>>y>>k;
+  	int n;
+  	cin>>n;
 
-  		LL ans = (y * k) + k - 1;
-  		ans += (x - 2);
-  		ans /= (x - 1);
+  	int pos = ask(0, n-1);
 
-  		ans += k;
+  	if (pos == 0 or ask(0, pos) != pos) {
+  		int low = pos, high = n - 1, mid;
 
-  		cout<<ans<<endl;
+  		while (high - low > 1) {
+  			mid = (low + high) / 2;
+
+  			if (ask(pos, mid) == pos)
+  				high = mid;
+  			else
+  				low = mid;
+  		}
+
+  		cout<<"! "<<high + 1<<endl;
+  	}
+
+  	else {
+  		int low = 0, high = pos, mid;
+
+  		while (high - low > 1) {
+  			mid = (low + high) / 2;
+
+  			if (ask(mid, pos) == pos)
+  				low = mid;
+  			else
+  				high = mid;
+  		}
+
+  		cout<<"! "<<low  + 1<<endl;
   	}
 
     END:
