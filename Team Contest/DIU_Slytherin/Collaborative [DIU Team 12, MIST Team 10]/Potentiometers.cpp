@@ -84,7 +84,7 @@ int KY[]={-1,  1, -2,  2, -2,  2, -1,  1}; // Knights Move
 
 // ---------------------DEBUG---------------------//
 
-#ifdef HOME
+#ifdef WOLF
      #define debug(...) __f(#__VA_ARGS__, __VA_ARGS__)
     template < typename Arg1 >
     void __f(const char* name, Arg1&& arg1){
@@ -126,6 +126,43 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+#define mx int(2e5+5)
+LL a[mx], tree[mx*4], n;
+
+int build(int node, int s, int e) 
+{
+    if (s==e) {
+        return tree[node]=a[s];
+    }
+    int left=node*2, right=left +1;
+    int mid=(s+e)/2;
+    return tree[node]=build(left, s, mid)+build(right, mid+1, e);
+}
+
+LL query(int node, int i, int j, int s=1, int e=n)
+{
+    if (e<i or s>j)
+        return 0;
+    if (s>=i and e<=j)
+        return tree[node];
+    int left=node*2, right=left+1;
+    int mid=(s+e)/2;
+    return query(left, i, j, s, mid)+query(right, i, j, mid+1, e);
+}
+
+LL update(int node, int i, int val, int s=1, int e=n)
+{
+    if (e<i or s>i)
+        return tree[node];
+    if (s==e) {
+        return tree[node]=val;
+    }
+    int left=node*2, right=left+1;
+    int mid=(s+e)/2;
+    return tree[node]=update(left, i, val, s, mid)+update(right, i, val, mid+1, e);
+}
+
+
 
 int main()
 {
@@ -136,7 +173,43 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-      
+  	int ca = 1;
+  	while (1) {
+  		scanf("%lld", &n);
+
+  		if (n == 0)
+  			break;
+
+  		for (int i=1; i<=n; i++)
+  			scanf("%lld", a + i);
+
+  		build(1, 1, n);
+
+  		char s[100], op;
+		int i, j;
+
+		if (ca > 1)
+			puts("");
+
+		printf("Case %d:\n", ca++);
+
+
+  		while (1) {
+	  		getchar();
+  			scanf("%[^\n]", s);
+
+  			if (strcmp(s, "END") == 0)
+  				break;
+
+  			sscanf(s, "%c %d %d", &op, &i, &j);
+
+  			if (op == 'S')
+  				update(1, i, j);
+
+  			else 
+  				printf("%lld\n", query(1, i, j));
+  		}
+  	}
 
     END:
     #ifdef WOLF

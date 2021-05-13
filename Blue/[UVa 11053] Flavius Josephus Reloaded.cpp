@@ -62,6 +62,7 @@ typedef set<char> SC;
 #define MIN                 -10000007
 #define inf                 int(1e6+9)
 #define PI                  acos(-1)
+#define sqr(x)				((x) * (x))
 #define BR                  PF("\n")
 #define FastIO              ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
 #define READ()              freopen("input.txt", "r", stdin)
@@ -84,7 +85,7 @@ int KY[]={-1,  1, -2,  2, -2,  2, -1,  1}; // Knights Move
 
 // ---------------------DEBUG---------------------//
 
-#ifdef HOME
+#ifdef WOLF
      #define debug(...) __f(#__VA_ARGS__, __VA_ARGS__)
     template < typename Arg1 >
     void __f(const char* name, Arg1&& arg1){
@@ -136,7 +137,31 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-      
+  	LL n, a, b;
+
+  	while (cin>>n and n) {
+  		cin>>a>>b;
+
+  		LL x = 0, ans = n;
+
+  		map<LL, LL> visited;
+
+  		while (1) {
+  			LL next = (((a % n * x % n) % n * x % n) % n + (b % n)) % n;
+
+  			visited[next]++;
+
+  			if (visited[next] == 2)
+  				ans--;
+
+  			else if (visited[next] == 3) 
+  				break;
+
+  			x = next;
+  		}
+
+  		cout<<ans<<endl;
+  	}
 
     END:
     #ifdef WOLF

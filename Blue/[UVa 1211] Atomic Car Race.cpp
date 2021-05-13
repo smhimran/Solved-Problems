@@ -126,6 +126,25 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int dist[105];
+double b, r, v, e, f;
+
+double timeNeeded(int source, int destination) {
+	double ret = 0.0;
+
+	for (int i=0; i<abs(dist[destination] - dist[source]); i++) {
+		if (i >= r)
+			ret += 1.0/(v - e *(i - r));
+
+		else 
+			ret += 1.0/(v - f * (r - i));
+	}
+
+	if (source > 0)
+		ret += b;
+
+	return ret;
+}
 
 int main()
 {
@@ -136,7 +155,26 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-      
+  	int n;
+  	while (cin>>n and n) {
+  		for (int i=1; i<=n; i++)
+  			cin>>dist[i];
+
+  		cin>>b>>r>>v>>e>>f;
+
+  		double dp[n+1];
+
+  		dp[0] = 0;
+
+  		for (int i=1; i<=n; i++) {
+  			dp[i] = 1e9+9;
+
+  			for (int j=0; j<i; j++) 
+  				dp[i] = min(dp[i], dp[j] + timeNeeded(j, i));
+  		}
+
+  		cout<<fixed<<setprecision(4)<<dp[n]<<endl;
+  	}
 
     END:
     #ifdef WOLF

@@ -84,7 +84,7 @@ int KY[]={-1,  1, -2,  2, -2,  2, -1,  1}; // Knights Move
 
 // ---------------------DEBUG---------------------//
 
-#ifdef HOME
+#ifdef WOLF
      #define debug(...) __f(#__VA_ARGS__, __VA_ARGS__)
     template < typename Arg1 >
     void __f(const char* name, Arg1&& arg1){
@@ -136,7 +136,27 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-      
+  	int t, ca = 1;
+  	cin>>t;
+  	while (t--) {
+  	
+  		int alpha[200];
+
+  		memset(alpha, 0, sizeof alpha);
+
+  		string s;
+  		cin>>s;
+
+  		for (int i=0; i<len(s); i++)
+  			alpha[s[i]]++;
+
+  		int ans = inf;
+
+  		for (char c='a'; c<='z'; c++)
+  			ans = min(ans, alpha[c]);
+  	
+  		cout<<"Case "<<ca++<<": "<<ans<<endl;
+  	}
 
     END:
     #ifdef WOLF

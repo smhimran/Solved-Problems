@@ -84,7 +84,7 @@ int KY[]={-1,  1, -2,  2, -2,  2, -1,  1}; // Knights Move
 
 // ---------------------DEBUG---------------------//
 
-#ifdef HOME
+#ifdef WOLF
      #define debug(...) __f(#__VA_ARGS__, __VA_ARGS__)
     template < typename Arg1 >
     void __f(const char* name, Arg1&& arg1){
@@ -136,7 +136,62 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-      
+  	int t, ca = 1;
+  	while (cin>>t and t) {
+  	
+  		cout<<"Case "<<ca++<<":\n";
+ 	 		
+  		LL s[t + 1];
+
+
+  		for (int i=0; i<t; i++) 
+  			cin>>s[i];
+
+  		int pos = 1;
+
+  		s[t] = 0;
+
+  		for (int i=0; i<t; i++) {
+  			if (s[i] + 1 != s[i+1]) {
+  				// cout<<endl;
+  				cout<<"0"<<s[i]<<endl;
+  			}
+
+  			else {
+  				cout<<"0"<<s[i]<<'-';
+
+  				pos = i + 1;
+  				
+  				while (s[pos] + 1 == s[pos + 1])
+	  				pos++;
+
+	  			// debug(pos);
+
+	  			// pos--;
+
+	  			string p = to_string(s[i]), q = to_string(s[pos]);
+
+	  			// debug(p, q);
+
+	  			bool flag = 0;
+
+	  			for (int j=0; j<len(p); j++) {
+	  				if (p[j] == q[j] and !flag) {
+	  					continue;
+	  				}
+
+	  				flag = 1;
+	  				cout<<q[j];
+	  			}
+
+	  			i = pos;
+
+	  			cout<<endl;
+  			}
+  		}
+
+		cout<<endl;
+  	}
 
     END:
     #ifdef WOLF

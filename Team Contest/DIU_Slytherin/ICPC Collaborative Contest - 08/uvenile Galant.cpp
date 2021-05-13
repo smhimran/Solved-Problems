@@ -84,7 +84,7 @@ int KY[]={-1,  1, -2,  2, -2,  2, -1,  1}; // Knights Move
 
 // ---------------------DEBUG---------------------//
 
-#ifdef HOME
+#ifdef WOLF
      #define debug(...) __f(#__VA_ARGS__, __VA_ARGS__)
     template < typename Arg1 >
     void __f(const char* name, Arg1&& arg1){
@@ -126,6 +126,96 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+const int MOD = 998244353;
+
+LL dp[1000006][10];
+
+LL solve(LL length, LL prev) {
+	if (length == 2)
+		return (prev ==1 or prev == 6);
+
+	if (length  == 1)
+		return (prev == 2 or prev == 5);
+
+	if (length < 1)
+		return 0;
+
+	LL &ret = dp[length][prev];
+
+	if (ret != -1)
+		return ret;
+
+	ret = 0;
+
+	if (prev == 1) {
+		ret = (ret + solve(length - 2, 1));
+
+		if (ret >= MOD)
+			ret -= MOD;
+
+		ret = (ret + solve(length - 2, 3));
+
+		if (ret >= MOD)
+			ret -= MOD;
+	}
+
+	else if (prev == 2) {
+		ret = (ret + solve(length - 2, 2));
+
+		if (ret >= MOD)
+			ret -= MOD;
+		ret = (ret + solve(length - 1, 4));
+
+		if (ret >= MOD)
+			ret -= MOD;
+	}
+
+	else if (prev == 3) {
+		ret = (ret + solve(length - 2, 5));
+
+		if (ret >= MOD)
+			ret -= MOD;
+		ret = (ret + solve(length - 1, 6));
+
+		if (ret >= MOD)
+			ret -= MOD;
+	}
+
+	else if (prev == 4) {
+		ret = (ret + solve(length - 2, 5));
+
+		if (ret >= MOD)
+			ret -= MOD;
+		ret = (ret + solve(length - 1, 6));
+
+		if (ret >= MOD)
+			ret -= MOD;
+	}
+
+	else if (prev == 5) {
+		ret = (ret + solve(length - 2, 2));
+
+		if (ret >= MOD)
+			ret -= MOD;
+		ret = (ret + solve(length - 1, 4));
+
+		if (ret >= MOD)
+			ret -= MOD;
+	}
+
+	else if (prev == 6) {
+		ret = (ret + solve(length - 2, 1));
+
+		if (ret >= MOD)
+			ret -= MOD;
+		ret = (ret + solve(length - 2, 3));
+
+		if (ret >= MOD)
+			ret -= MOD;
+	}
+
+	return ret;
+}
 
 int main()
 {
@@ -136,7 +226,23 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-      
+  	int n;
+  	cin>>n;
+
+  	memset(dp, -1, sizeof dp);
+
+  	if (n == 2) 
+  		cout<<1<<endl;
+
+  	else {
+
+  		LL ans = solve(n - 2, 1) + solve(n - 2, 3);
+
+  		if (ans >= MOD)
+  			ans -= MOD;
+
+	  	cout<<ans<<endl;
+  	}
 
     END:
     #ifdef WOLF

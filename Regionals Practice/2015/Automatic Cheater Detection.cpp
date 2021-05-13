@@ -84,7 +84,7 @@ int KY[]={-1,  1, -2,  2, -2,  2, -1,  1}; // Knights Move
 
 // ---------------------DEBUG---------------------//
 
-#ifdef HOME
+#ifdef WOLF
      #define debug(...) __f(#__VA_ARGS__, __VA_ARGS__)
     template < typename Arg1 >
     void __f(const char* name, Arg1&& arg1){
@@ -136,7 +136,41 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-      
+  	int t, ca = 1;
+  	cin>>t;
+  	while (t--) {
+  	
+  		int q;
+  		cin>>q;
+
+  		int notLeakedIncorrects[12], leakedCorrects[12];
+
+  		memset(notLeakedIncorrects, 0, sizeof notLeakedIncorrects);
+  		memset(leakedCorrects, 0, sizeof leakedCorrects);
+
+  		while (q--) {
+  			int d, l;
+  			char c;
+
+  			cin>>d>>l>>c;
+
+  			if (l == 0 and c == 'i')
+  				notLeakedIncorrects[d]++;
+
+  			else if (l == 1 and c == 'c')
+  				leakedCorrects[d]++;
+  		}
+
+  		int ans = 0;
+
+  		for (int i=2; i<=10; i++) {
+  			for (int j=1; j<i; j++) {
+  				ans += notLeakedIncorrects[j] * leakedCorrects[i];
+  			}
+  		}
+
+  		cout<<ans<<endl;
+  	}
 
     END:
     #ifdef WOLF

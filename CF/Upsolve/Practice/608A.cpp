@@ -84,7 +84,7 @@ int KY[]={-1,  1, -2,  2, -2,  2, -1,  1}; // Knights Move
 
 // ---------------------DEBUG---------------------//
 
-#ifdef HOME
+#ifdef WOLF
      #define debug(...) __f(#__VA_ARGS__, __VA_ARGS__)
     template < typename Arg1 >
     void __f(const char* name, Arg1&& arg1){
@@ -126,6 +126,7 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int arrival[1005];
 
 int main()
 {
@@ -136,7 +137,24 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-      
+  	int n, s;
+  	cin>>n>>s;
+
+  	while (n--) {
+  		int x, y;
+  		cin>>x>>y;
+
+  		arrival[x] = max(arrival[x], y);
+  	}
+
+  	int ans = s;
+
+  	for (int i=0; i<=s; i++) {
+  		if (arrival[i])
+	  		ans = max(ans, i + arrival[i]);
+  	}
+
+  	cout<<ans<<endl;
 
     END:
     #ifdef WOLF

@@ -84,7 +84,7 @@ int KY[]={-1,  1, -2,  2, -2,  2, -1,  1}; // Knights Move
 
 // ---------------------DEBUG---------------------//
 
-#ifdef HOME
+#ifdef WOLF
      #define debug(...) __f(#__VA_ARGS__, __VA_ARGS__)
     template < typename Arg1 >
     void __f(const char* name, Arg1&& arg1){
@@ -126,6 +126,29 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int L, S;
+
+int dp[30][150][400];
+
+int solve(int i, char prev, int sum) {
+	if (i == L)
+		return sum == S;
+
+	if (sum > S)
+		return 0;
+
+	int &ret = dp[i][prev][sum];
+
+	if (ret != -1)
+		return ret;
+
+	ret = 0;
+
+	for (char c=prev + 1; c <= 'z'; c++)
+		ret += solve(i + 1, c, sum + (c - 'a') + 1);
+
+	return ret;
+}
 
 int main()
 {
@@ -136,7 +159,22 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-      
+    int ca = 1;
+	while (cin>>L>>S) {
+		if (L == 0 and S == 0)
+			break;
+
+		cout<<"Case "<<ca++<<": ";
+
+		if (L>26 or S>351)
+			cout<<0<<endl;
+
+		else {
+			memset(dp, -1, sizeof dp);
+
+			cout<<solve(0, 96, 0)<<endl;
+		}
+	}  	
 
     END:
     #ifdef WOLF

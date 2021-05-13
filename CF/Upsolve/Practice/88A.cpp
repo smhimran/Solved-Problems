@@ -84,7 +84,7 @@ int KY[]={-1,  1, -2,  2, -2,  2, -1,  1}; // Knights Move
 
 // ---------------------DEBUG---------------------//
 
-#ifdef HOME
+#ifdef WOLF
      #define debug(...) __f(#__VA_ARGS__, __VA_ARGS__)
     template < typename Arg1 >
     void __f(const char* name, Arg1&& arg1){
@@ -136,7 +136,66 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-      
+  	string note[] = {"#",  "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "B", "H"};
+
+  	string x, y, z;
+
+  	cin>>x>>y>>z;
+
+  	int a[3];
+
+  	for (int i=1; i<=12; i++) {
+  		if (note[i] == x) {
+  			a[0] = i;
+  			break;
+  		}
+  	}
+
+  	for (int i=1; i<=12; i++) {
+  		if (note[i] == y) {
+  			a[1] = i;
+  			break;
+  		}
+  	}
+
+  	for (int i=1; i<=12; i++) {
+  		if (note[i] ==z) {
+  			a[2] = i;
+  			break;
+  		}
+  	}
+
+  	sort(a, a+3);
+
+  	bool strange = 1;
+
+  	do {
+  		int p = a[0], q = a[1], r = a[2];
+
+  		if (q < p)
+  			q += 12;
+
+  		if (r < q)
+  			r += 12;
+
+  		int disA = q - p, disB = r - q;
+
+  		if (disA == 4 and disB == 3) {
+  			cout<<"major"<<endl;
+  			strange = 0;
+  			break;
+  		}
+
+  		else if (disA == 3 and disB == 4) {
+  			cout<<"minor"<<endl;
+  			strange = 0;
+  			break;
+  		}
+
+  	} while (next_permutation(a, a+3));
+
+  	if (strange)
+  		cout<<"strange"<<endl;
 
     END:
     #ifdef WOLF

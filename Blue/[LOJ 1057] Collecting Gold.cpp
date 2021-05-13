@@ -1,3 +1,5 @@
+// Unsolved
+
 #include<bits/stdc++.h>
 using namespace std;
 
@@ -84,7 +86,7 @@ int KY[]={-1,  1, -2,  2, -2,  2, -1,  1}; // Knights Move
 
 // ---------------------DEBUG---------------------//
 
-#ifdef HOME
+#ifdef WOLF
      #define debug(...) __f(#__VA_ARGS__, __VA_ARGS__)
     template < typename Arg1 >
     void __f(const char* name, Arg1&& arg1){
@@ -126,6 +128,37 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int n, m, dp[25][25][25], golds;
+
+char grid[25][25];
+
+bool isValid(int row, int column) {
+	return ((row >= 1 and row <= n) and (column >= 1 and column <= m));
+}
+
+int solve(int row, int column, int gold) {
+	if (gold == golds)
+		return 0;
+
+	int &ret = dp[row][column][gold];
+
+	if (ret != -1)
+		return ret;
+
+	ret = inf;
+
+	for (int i=0; i<8; i++) {
+		int newRow = row + X[i];
+		int newColumn = column + Y[i];
+
+		if (isValid(newRow, newColumn)) {
+			debug(newRow, newColumn, grid[newRow][newColumn]);
+			ret = min(ret, 2 + solve(newRow, newColumn, gold + (grid[newRow][newColumn] == 'g')));
+		}
+	}
+
+	return ret;
+}
 
 int main()
 {
@@ -136,7 +169,41 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-      
+  	int t, ca = 1;
+  	cin>>t;
+  	while (t--) {
+  	
+  		cin>>n>>m;
+
+  		int x, y;
+  		golds = 0;
+
+  		for (int i=1; i<=n; i++) {
+  			for (int j=1; j<=m; j++) {
+  				cin>>grid[i][j];
+
+  				if (grid[i][j] == 'x') {
+  					x = i;
+  					y = j;
+  				}
+
+  				else if (grid[i][j] == 'g')
+  					golds++;
+  			}
+  		}
+
+  		for (int i=1; i<=n; i++) {
+  			for (int j=1; j<=m; j++)
+  				cout<<grid[i][j];
+  			cout<<endl;
+  		}
+
+  		debug(x, y);
+
+  		memset(dp, -1, sizeof dp);
+  	
+  		cout<<"Case "<<ca++<<": "<<solve(x, y, 0)<<endl;
+  	}
 
     END:
     #ifdef WOLF

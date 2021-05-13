@@ -129,14 +129,57 @@ bool CMP(int a, int b) { return a>b; }
 
 int main()
 {
-    // FastIO;
+    FastIO;
     #ifdef WOLF
      clock_t Start=clock();
      freopen("in.txt", "r", stdin);
      freopen("out.txt", "w", stdout);
     #endif
     
-      
+  	int t, ca = 1;
+  	cin>>t;
+  	while (t--) {
+  	
+  		int n, m;
+  		cin>>n;
+
+  		map<string, LL> times;
+
+  		string s;
+  		while (n--) {
+  			cin>>s;
+
+  			if (len(s) > 2)
+	  			sort(s.begin()+1, s.end()-1);
+
+  			times[s]++;
+  		}
+
+  		cout<<"Case "<<ca++<<":\n";
+
+  		cin>>m;
+
+  		cin.ignore();
+
+  		while (m--) {
+  			getline(cin, s);
+
+  			stringstream ss(s);
+
+  			LL ans = 1;
+  			string word;
+
+  			while (ss>>word) {
+  				if (len(word) > 2)
+	  				sort(word.begin()+1, word.end()-1);
+
+  				ans *= times[word];
+  			}
+
+  			cout<<ans<<endl;
+  		}
+  	
+  	}
 
     END:
     #ifdef WOLF

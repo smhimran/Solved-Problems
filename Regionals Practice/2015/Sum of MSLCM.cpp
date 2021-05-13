@@ -1,9 +1,9 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-// #pragma comment(linker, "/stack:200000000")
-// #pragma GCC optimize("Ofast")
-// #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,tune=native")
+#pragma comment(linker, "/stack:200000000")
+#pragma GCC optimize("Ofast")
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,tune=native")
 
 // - - - - - - Data Types - - - - - - //
 
@@ -84,7 +84,7 @@ int KY[]={-1,  1, -2,  2, -2,  2, -1,  1}; // Knights Move
 
 // ---------------------DEBUG---------------------//
 
-#ifdef HOME
+#ifdef WOLF
      #define debug(...) __f(#__VA_ARGS__, __VA_ARGS__)
     template < typename Arg1 >
     void __f(const char* name, Arg1&& arg1){
@@ -126,17 +126,37 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+#define LIMIT 20000001
+
+LL ans[LIMIT + 1];
+
+void precal() {
+	for (int i=1; i<LIMIT; ++i) 
+		for (int j=i; j<LIMIT; j+=i)
+			ans[j] += i;
+
+	for (int i=3; i<LIMIT; ++i)
+		ans[i] += ans[i-1];
+}
+
 
 int main()
 {
-    // FastIO;
+    FastIO;
     #ifdef WOLF
      clock_t Start=clock();
      freopen("in.txt", "r", stdin);
      freopen("out.txt", "w", stdout);
     #endif
     
-      
+  	precal();
+
+  	int n;
+
+  	while (cin>>n and n) {
+
+  		cout<<ans[n]<<"\n";
+  	}
 
     END:
     #ifdef WOLF

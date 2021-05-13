@@ -84,7 +84,7 @@ int KY[]={-1,  1, -2,  2, -2,  2, -1,  1}; // Knights Move
 
 // ---------------------DEBUG---------------------//
 
-#ifdef HOME
+#ifdef WOLF
      #define debug(...) __f(#__VA_ARGS__, __VA_ARGS__)
     template < typename Arg1 >
     void __f(const char* name, Arg1&& arg1){
@@ -126,6 +126,73 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int n, l, start_x, start_y, end_x, end_y;
+char grid[105][105];
+bool visited[105][105];
+
+string s;
+
+bool isValid(int row, int column) {
+	if (row <= 0 or column <= 0)
+		return 0;
+	if (row >= n or column >= n)
+		return 0;
+
+	return 1;
+}
+
+bool solve(int i, int row, int column) {
+	debug(i, row, column);
+	bool ret = 0;
+
+	if (visited[row][column])
+		return 0;
+
+	visited[row][column] = 1;
+
+	if (i == l) 
+		return 1;
+
+	if (i > 0 and s[i] != grid[row][column])
+		return 0;
+
+	else if (s[i] != grid[row][column]) {
+		for (int j=0; j<8; j++) {
+			int newRow = row + X[j];
+			int newColumn = column + Y[j];
+
+			if (isValid(newRow, newColumn))
+				ret |= solve(i, newRow, newColumn);
+
+			if (ret)
+				return 1;
+		}
+	}
+
+
+	if (i == 0) {
+		start_x = row;
+		start_y = column;
+	}
+
+	else if (i == l - 1) {
+		end_x = row;
+		end_y = column;
+	}
+
+	for (int j=0; j<8; j++) {
+		int newRow = row + X[j];
+		int newColumn = column + Y[j];
+
+		if (isValid(newRow, newColumn))
+			ret |= solve(i + 1, newRow, newColumn);
+
+		if (ret)
+			return 1;
+	}
+
+	return ret;
+}
 
 int main()
 {
@@ -136,7 +203,26 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-      
+  	cin>>n;
+
+  	for (int i=1; i<=n; i++) 
+  		for (int j=1; j<=n; j++)
+  			cin>>grid[i][j];
+
+  	while (cin>>s) {
+  		if (s == "0")
+  			break;
+
+  		l = len(s);
+
+  		memset(visited, 0, sizeof visited);
+
+  		if (solve(0, 1, 1))
+  			cout<<start_x<<","<<start_y<<" "<<end_x<<","<<end_y<<endl;
+
+  		else 
+  			cout<<"Not found"<<endl;
+  	}
 
     END:
     #ifdef WOLF

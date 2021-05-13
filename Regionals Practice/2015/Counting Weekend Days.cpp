@@ -84,7 +84,7 @@ int KY[]={-1,  1, -2,  2, -2,  2, -1,  1}; // Knights Move
 
 // ---------------------DEBUG---------------------//
 
-#ifdef HOME
+#ifdef WOLF
      #define debug(...) __f(#__VA_ARGS__, __VA_ARGS__)
     template < typename Arg1 >
     void __f(const char* name, Arg1&& arg1){
@@ -136,7 +136,48 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-      
+	map<string, int> days;
+
+	days["JAN"] = 31;  	
+	days["FEB"] = 28;  	
+	days["MAR"] = 31;  	
+	days["APR"] = 30;  	
+	days["MAY"] = 31;  	
+	days["JUN"] = 30;  	
+	days["JUL"] = 31;  	
+	days["AUG"] = 31;  	
+	days["SEP"] = 30;
+	days["OCT"] = 31;  	
+	days["NOV"] = 30;  	
+	days["DEC"] = 31;
+
+	int t, ca = 1;
+	cin>>t;
+	while (t--) {
+		string month, day;
+	
+		cin>>month>>day;
+
+		int daysInMonth = days[month];
+
+		if (daysInMonth == 28) 
+			cout<<8<<endl;
+
+		else if (daysInMonth == 31 and (day == "FRI" or day == "THU"))
+			cout<<10<<endl;
+
+		else if (daysInMonth == 30 and day == "FRI")
+			cout<<10<<endl;
+
+		else if (daysInMonth == 31 and (day == "SAT" or day == "WED"))
+			cout<<9<<endl;
+
+		else if (daysInMonth == 30 and (day == "SAT" or day == "THU"))
+			cout<<9<<endl;
+
+		else 
+			cout<<8<<endl;
+	}
 
     END:
     #ifdef WOLF

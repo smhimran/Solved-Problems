@@ -126,6 +126,34 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+char finalGrid[20][45], grid[20][45], now;
+int timesVisited[20][45];
+bool visited[20][45];
+
+void floodFill(int i, int j) {
+	visited[i][j] = 1;
+	timesVisited[i][j]++;
+	finalGrid[i][j] = now;
+
+	for (int k=0; k<4; k++) {
+		int nextRow = i + ROW[k];
+		int nextColumn = j + COL[k];
+
+		if (!visited[nextRow][nextColumn] and grid[nextRow][nextColumn] == '*')
+			floodFill(nextRow, nextColumn);
+	}
+}
+
+bool check(char c) {
+	for (int i=1; i<=16; i++) {
+		for (int j=1; j<=43; j++) {
+			if (finalGrid[i][j] == c and timesVisited[i][j] == 1)
+				return 1;
+		}
+	}
+
+	return 0;
+}
 
 int main()
 {
@@ -136,7 +164,51 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-      
+    memset(finalGrid, '.', sizeof finalGrid);
+    memset(grid, '.', sizeof grid);
+
+  	int n, q;
+  	cin>>n>>q;
+
+  	string s;
+  	cin>>s;
+
+
+  	for (int _=0; _<n; _++) {
+  		int r = 0, c = 0;
+  		for (int i=1; i<=17; i++) {
+  			for (int j=1; j<=43; j++) {
+  				cin>>grid[i][j];
+
+  				if ((!r and !c) and grid[i][j] == '*') {
+  					r = i;
+  					c = j;
+  				}
+  			}
+  		}
+
+  		
+  		now = s[_];
+
+  		memset(visited, 0, sizeof visited);
+
+  		floodFill(r, c);
+  	}
+
+  	for (int ca=1; ca<=q; ca++) {
+  		cin>>s;
+
+  		cout<<"Query "<<ca<<": ";
+
+  		for (int i=0; i<len(s); i++) {
+  			if (check(s[i]))
+  				cout<<'Y';
+  			else
+  				cout<<'N';
+  		}
+
+  		cout<<endl;
+  	}
 
     END:
     #ifdef WOLF

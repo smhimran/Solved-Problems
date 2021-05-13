@@ -84,7 +84,7 @@ int KY[]={-1,  1, -2,  2, -2,  2, -1,  1}; // Knights Move
 
 // ---------------------DEBUG---------------------//
 
-#ifdef HOME
+#ifdef WOLF
      #define debug(...) __f(#__VA_ARGS__, __VA_ARGS__)
     template < typename Arg1 >
     void __f(const char* name, Arg1&& arg1){
@@ -126,6 +126,41 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int n;
+int dp[1005][5], parent[1005];
+
+vector<int> v[1005];
+
+int solve(int i, bool isExit) {
+	int &ret = dp[i][isExit];
+
+	if (ret != -1)
+		return ret;
+
+	ret = isExit;
+
+	for (auto u: v[i]) {
+		if (u == parent[i])
+			continue;
+
+		parent[u] = i;
+
+		if (isExit) {
+			ret += min(solve(u, 0), solve(u, 1));
+		}
+
+		else {
+			ret += solve(u, 1);
+		}
+	}
+
+	return ret;
+}
+
+void clear() {
+	for (int i=0; i<=1000; i++) 
+		v[i].clear();
+}
 
 int main()
 {
@@ -136,7 +171,30 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-      
+    while (cin>>n and n) {
+    	for (int i=1; i<=n; i++) {
+    		int m, x;
+
+    		cin>>m;
+
+    		while (m--) {
+    			cin>>x;
+    			v[i].push_back(x);
+    		}
+    	}
+
+    	if (n == 1) {
+    		cout<<1<<endl;
+    		continue;
+    	}
+
+    	memset(dp, -1, sizeof dp);
+    	memset(parent, -1, sizeof parent);
+
+    	cout<<min(solve(1, 0), solve(1, 1))<<endl;
+
+    	clear();
+    }
 
     END:
     #ifdef WOLF

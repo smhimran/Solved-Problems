@@ -126,6 +126,63 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+double dp[55][155][155], dp2[55][155][155];
+bool visited[55][155][155];
+
+double probabilityOfWinning(int round, int alice, int bob) {
+	if (alice == 0)
+		return 0;
+
+	if (bob == 0)
+		return 1;
+
+	if (round >= 50)
+		return !bob;
+
+	double ret = dp[round][alice][bob];
+
+	if (visited[round][alice][bob])
+		return ret;
+
+	visited[round][alice][bob] = 1;
+
+	ret = 0;
+
+	int deduct = min(alice, bob);
+
+	ret = 0.5 * probabilityOfWinning(round + 1, alice + deduct, bob - deduct);
+	ret += 0.5 * probabilityOfWinning(round + 1, alice - deduct, bob + deduct);
+
+	return dp[round][alice][bob] = ret;
+}
+
+double expectedNumberOfRounds(int round, int alice, int bob) {
+	if (alice == 0)
+		return 0;
+
+	if (bob == 0)
+		return 0;
+
+	if (round >= 50)
+		return 0;
+
+	double ret = dp2[round][alice][bob];
+
+	if (visited[round][alice][bob])
+		return ret;
+
+	visited[round][alice][bob] = 1;
+
+	ret = 0;
+
+	int deduct = min(alice, bob);
+
+	ret += 0.5 * (1 + expectedNumberOfRounds(round + 1, alice + deduct, bob - deduct));
+	ret += 0.5 * (1 + expectedNumberOfRounds(round + 1, alice - deduct, bob + deduct));
+
+	return dp2[round][alice][bob] = ret;
+}
+
 
 int main()
 {
@@ -136,7 +193,24 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-      
+  	int t, ca = 1;
+  	cin>>t;
+  	while (t--) {
+  	
+  		int a, b;
+  		cin>>a>>b;
+
+  		memset(visited, 0, sizeof visited);
+
+  		double probability = probabilityOfWinning(0, a, b);
+
+
+  		memset(visited, 0, sizeof visited);
+
+  		double expected = expectedNumberOfRounds(0, a, b);
+  	
+  		cout<<fixed<<setprecision(6)<<"Case "<<ca++<<": "<<expected<<" "<<probability<<endl;
+  	}
 
     END:
     #ifdef WOLF

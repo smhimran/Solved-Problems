@@ -84,7 +84,7 @@ int KY[]={-1,  1, -2,  2, -2,  2, -1,  1}; // Knights Move
 
 // ---------------------DEBUG---------------------//
 
-#ifdef HOME
+#ifdef WOLF
      #define debug(...) __f(#__VA_ARGS__, __VA_ARGS__)
     template < typename Arg1 >
     void __f(const char* name, Arg1&& arg1){
@@ -126,6 +126,75 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+// Trie
+
+class Node {
+public:
+	bool ended;
+	int times;
+	
+	Node *next[4];
+	
+	Node() {
+		ended = 0;
+		times = 0;
+		
+		for (int i=0; i<4; i++)
+			next[i] = NULL;
+	}	
+}  *root;
+
+int getCharValue(char c) {
+	if (c == 'A')
+		return 0;
+
+	else if (c == 'C')
+		return 1;
+
+	else if (c == 'G')
+		return 2;
+
+	else
+		return 3;
+}
+
+void insert(string s) {
+	int n = len(s);
+	
+	Node *curr = root;
+	for (int i=0; i<n; i++) {
+		int pos = getCharValue(s[i]);
+		
+		if (curr -> next[pos] == NULL) 
+			curr -> next[pos] = new Node();
+		
+		curr = curr -> next[pos];
+		curr -> times++;
+	}
+	
+	curr -> ended = true;
+}
+
+void del(Node *curr) {
+	for (int i=0; i<4; i++) {
+		if (curr -> next[i] != NULL) 
+			del(curr -> next[i]);
+	}
+	
+	delete(curr);
+}
+
+int solve(Node *curr, int depth) {
+	int ret = curr -> times * depth;
+
+	for (int i=0; i<4; i++) {
+		if (curr -> next[i] != NULL) {
+			ret = max(ret, solve(curr -> next[i], depth + 1));
+		}
+	}
+
+	return ret;
+}
 
 int main()
 {
@@ -136,7 +205,27 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-      
+  	int t, ca = 1;
+  	cin>>t;
+  	while (t--) {
+
+  		root = new Node();
+  	
+  		int n;
+  		cin>>n;
+
+  		string s;
+
+  		while (n--) {
+  			cin>>s;
+
+  			insert(s);
+  		}
+  	
+  		cout<<"Case "<<ca++<<": "<<solve(root, 0)<<endl;
+
+  		del(root);
+  	}
 
     END:
     #ifdef WOLF

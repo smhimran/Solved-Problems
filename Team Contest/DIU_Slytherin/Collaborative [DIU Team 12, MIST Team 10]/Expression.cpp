@@ -84,7 +84,7 @@ int KY[]={-1,  1, -2,  2, -2,  2, -1,  1}; // Knights Move
 
 // ---------------------DEBUG---------------------//
 
-#ifdef HOME
+#ifdef WOLF
      #define debug(...) __f(#__VA_ARGS__, __VA_ARGS__)
     template < typename Arg1 >
     void __f(const char* name, Arg1&& arg1){
@@ -126,6 +126,79 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+// operator checker 
+bool isoperator(char c){
+    return (!isalpha(c) && !isdigit(c));
+}
+
+//evaluate from postfix
+
+int evalute_postfix(string s){
+    stack<int> st;
+    for(int i=0;i<s.size();i++){
+        if(!isdigit(s[i]) && !isalpha(s[i])){
+            int b=st.top();st.pop();
+            int a=st.top();st.pop();
+            
+            if(s[i]=='+')st.push(a+b);
+            else if(s[i]=='-')st.push(a-b);
+            else if(s[i]=='*')st.push(a*b);
+            else if(s[i]=='/')st.push(a/b);
+        }
+        else st.push(s[i]-48);
+    }
+    return st.top();
+}
+
+int operator_value( char op )
+{
+    if ( op == '^' )return 3;
+    if ( op == '*' || op == '/' )return 2;
+    if ( op == '+' || op == '-' )return 1;
+    return -1;
+}
+
+string Infix_To_Postfix(string s)
+{
+    int sz = s.size();
+    string temp = "";
+    stack<char> stk;
+    char ch;
+    for ( int i = 0; i != sz; i++ )
+    {
+
+        if ( s [ i ] >= '0' && s [ i ] <= '9' ) 
+        	temp += s [ i ];
+
+        else if ( s [ i ] == '(' )
+        	stk.push( s [ i ] );
+
+        else if ( s [ i ] == ')' ) {
+            while ( !stk.empty() && stk.top() != '(' ) {
+                ch = stk.top();
+                stk.pop();
+                temp += ch;
+            }
+            stk.pop();
+        }
+
+        else {
+            while ( !stk.empty() && operator_value( s [ i ] ) <= operator_value( stk.top() ) ) {
+                ch = stk.top();
+                stk.pop();
+                if ( ch != ')' && ch != '(' )temp += ch;
+            }
+            stk.push( s [ i ] );
+        }
+    }
+
+    while ( !stk.empty() ) {
+        if ( stk.top() != '(' && stk.top() != ')' )temp += stk.top();
+        stk.pop();
+    }
+
+    return temp;
+}
 
 int main()
 {
@@ -136,7 +209,59 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-      
+  	int t, ca = 1;
+  	cin>>t;
+  	while (t--) {
+  	
+  		string s, digit;
+  		cin>>s>>digit;
+
+  		sort(digit.begin(), digit.end());
+
+  		int left = 0, right = len(digit) - 1;
+
+  		stack<bool> negative;
+
+  		negative.push(0);
+
+  		bool now = 0;
+
+  		for (int i=0; i<len(s); i++) {
+  			if (s[i] == '(') {
+  				if (i > 0 and s[i-1] == '-') {
+  					negative.push(now);
+  					now = !now;
+  				}
+
+  				else {
+  					negative.push(now);
+  				}
+  			}
+
+  			else if (s[i] == ')') {
+  				now = negative.top();
+
+  				negative.pop();
+  			}
+
+  			else if (s[i] == '#') {
+  				if (now) {
+  					s[i] = digit[left++];
+  				}
+
+  				else 
+  					s[i] = digit[right--];
+  			}
+  		}
+
+  		cout<<"Case "<<ca++<<":\n";
+  		cout<<s<<endl;
+  	
+  		string post = Infix_To_Postfix(s);
+  		cout<<post<<endl;
+
+  		cout<<evalute_postfix(post)<<endl;
+  	}
 
     END:
     #ifdef WOLF

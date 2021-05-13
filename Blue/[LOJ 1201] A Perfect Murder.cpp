@@ -84,7 +84,7 @@ int KY[]={-1,  1, -2,  2, -2,  2, -1,  1}; // Knights Move
 
 // ---------------------DEBUG---------------------//
 
-#ifdef HOME
+#ifdef WOLF
      #define debug(...) __f(#__VA_ARGS__, __VA_ARGS__)
     template < typename Arg1 >
     void __f(const char* name, Arg1&& arg1){
@@ -126,6 +126,42 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int n;
+int dp[1005][5], parent[1005];
+
+bool visited[1005];
+
+vector<int> v[1005];
+
+int solve(int i, bool killed) {
+	int &ret = dp[i][killed];
+
+	if (ret != -1)
+		return ret;
+
+	ret = killed;
+
+	visited[i] = 1;
+
+	for (auto u: v[i]) {
+		if (u == parent[i])
+			continue;
+
+		parent[u] = i;
+
+		if (killed)
+			ret += solve(u, 0);
+		else 
+			ret += max(solve(u, 0), solve(u, 1));
+	}
+
+	return ret;
+} 
+
+void clear() {
+	for (int i=0; i<=1000; i++)
+		v[i].clear();
+}
 
 int main()
 {
@@ -136,7 +172,37 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-      
+  	int t, ca = 1;
+  	cin>>t;
+  	while (t--) {
+  	
+  		int m;
+  		cin>>n>>m;
+
+  		while (m--) {
+  			int x, y;
+  			cin>>x>>y;
+
+  			v[x].push_back(y);
+  			v[y].push_back(x);
+  		}
+
+  		memset(visited, 0, sizeof visited);
+  		memset(dp, -1, sizeof dp);
+  		memset(parent, -1, sizeof parent);
+
+  		int ans = 0;
+
+  		for (int i=1; i<=n; i++) {
+  			if (!visited[i]) 
+  				ans += max(solve(i, 0), solve(i, 1));
+  		}
+  	
+  		cout<<"Case "<<ca++<<": "<<ans<<endl;
+
+  		if (t)
+  			clear();
+  	}
 
     END:
     #ifdef WOLF

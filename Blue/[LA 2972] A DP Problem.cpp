@@ -84,7 +84,7 @@ int KY[]={-1,  1, -2,  2, -2,  2, -1,  1}; // Knights Move
 
 // ---------------------DEBUG---------------------//
 
-#ifdef HOME
+#ifdef WOLF
      #define debug(...) __f(#__VA_ARGS__, __VA_ARGS__)
     template < typename Arg1 >
     void __f(const char* name, Arg1&& arg1){
@@ -136,7 +136,79 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-      
+  	int t, ca = 1;
+  	cin>>t;
+  	getchar();
+  	while (t--) {
+  	
+  		string s;
+  		getline(cin, s);
+
+  		int coefficient[2] = {0, 0}, constant[2] = {0, 0};
+
+  		int right = 0;
+
+  		for (int i=0; i<len(s); i++) {
+  			if (isalnum(s[i])) {
+  				if (s[i] == 'x') {
+  					if (i == 0)
+  						coefficient[right]++;
+
+  					else if (s[i-1] == '-')
+  						coefficient[right]--;
+
+  					else coefficient[right]++;
+  				}
+
+  				else {
+  					int num = 0, sign = 1;
+
+  					if (i > 0 and s[i-1] == '-')
+  						sign = -1;
+
+  					while (isdigit(s[i])) {
+  						num *= 10;
+  						num += (s[i] - '0');
+  						i++;
+  					}
+
+  					num *= sign;
+
+  					if (s[i] == 'x') 
+  						coefficient[right] += num;
+
+  					else 
+  						constant[right] += num;
+  				}
+  			}
+
+  			if (s[i] == '=') 
+  				right = 1;
+
+  		}
+  		
+  		coefficient[0] -= coefficient[1];
+  		constant[0] = constant[1] - constant[0];
+
+  		if (coefficient[0] == 0) {
+  			if (constant[0])
+  				cout<<"IMPOSSIBLE"<<endl;
+
+  			else
+  				cout<<"IDENTITY"<<endl;
+  		}
+
+  		else {
+  			if (constant[0] % coefficient[0] == 0)
+  				cout<<(constant[0] / coefficient[0])<<endl;
+
+  			else if (constant[0] * coefficient[0] > 0) 
+  				cout<<(constant[0] / coefficient[0])<<endl;
+
+  			else
+  				cout<<(constant[0] / coefficient[0]) - 1<<endl;
+  		}
+  	}
 
     END:
     #ifdef WOLF

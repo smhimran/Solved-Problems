@@ -84,7 +84,7 @@ int KY[]={-1,  1, -2,  2, -2,  2, -1,  1}; // Knights Move
 
 // ---------------------DEBUG---------------------//
 
-#ifdef HOME
+#ifdef WOLF
      #define debug(...) __f(#__VA_ARGS__, __VA_ARGS__)
     template < typename Arg1 >
     void __f(const char* name, Arg1&& arg1){
@@ -126,6 +126,29 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int fruitLeft[1005], fruitRight[1005], toLeft[1005], toRight[1005];
+
+int dp[1005][5], n;
+
+int solve(int i, int tower) {
+	if (i == n)
+		return 0;
+
+	int &ret = dp[i][tower];
+
+	if (ret != -1)
+		return ret;
+
+	ret = tower? fruitRight[i] : fruitLeft[i];
+
+	if (tower)
+		ret += min(solve(i+1, tower), toLeft[i+1] + solve(i+1, 0));
+
+	else 
+		ret += min(solve(i+1, tower), toRight[i+1] + solve(i+1, 1));
+
+	return ret;
+}
 
 int main()
 {
@@ -136,7 +159,28 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-      
+  	int t, ca = 1;
+  	cin>>t;
+  	while (t--) {
+  	
+  		cin>>n;
+
+  		for (int i=0; i<n; i++)
+  			cin>>fruitLeft[i];
+
+  		for (int i=0; i<n; i++)
+  			cin>>fruitRight[i];
+  	
+  		for (int i=1; i<n; i++)
+  			cin>>toRight[i];
+
+  		for (int i=1; i<n; i++)
+  			cin>>toLeft[i];
+  		
+  		memset(dp, -1, sizeof dp);
+
+  		cout<<"Case "<<ca++<<": "<<min(solve(0, 0), solve(0, 1))<<endl;
+  	}
 
     END:
     #ifdef WOLF

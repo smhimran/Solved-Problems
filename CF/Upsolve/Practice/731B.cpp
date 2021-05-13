@@ -84,7 +84,7 @@ int KY[]={-1,  1, -2,  2, -2,  2, -1,  1}; // Knights Move
 
 // ---------------------DEBUG---------------------//
 
-#ifdef HOME
+#ifdef WOLF
      #define debug(...) __f(#__VA_ARGS__, __VA_ARGS__)
     template < typename Arg1 >
     void __f(const char* name, Arg1&& arg1){
@@ -136,7 +136,25 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-      
+  	int n, x;
+  	cin>>n;
+
+  	bool coupon = 0, ok = 1;
+
+  	while (n--) {
+  		cin>>x;
+
+  		if (x & 1) 
+  			coupon = !coupon;
+
+  		else if (x == 0 and coupon)
+  			ok = 0;
+  	}
+
+  	if (coupon)
+  		ok = 0;
+
+  	cout<<(ok? "YES": "NO")<<endl;
 
     END:
     #ifdef WOLF

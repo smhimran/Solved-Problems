@@ -84,7 +84,7 @@ int KY[]={-1,  1, -2,  2, -2,  2, -1,  1}; // Knights Move
 
 // ---------------------DEBUG---------------------//
 
-#ifdef HOME
+#ifdef WOLF
      #define debug(...) __f(#__VA_ARGS__, __VA_ARGS__)
     template < typename Arg1 >
     void __f(const char* name, Arg1&& arg1){
@@ -126,6 +126,57 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+int n, k;
+LL dp[55][2505][55];
+
+PII vec[55];
+
+LL solve(int i, int y, int taken) {
+	if (i == n)
+		return 0;
+
+	if (taken == k)
+		return 0;
+
+	LL &ret = dp[i][y][taken];
+
+	if (ret != -1)
+		return ret;
+
+	ret = 0;
+
+	int a = vec[i].first, b = vec[i].second;
+
+	if (b == 0) {
+		LL area = a * y * 2;
+
+		ret = max(ret, area + solve(i + 1, y, taken + 1));
+	}
+
+	else if (a == 0) 
+		ret = max(ret, solve(i+1, y + b, taken + 1));
+
+	else {
+		LL triangleArea = a * b;
+		LL rectangleArea = 2 * a * y;
+
+		ret = max(ret, triangleArea + rectangleArea + solve(i+1, y + b, taken + 1));
+	}
+
+	ret = max(ret, solve(i + 1, y, taken));
+
+	return ret;
+}
+
+bool cmp(PII a, PII b) {
+	if (a.second * b.first > b.second * a.first)
+		return true;
+
+	if (a.second * b.first == b.second * a.first and a.second > b.first)
+		return true;
+
+	return false;
+}
 
 int main()
 {
@@ -136,7 +187,21 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-      
+  	int t, ca = 1;
+  	cin>>t;
+  	while (t--) {
+  	
+  		cin>>n>>k;
+
+  		for (int i=0; i<n; i++)
+  			cin>>vec[i].first>>vec[i].second;
+
+  		sort(vec, vec+n, cmp);
+
+  		memset(dp, -1, sizeof dp);
+  	
+  		cout<<"Case "<<ca++<<": "<<solve(0, 0, 0)<<endl;
+  	}
 
     END:
     #ifdef WOLF
