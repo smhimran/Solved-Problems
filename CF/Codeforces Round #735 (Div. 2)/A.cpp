@@ -136,8 +136,25 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	 // Code 
-     cout<<"Hello World"<<endl;
+  	 int t;
+  	 cin>>t;
+  	 while (t--) {
+  	 	int n;
+  	 	cin>>n;
+
+  	 	LL a[n+1];
+  	 	LL ans = 0;
+
+  	 	for (int i=0; i<n; i++) {
+  	 		cin>>a[i];
+  	 		
+            if (i > 0) {
+                ans = max(ans, a[i] * a[i - 1]);
+            }
+  	 	}
+
+        cout<<ans<<endl;
+  	 }
 
     END:
     #ifdef WOLF

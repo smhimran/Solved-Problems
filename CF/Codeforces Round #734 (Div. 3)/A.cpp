@@ -136,8 +136,22 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	 // Code 
-     cout<<"Hello World"<<endl;
+  	 int t;
+  	 cin>>t;
+  	 while (t--) {
+  	 	int x;
+  	 	cin>>x;
+
+  	 	int a = x / 3, b = a;
+
+  	 	if (x % 3 == 1)
+  	 		a++;
+
+  	 	else if (x % 3 == 2)
+  	 		b++;
+
+  	 	cout<<a<<" "<<b<<endl;
+  	 }
 
     END:
     #ifdef WOLF

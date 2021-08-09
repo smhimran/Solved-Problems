@@ -126,6 +126,43 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+bool dp[505][505][5];
+int visited[505][505][5];
+
+int givenLength, outputLength, ca = 1;
+
+string given, output;
+
+bool isPossible(int givenPosition, int outputPosition, bool left) {
+	if (outputPosition == outputLength)
+		return true;
+
+	if ((givenPosition == -1 or givenPosition == givenLength) and outputPosition != outputLength)
+		return false;
+
+	bool &ret = dp[givenPosition][outputPosition][left];
+
+	if (visited[givenPosition][outputPosition][left] == ca)
+		return ret;
+
+	visited[givenPosition][outputPosition][left] = ca;
+
+    ret = false;
+
+	if (given[givenPosition] != output[outputPosition])
+		return ret = false;
+
+	if (left == false) 
+		ret = isPossible(givenPosition + 1, outputPosition + 1, false);
+
+	if (ret)
+		return true;
+
+	else 
+		ret = isPossible(givenPosition - 1, outputPosition + 1, true);
+
+	return ret;
+}
 
 int main()
 {
@@ -136,8 +173,28 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	 // Code 
-     cout<<"Hello World"<<endl;
+  	 int t;
+  	 cin>>t;
+  	 while (t--) {
+  	 	cin>>given>>output;
+
+  	 	givenLength = len(given), outputLength = len(output);
+
+  	 	bool ok = false;
+
+  	 	for (int i=0; i<len(given); i++) {
+  	 		if (given[i] == output[0]) 
+  	 			ok |= isPossible(i, 0, false);
+  	 	}
+
+  	 	if (ok)
+  	 		cout<<"Yes"<<endl;
+
+  	 	else
+  	 		cout<<"No"<<endl;
+
+  	 	ca++;
+  	 }
 
     END:
     #ifdef WOLF

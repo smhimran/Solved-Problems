@@ -126,6 +126,53 @@ bool CMP(int a, int b) { return a>b; }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - END - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+string s;
+
+int solve(int kick, int firstGoals, int secondGoals) {
+	if (kick == len(s)) 
+		return len(s);
+
+	int remaining = len(s) - kick;
+
+	remaining--;
+
+	int aKicks = remaining / 2, bKicks = remaining / 2;
+
+	if (remaining & 1) 
+		bKicks++;
+
+	if ((firstGoals < secondGoals) and (aKicks < abs(secondGoals - firstGoals)))
+		return kick + 1;
+	
+
+	if ((secondGoals < firstGoals) and (bKicks < abs(firstGoals - secondGoals)))
+		return kick + 1;
+	
+
+	int ret = 1001;
+
+	if (s[kick] != '?') {
+		if (kick & 1) 
+			ret = min(ret, solve(kick + 1, firstGoals, secondGoals + (s[kick] == '1'? 1 : 0)));
+
+		else
+			ret = min(ret, solve(kick + 1, firstGoals + (s[kick] == '1'? 1 : 0), secondGoals));
+	}
+
+	else {
+		if (kick & 1) {
+			ret = min(ret, solve(kick + 1, firstGoals, secondGoals + 1));
+			ret = min(ret, solve(kick + 1, firstGoals, secondGoals));
+		}
+
+		else {
+			ret = min(ret, solve(kick + 1, firstGoals + 1, secondGoals));
+			ret = min(ret, solve(kick + 1, firstGoals, secondGoals));
+		}
+	}
+
+	return ret;
+}
 
 int main()
 {
@@ -136,8 +183,13 @@ int main()
      freopen("out.txt", "w", stdout);
     #endif
     
-  	 // Code 
-     cout<<"Hello World"<<endl;
+  	int t;
+  	cin>>t;
+  	while (t--) {
+  		cin>>s;
+
+  		cout<<solve(0, 0, 0)<<endl;
+  	} 
 
     END:
     #ifdef WOLF
